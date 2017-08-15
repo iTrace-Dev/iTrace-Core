@@ -1,5 +1,6 @@
 #include "tobii_research.h"
 #include "tobii_research_eyetracker.h"
+#include "tobii_research_streams.h"
 #include "tobii_research_calibration.h"
 #include <windows.h>
 
@@ -35,7 +36,8 @@ typedef GET_TRACKER_GAZE_FREQUENCY(GetOutputFrequencies);
 #define GET_TRACKER_TRACKING_MODES(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker, TobiiResearchEyeTrackingModes* modes)
 typedef GET_TRACKER_TRACKING_MODES(GetTrackingModes);
 
-
+#define SUBSCRIBE_TO_DATA(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker, tobii_research_gaze_data_callback callback, void* data)
+typedef SUBSCRIBE_TO_DATA(SubscribeToData);
 
 
 #define CALIBRATION_OPERATION(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker)

@@ -33,8 +33,12 @@ TobiiPro::TobiiPro()
     stringstream path;
     char* tobiiHome = getenv("TOBII_HOME");
     if(tobiiHome != NULL) path << tobiiHome << "\\64\\lib\\tobii_research.dll";
+    qDebug() << path.str().c_str();
     tobiiLibrary = LoadLibraryA(path.str().c_str());
-    if(!tobiiLibrary) SetFunctionsToStubs();
+    if(!tobiiLibrary){
+        qDebug() << "Tobii Pro SDK not loaded.";
+        SetFunctionsToStubs();
+    }
     else ExtractTobiiFunctions();
 }
 

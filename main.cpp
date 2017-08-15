@@ -20,14 +20,14 @@ int main(int argc, char *argv[])
     result = tobiiPro->findAllTrackers(&eyetrackers);
     if(result != TOBII_RESEARCH_STATUS_FATAL_ERROR){
         for(int i=0; i<eyetrackers->count; i++){
-            tobiiEyeTracker::tobiiEyeTrackers.push_back(new tobiiEyeTracker(eyetrackers->eyetrackers[i]));
+            TobiiEyeTracker::tobiiEyeTrackers.push_back(new TobiiEyeTracker(eyetrackers->eyetrackers[i]));
+            qDebug() << TobiiEyeTracker::tobiiEyeTrackers[i]->getName();
         }
     }else{
         qDebug() << "Tobii Pro SDK not loaded." << endl;
     }
     MainWindow w;
     w.show();
-    Reticle r((QWidget*)w.parent());
-    r.show();
+    Reticle::createReticle((QWidget*) w.parent());
     return a.exec();
 }

@@ -12,6 +12,7 @@ class CalibrationScreen : public QWidget
 public:
     static CalibrationScreen* getCalibrationScreen();
     void startCalibration(Tracker* tracker);
+    void stopCalibration();
 signals:
 
 public slots:

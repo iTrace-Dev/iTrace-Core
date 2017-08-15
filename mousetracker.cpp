@@ -29,7 +29,26 @@ void MouseTracker::stop(){
 void MouseTracker::trackMouse(){
     cursor = QCursor::pos();
     stringstream ss;
-    ss << "iTraceData," << cursor.x() << "," << cursor.y() << '\n';
+    ss << cursor.x() << "," << cursor.y() << '\n';
     gazeServer->sendGazeData(ss.str().c_str(), ss.str().length()+1);
 }
 
+void MouseTracker::enterCalibration(){
+    return;
+}
+
+void MouseTracker::leaveCalibration(){
+    return;
+}
+
+void MouseTracker::useCalibrationPoint(float x, float y){
+    return;
+}
+
+void MouseTracker::discardCalibrationPoint(float x, float y){
+    return;
+}
+
+void MouseTracker::startTracker(){
+    return;
+}

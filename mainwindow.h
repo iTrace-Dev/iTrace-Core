@@ -3,6 +3,7 @@
 
 #include "mousetracker.h"
 #include <QMainWindow>
+#include "tracker.h"
 
 
 namespace Ui {
@@ -19,8 +20,9 @@ public:
 
 public slots:
     void startTracker();
-    void displayMouse();
-
+    void displayData();
+    void toggleReticle();
+    void startCalibration();
 
 private:
     Ui::MainWindow *ui;

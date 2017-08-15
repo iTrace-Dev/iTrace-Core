@@ -1,5 +1,5 @@
 #include "calibrationscreen.h"
-
+#include <windows.h>
 CalibrationScreen* CalibrationScreen::calibrationScreen = 0;
 
 CalibrationScreen* CalibrationScreen::getCalibrationScreen(){
@@ -10,7 +10,9 @@ CalibrationScreen* CalibrationScreen::getCalibrationScreen(){
 }
 
 CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
+    setWindowFlags(Qt::FramelessWindowHint|Qt::CustomizeWindowHint);
     resize(1000,1000);
+    setWindowState(Qt::WindowFullScreen);
     points[0] = QPointF(0.1,0.1);
     points[1] = QPointF(0.5,0.1);
     points[2] = QPointF(0.9,0.1);
@@ -28,15 +30,27 @@ CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
 void CalibrationScreen::startCalibration(Tracker* selectedTracker){
     tracker = selectedTracker;
     tracker->enterCalibration();
+    this->show();
     timer->start(16);
     t = 0;
     return;
 }
 
+void CalibrationScreen::stopCalibration(){
+    tracker->leaveCalibration();
+    timer->stop();
+    Sleep(250);
+    this->hide();
+}
+
 void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
     if((t/100)%2 == 0){
-        if((t%100) < 44) size = size-1;
+        if((t%100) < 44){
+            if((t%100) == 43) tracker->useCalibrationPoint(points[t/200].x(),points[t/200].y());
+            size = size-1;
+        }
         else if((t%100) >= 56) size = size + 1;
+
         x = (int)((points[t/200].x()*(float)width())-(size/2));
         y = (int)((points[t/200].y()*(float)height())-(size/2));
         dotx = (int)((points[t/200].x()*(float)width())-2);
@@ -60,6 +74,7 @@ void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
     painter.setBrush(Qt::black);
     painter.setPen(Qt::black);
     painter.drawEllipse(dotx,doty,4,4);
+    if(t == 1699) stopCalibration();
 }
 
 void CalibrationScreen::updatePosition(){

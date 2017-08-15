@@ -9,10 +9,11 @@
 #include <QTcpSocket>
 #include <vector>
 #include "gazeserver.h"
+#include "tracker.h"
 
 using namespace std;
 
-class MouseTracker: QObject
+class MouseTracker: Tracker
 {
     Q_OBJECT
     QPoint cursor;
@@ -27,7 +28,11 @@ public:
     ~MouseTracker();
     void start();
     void stop();
-
+    void enterCalibration() override;
+    void leaveCalibration() override;
+    void useCalibrationPoint(float x, float y) override;
+    void discardCalibrationPoint(float x, float y) override;
+    void startTracker() override;
 
 public slots:
     void trackMouse();

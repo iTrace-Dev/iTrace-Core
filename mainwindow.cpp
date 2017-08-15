@@ -5,6 +5,8 @@
 #include "mousetracker.h"
 #include "tobiiEyetracker.h"
 #include "reticle.h"
+#include "calibrationscreen.h"
+#include "tracker.h"
 #include <sstream>
 
 
@@ -17,11 +19,14 @@ MainWindow::MainWindow(QWidget *parent) :
     mouseTracker = new MouseTracker();
     ui->setupUi(this);
     connect(ui->startServerButton, SIGNAL(released()), this, SLOT(startTracker()));
+    connect(ui->reticleBox, SIGNAL(stateChanged(int)), this, SLOT(toggleReticle()));
+    connect(ui->calibrateButton, SIGNAL(released()), this, SLOT(startCalibration()));
     socket = new QTcpSocket(this);
-    connect(socket, SIGNAL(readyRead()), this, SLOT(displayMouse()));
+    connect(socket, SIGNAL(readyRead()), this, SLOT(displayData()));
     this->setFixedSize(this->geometry().width(),this->geometry().height());
-    for(int i=0; i<tobiiEyeTracker::tobiiEyeTrackers.size(); i++){
-        ui->trackerBox->addItem(tobiiEyeTracker::tobiiEyeTrackers[i]->getName());
+    ui->trackerBox->addItem("Mouse Tracker");
+    for(int i=0; i<TobiiEyeTracker::tobiiEyeTrackers.size(); i++){
+        ui->trackerBox->addItem(TobiiEyeTracker::tobiiEyeTrackers[i]->getName());
     }
 }
 
@@ -33,16 +38,37 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::startTracker(){
-    mouseTracker->start();
+    if(ui->trackerBox->currentIndex() == 0) mouseTracker->start();
+    else{
+        qDebug() << ui->trackerBox->currentIndex() << " " << TobiiEyeTracker::tobiiEyeTrackers.size();
+        TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->startTracker();
+    }
     size = 0;
     socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
 
 }
 
-void MainWindow::displayMouse(){
+void MainWindow::toggleReticle(){
+    Reticle* r = Reticle::getReticle();
+    if(ui->reticleBox->isChecked()){
+        r->show();
+    }else{
+        r->hide();
+    }
+}
+
+void MainWindow::displayData(){
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_5_8);
     char * data = new char[100];
     in.readRawData(data,100);
     ui->textBrowser->setText(data);
+}
+
+void MainWindow::startCalibration(){
+    CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();
+    Tracker* tracker;
+    if(ui->trackerBox->currentIndex() == 0) tracker = (Tracker*)mouseTracker;
+    else tracker = (Tracker*)TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1];
+    calibrationScreen->startCalibration(tracker);
 }
