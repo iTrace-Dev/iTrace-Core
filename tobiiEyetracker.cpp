@@ -11,7 +11,8 @@ CALIBRATION_OPERATION(calibrationOperationStub){
     return (TobiiResearchStatus)1;
 }
 GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
-    *attribute = "Tobii Pro SDK not found!";
+    //*attribute = "Tobii Pro SDK not found!";
+    //C++ error, trying to convert char[] to a char *
     return (TobiiResearchStatus)1;
 }
 

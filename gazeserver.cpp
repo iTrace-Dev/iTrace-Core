@@ -24,7 +24,10 @@ void GazeServer::newConnections(){
     while(tcpServer->hasPendingConnections()){
         QTcpSocket* client = tcpServer->nextPendingConnection();
         if(!client) continue;
-        connect(client,SIGNAL(disconnected()), client, SLOT(deleteLater()));
+        connect(client,SIGNAL(disconnected()), client, SLOT(destroyed()));
+        //deleteLater() causes crashing, unknown reason.
+        //destroyed() tries to destroy slots that aren't there,
+        //  unsure if this is an error message that can be supressed or needs to be dealt with.
         clients.push_back(client);
     }
 }

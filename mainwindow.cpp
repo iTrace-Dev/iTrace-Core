@@ -38,13 +38,29 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::startTracker(){
-    if(ui->trackerBox->currentIndex() == 0) mouseTracker->start();
+    if(ui->trackerBox->currentIndex() == 0){
+        if(ui->startServerButton->text() == "Start Server")
+            mouseTracker->start();
+    }
     else{
         qDebug() << ui->trackerBox->currentIndex() << " " << TobiiEyeTracker::tobiiEyeTrackers.size();
         TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->startTracker();
     }
-    size = 0;
-    socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
+
+
+    if(ui->startServerButton->text() == "Start Server"){
+       ui->startServerButton->setText("Stop Server");
+       //size = 0; has no use?
+       socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
+    }
+    else if(ui->startServerButton->text() == "Stop Server"){
+         ui->startServerButton->setText("Start Server");
+         mouseTracker->stop();
+         socket->disconnectFromHost();
+         ui->textBrowser->clear();
+    }
+
+
 
 }
 
