@@ -33,7 +33,9 @@ SOURCES += main.cpp\
     tobiiEyetracker.cpp \
     tracker.cpp \
     gazeserver.cpp \
-    reticle.cpp
+    reticle.cpp \
+    xmlwriter.cpp \
+    jsonwriter.cpp
 
 HEADERS  += mainwindow.h \
     mousetracker.h \
@@ -43,7 +45,9 @@ HEADERS  += mainwindow.h \
     tobiiEyetracker.h \
     tracker.h \
     gazeserver.h \
-    reticle.h
+    reticle.h \
+    xmlwriter.h \
+    jsonwriter.h
 
 HEADERS  += mainwindow.h \
     mousetracker.h \

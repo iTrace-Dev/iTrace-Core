@@ -7,6 +7,7 @@
 #include "reticle.h"
 #include "calibrationscreen.h"
 #include "tracker.h"
+#include "xmlwriter.h"
 #include <sstream>
 
 
@@ -38,9 +39,12 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::startTracker(){
-    if(ui->trackerBox->currentIndex() == 0){
-        if(ui->startServerButton->text() == "Start Server")
-            mouseTracker->start();
+    if(ui->xmlCheck->isChecked() || ui->jsonCheck->isChecked()){
+        if(ui->trackerBox->currentIndex() == 0){
+            if(ui->startServerButton->text() == "Start Server"){
+                mouseTracker->start();
+                xmlwrite.setFile();
+        }
     }
     else{
         qDebug() << ui->trackerBox->currentIndex() << " " << TobiiEyeTracker::tobiiEyeTrackers.size();
@@ -50,18 +54,19 @@ void MainWindow::startTracker(){
 
     if(ui->startServerButton->text() == "Start Server"){
        ui->startServerButton->setText("Stop Server");
-       //size = 0; has no use?
+       size = 0; // has no use?
        socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
     }
     else if(ui->startServerButton->text() == "Stop Server"){
          ui->startServerButton->setText("Start Server");
          mouseTracker->stop();
          socket->disconnectFromHost();
+         xmlwrite.closeFile();
          ui->textBrowser->clear();
     }
 
 
-
+}
 }
 
 void MainWindow::toggleReticle(){
@@ -79,6 +84,9 @@ void MainWindow::displayData(){
     char * data = new char[100];
     in.readRawData(data,100);
     ui->textBrowser->setText(data);
+   // gaze.setGaze(data)
+    xmlwrite.writeGaze(data);
+
 }
 
 void MainWindow::startCalibration(){

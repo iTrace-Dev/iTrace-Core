@@ -3,7 +3,10 @@
 
 #include "mousetracker.h"
 #include <QMainWindow>
+#include <fstream>
 #include "tracker.h"
+#include "xmlwriter.h"
+#include "jsonwriter.h"
 
 
 namespace Ui {
@@ -29,6 +32,7 @@ private:
     MouseTracker * mouseTracker;
     QTcpSocket * socket;
     quint32 size;
+    xmlWriter xmlwrite;
 };
 
 #endif // MAINWINDOW_H
