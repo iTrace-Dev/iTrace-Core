@@ -9,7 +9,7 @@ using namespace std;
 
 void xmlWriter::setFile()
 {
-    fs.open("testXML.xml",ios::out);
+    fs.open("data/testXML.xml",ios::out);
     xmlSetup();
 }
 
@@ -42,10 +42,21 @@ void xmlWriter::writeGaze(char * data)
     fs <<"</gaze>" << endl;
 }
 
+void xmlWriter::writeSessionTime(char * data)
+{
+
+}
+
 
 void xmlWriter::xmlSetup()
 {
     fs << "<?xml version=\"1.0\" encoding=\"UTF-8\"?>" << endl;
+    fs << "<environment>" << endl;
+    fs << "<tracker-name>" <<endl;
+    fs << "<application-type>" <<endl;
     fs << "<itrace-records>" << endl;
     fs << "<gazes>" << endl;
+    fs << "<sessiontime>" << endl;
+    fs << "<screen-width>" << endl;
+    fs << "<screen-height>" << endl;
 }

@@ -1,6 +1,9 @@
 #include "mainwindow.h"
 
 #include <QtNetwork>
+#include <QApplication>
+#include <QMessageBox>
+#include <QDebug>
 #include "ui_mainwindow.h"
 #include "mousetracker.h"
 #include "tobiiEyetracker.h"
@@ -58,11 +61,15 @@ void MainWindow::startTracker(){
        socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
     }
     else if(ui->startServerButton->text() == "Stop Server"){
-         ui->startServerButton->setText("Start Server");
-         mouseTracker->stop();
-         socket->disconnectFromHost();
-         xmlwrite.closeFile();
-         ui->textBrowser->clear();
+        QMessageBox::StandardButton reply;
+            reply = QMessageBox::question(this, "Alert", "Do you want to stop the server?");
+            if (reply == QMessageBox::Yes){
+             ui->startServerButton->setText("Start Server");
+             mouseTracker->stop();
+             socket->disconnectFromHost();
+             xmlwrite.closeFile();
+             ui->textBrowser->clear();
+            }
     }
 
 
