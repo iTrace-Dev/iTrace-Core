@@ -13,6 +13,7 @@ public:
     void setFile();
     void closeFile();
     void writeGaze(char*);
+    void writeSessionTime(char*);
 
 private:
     void xmlSetup();
