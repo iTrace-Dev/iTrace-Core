@@ -4,6 +4,7 @@
 #include "mousetracker.h"
 #include <QMainWindow>
 #include <fstream>
+#include "sessionsetup.h"
 #include "tracker.h"
 #include "xmlwriter.h"
 #include "jsonwriter.h"
@@ -26,6 +27,7 @@ public slots:
     void displayData();
     void toggleReticle();
     void startCalibration();
+    void showSessionSetup();
 
 private:
     Ui::MainWindow *ui;
@@ -33,6 +35,7 @@ private:
     QTcpSocket * socket;
     quint32 size;
     xmlWriter xmlwrite;
+
 };
 
 #endif // MAINWINDOW_H

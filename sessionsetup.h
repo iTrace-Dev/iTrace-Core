@@ -14,6 +14,7 @@ class sessionSetup : public QDialog
 public:
     explicit sessionSetup(QWidget *parent = 0);
     ~sessionSetup();
+    static sessionSetup* getSessionSetup();
 
 private:
     Ui::sessionSetup *ui;

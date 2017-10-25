@@ -9,10 +9,12 @@ using namespace std;
 class xmlWriter{
 
 public:
-    fstream fs;
+    ofstream fs;
     void setFile();
     void closeFile();
     void writeGaze(char*);
+    void writeResponse(char*);
+    void writeEnvironment();
     void writeSessionTime(char*);
 
 private:
