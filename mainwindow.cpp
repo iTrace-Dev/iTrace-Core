@@ -1,9 +1,10 @@
 #include "mainwindow.h"
-
+#include <QFileDialog>
 #include <QtNetwork>
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
+#include <QString>
 #include "ui_mainwindow.h"
 #include "mousetracker.h"
 #include "tobiiEyetracker.h"
@@ -72,6 +73,8 @@ void MainWindow::startTracker(){
              socket->disconnectFromHost();
              xmlwrite.closeFile();
              ui->textBrowser->clear();
+
+
             }
     }
 

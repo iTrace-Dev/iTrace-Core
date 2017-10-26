@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include <QDebug>
+#include <QString>
 #include <iostream>
 #include <time.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 using namespace std;
 void xmlWriter::setFile()
 {
-    fs.open("testXML.xml"/*,ios::out*/);
+    fs.open("test.xml"/*,ios::out*/);
     if(!fs){
         qDebug() << "File not loaded" << endl;
     }

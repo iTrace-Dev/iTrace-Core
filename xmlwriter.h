@@ -4,7 +4,7 @@
 #include <fstream>
 #include <string>
 #include <iostream>
-
+#include <QString>
 
 using namespace std;
 
