@@ -49,6 +49,7 @@ void MainWindow::startTracker(){
             if(ui->startServerButton->text() == "Start Server"){
                 mouseTracker->start();
                 xmlwrite.setFile();
+                xmlwrite.writeEnvironment();
             }
          }
         else{
