@@ -17,6 +17,7 @@ public:
     void writeGaze(char*);
     void writeResponse(char*);
     void writeEnvironment();
+    void setScreenRes(float ,float );
     void setTrackerName(char*);
     void writeSessionTime(char*);
     const string currentDateTime();
@@ -24,5 +25,7 @@ public:
 private:
     void xmlSetup();
     char *tracker_name;
+    float screen_height;
+    float screen_width;
 };
 #endif // XMLWRITER_H

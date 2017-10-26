@@ -9,6 +9,7 @@
 #include <vector>
 #include <QTimer>
 #include "gazeserver.h"
+#include "xmlwriter.h"
 
 using namespace std;
 
@@ -40,6 +41,7 @@ class TobiiEyeTracker: Tracker
     GazeServer* gazeServer;
     float screenWidth;
     float screenHeight;
+    xmlWriter* writer;
 public:
     static vector<TobiiEyeTracker*> tobiiEyeTrackers;
     TobiiEyeTracker(TobiiResearchEyeTracker* eyetracker);

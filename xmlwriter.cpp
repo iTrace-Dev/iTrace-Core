@@ -29,6 +29,11 @@ void xmlWriter::writeEnvironment(){
     fs << "</environment>" << endl;
     fs << "<response>" << endl;
 }
+void xmlWriter::setScreenRes(float x, float y){
+    screen_height = x;
+    screen_width = y;
+}
+
 void xmlWriter::writeResponse(char * data){
     std::stringstream ss;
     ss << data;
