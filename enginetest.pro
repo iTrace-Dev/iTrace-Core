@@ -58,3 +58,8 @@ FORMS    += mainwindow.ui \
     reticle.ui
 
 
+
+win32: LIBS += -L$$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/lib/ -ltobii_research
+
+INCLUDEPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
+DEPENDPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
