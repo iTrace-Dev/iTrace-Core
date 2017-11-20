@@ -7,6 +7,7 @@
 #include <iostream>
 #include <time.h>
 #include <stdio.h>
+#include <inttypes.h>
 
 using namespace std;
 void xmlWriter::setFile()
@@ -40,16 +41,20 @@ void xmlWriter::writeResponse(char * data){
     ss << data;
     int newx;
     int newy;
+    int64_t trackerTime = 0;
+    int64_t systemTime = 0;
     int i=0;
     while(data[i] != ',') i++;
     string xstring = ss.str().substr(0,i);
     newx = stoi(xstring);
     string ystring = ss.str().substr(i+1);
     newy = stoi(ystring);
+
+
     fs <<"<y=\"" << newy << "\" x=\"" << newx << "\"";
     fs << "   left validation=\"" << "\"     right validation=\"" << "\"";
-    fs << "   tracker time=\"" << "\"";
-    fs << "   system time=\"" << "\"";
+    fs << "   tracker time=\"" << trackerTime << "\"";
+    fs << "   system time=\"" << systemTime <<  "\"";
     fs << "   left-pupil diameter=\"";
     fs << "   right-pupil diameter=\"  />";
     fs << endl;
