@@ -56,10 +56,12 @@ void Reticle::moveReticle(){
     int newx;
     int newy;
     int i=0;
+    /*
     while(data[i] != ',') i++;
     string xstring = ss.str().substr(0,i);
     newx = stoi(xstring);
     string ystring = ss.str().substr(i+1);
     newy = stoi(ystring);
     if(newx > 0 && newy > 0) this->move(newx-(geometry().width()/2),newy-(geometry().height()/2));
+    */
 }

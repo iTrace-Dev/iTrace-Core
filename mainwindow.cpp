@@ -35,6 +35,7 @@ MainWindow::MainWindow(QWidget *parent) :
     for(int i=0; i<TobiiEyeTracker::tobiiEyeTrackers.size(); i++){
         ui->trackerBox->addItem(TobiiEyeTracker::tobiiEyeTrackers[i]->getName());
     }
+    timer = 0;
 }
 
 MainWindow::~MainWindow()
@@ -56,6 +57,8 @@ void MainWindow::startTracker(){
         else{
             qDebug() << ui->trackerBox->currentIndex() << " " << TobiiEyeTracker::tobiiEyeTrackers.size();
              TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->startTracker();
+             xmlwrite.setFile();
+             xmlwrite.writeEnvironment();
          }
 
 
@@ -69,9 +72,11 @@ void MainWindow::startTracker(){
             reply = QMessageBox::question(this, "Alert", "Do you want to stop the server?");
             if (reply == QMessageBox::Yes){
              ui->startServerButton->setText("Start Server");
+             /*need to stop tracker here */
+             //TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->disconnect());
+             xmlwrite.closeFile();
              mouseTracker->stop();
              socket->disconnectFromHost();
-             xmlwrite.closeFile();
              ui->textBrowser->clear();
 
 
@@ -97,15 +102,16 @@ void MainWindow::toggleReticle(){
 }
 
 void MainWindow::displayData(){
+    timer = (timer+1)%10;
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_5_8);
     char * data = new char[100];
     in.readRawData(data,100);
-    ui->textBrowser->setText(data);
+    if(timer == 0)ui->textBrowser->setText(data);
    // gaze.setGaze(data)
     xmlwrite.writeResponse(data);
     //xmlwrite.writeGaze(data);
-
+    delete data;
 }
 void MainWindow::showSessionSetup(){
 

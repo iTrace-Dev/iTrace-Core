@@ -116,7 +116,7 @@ void TobiiEyeTracker::retrieveData(){
        << ','
        << (int)(((float)screen.width())*gazeData.left_eye.gaze_point.position_on_display_area.y)
        << '\n';
-    writer->setScreenRes(screenHeight, screenWidth);
+    //writer->setScreenRes(screenHeight, screenWidth);
     gazeServer->sendGazeData(ss.str().c_str(), ss.str().length()+1);
 }
 

@@ -33,6 +33,7 @@ private:
     Ui::MainWindow *ui;
     MouseTracker * mouseTracker;
     QTcpSocket * socket;
+    int timer;
     quint32 size;
     xmlWriter xmlwrite;
 

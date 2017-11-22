@@ -23,13 +23,12 @@ int main(int argc, char *argv[])
         for(int i=0; i<eyetrackers->count; i++){
             TobiiEyeTracker::tobiiEyeTrackers.push_back(new TobiiEyeTracker(eyetrackers->eyetrackers[i]));
             qDebug() << TobiiEyeTracker::tobiiEyeTrackers[i]->getName();
-            xmlWriter *writer;
-            writer->setTrackerName(TobiiEyeTracker::tobiiEyeTrackers[i]->getName());
+            //xmlWriter *writer;
+            //writer->setTrackerName(TobiiEyeTracker::tobiiEyeTrackers[i]->getName());
         }
     }else{
         qDebug() << "Tobii Pro SDK not loaded." << endl;
     }
-
     MainWindow w;
     w.show();
     Reticle::createReticle((QWidget*) w.parent());
