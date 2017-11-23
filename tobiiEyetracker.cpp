@@ -120,4 +120,7 @@ void TobiiEyeTracker::retrieveData(){
     gazeServer->sendGazeData(ss.str().c_str(), ss.str().length()+1);
 }
 
+void TobiiEyeTracker::stopTracking(){
+
+}
 

@@ -37,7 +37,6 @@ void xmlWriter::setScreenRes(float x, float y){
 }
 
 void xmlWriter::writeResponse(char * data){
-    /*
     std::stringstream ss;
     ss << data;
     int newx;
@@ -47,12 +46,11 @@ void xmlWriter::writeResponse(char * data){
     int i=0;
     while(data[i] != ',') i++;
     string xstring = ss.str().substr(0,i);
-    //newx = stoi(xstring);
+    newx = stoi(xstring);
+    if(newx < 0) return;
     string ystring = ss.str().substr(i+1);
-    //newy = stoi(ystring);
-
-
-
+    newy= stoi(ystring);
+    if (newy < 0) return;
     fs <<"<y=\"" << ystring << "\" x=\"" << xstring << "\"";
     fs << "   left validation=\"" << "\"     right validation=\"" << "\"";
     fs << "   tracker time=\"" << trackerTime << "\"";
@@ -60,7 +58,6 @@ void xmlWriter::writeResponse(char * data){
     fs << "   left-pupil diameter=\"";
     fs << "   right-pupil diameter=\"  />";
     fs << endl;
-    */
 }
 
 void xmlWriter::closeFile()

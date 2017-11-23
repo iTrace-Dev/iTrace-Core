@@ -59,6 +59,7 @@ public:
 
 public slots:
     void retrieveData();
+    void stopTracking();
 };
 
 #endif // TOBIIEYETRACKER_H

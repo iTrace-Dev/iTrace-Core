@@ -73,9 +73,9 @@ void MainWindow::startTracker(){
             if (reply == QMessageBox::Yes){
              ui->startServerButton->setText("Start Server");
              /*need to stop tracker here */
-             //TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->disconnect());
+             TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracking();
              xmlwrite.closeFile();
-             mouseTracker->stop();
+             //mouseTracker->stop();
              socket->disconnectFromHost();
              ui->textBrowser->clear();
 
@@ -107,9 +107,12 @@ void MainWindow::displayData(){
     in.setVersion(QDataStream::Qt_5_8);
     char * data = new char[100];
     in.readRawData(data,100);
-    if(timer == 0)ui->textBrowser->setText(data);
+    if(timer == 0)
+    {
+        ui->textBrowser->setText(data);
    // gaze.setGaze(data)
-    xmlwrite.writeResponse(data);
+        xmlwrite.writeResponse(data);
+    }
     //xmlwrite.writeGaze(data);
     delete data;
 }
