@@ -73,7 +73,8 @@ void MainWindow::startTracker(){
             if (reply == QMessageBox::Yes){
              ui->startServerButton->setText("Start Server");
              /*need to stop tracker here */
-             TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracking();
+             if(ui->trackerBox->currentIndex() == 0) mouseTracker->stop();
+             else TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracking();
              xmlwrite.closeFile();
              //mouseTracker->stop();
              socket->disconnectFromHost();
