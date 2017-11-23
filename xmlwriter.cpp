@@ -8,8 +8,29 @@
 #include <time.h>
 #include <stdio.h>
 #include <inttypes.h>
+#include <QXmlStreamWriter>
+#include <QIODevice>
+#include <QtXml/qdom.h>
 
 using namespace std;
+
+void xmlWriter::process(){
+   /* QDomDocument document;
+    QDomElement root = document.createElement("Response");
+    document.appendChild(root);
+    QFile file("test.xml");
+    if(!file.open(QIODevice::WriteOnly | QIODevice::Text)){
+        qDebug() << "Failed to open file for writing!";
+    }
+    else{
+        QTextStream stream(&file);
+        stream << document.toString();
+        file.close();
+        qDebug() << "Finshed";
+    }*/
+
+}
+
 void xmlWriter::setFile()
 {
     fs.open("test.xml"/*,ios::out*/);
@@ -17,6 +38,7 @@ void xmlWriter::setFile()
         qDebug() << "File not loaded" << endl;
     }
     xmlSetup();
+    //process();
 }
 void xmlWriter::xmlSetup()
 {

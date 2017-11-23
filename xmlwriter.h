@@ -5,6 +5,8 @@
 #include <string>
 #include <iostream>
 #include <QString>
+#include <QXmlStreamWriter>
+#include <QFile>
 
 using namespace std;
 
@@ -21,6 +23,7 @@ public:
     void setTrackerName(char*);
     void writeSessionTime(char*);
     const string currentDateTime();
+    void process();
 
 private:
     void xmlSetup();
