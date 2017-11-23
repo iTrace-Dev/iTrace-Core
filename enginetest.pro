@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     gazeserver.cpp \
     reticle.cpp \
     xmlwriter.cpp \
-    jsonwriter.cpp
+    jsonwriter.cpp \
+    sessionsetup.cpp
 
 HEADERS  += mainwindow.h \
     mousetracker.h \
@@ -47,7 +48,8 @@ HEADERS  += mainwindow.h \
     gazeserver.h \
     reticle.h \
     xmlwriter.h \
-    jsonwriter.h
+    jsonwriter.h \
+    sessionsetup.h
 
 HEADERS  += mainwindow.h \
     mousetracker.h \

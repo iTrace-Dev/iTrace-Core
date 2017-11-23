@@ -8,6 +8,7 @@
 #include "tobiipro.h"
 #include "calibrationscreen.h"
 #include "reticle.h"
+#include "ui_sessionsetup.h"
 #include "xmlwriter.h"
 
 using namespace std;
@@ -32,5 +33,6 @@ int main(int argc, char *argv[])
     MainWindow w;
     w.show();
     Reticle::createReticle((QWidget*) w.parent());
+    sessionSetup::createSessionSetup((QWidget*) w.parent());
     return a.exec();
 }

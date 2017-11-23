@@ -4,6 +4,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QDebug>
+#include <QDialog>
 #include <QString>
 #include "ui_mainwindow.h"
 #include "mousetracker.h"
@@ -12,6 +13,7 @@
 #include "calibrationscreen.h"
 #include "tracker.h"
 #include "xmlwriter.h"
+#include "ui_sessionsetup.h"
 #include "sessionsetup.h"
 #include <sstream>
 
@@ -76,11 +78,8 @@ void MainWindow::startTracker(){
              if(ui->trackerBox->currentIndex() == 0) mouseTracker->stop();
              else TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracking();
              xmlwrite.closeFile();
-             //mouseTracker->stop();
              socket->disconnectFromHost();
              ui->textBrowser->clear();
-
-
             }
     }
 
@@ -118,7 +117,8 @@ void MainWindow::displayData(){
     delete data;
 }
 void MainWindow::showSessionSetup(){
-
+    sessionSetup* s = sessionSetup::getSessionSetup();
+    s->show();
 }
 
 

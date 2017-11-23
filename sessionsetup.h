@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-class sessionSetup;
+ class sessionSetup;
 }
 
 class sessionSetup : public QDialog
@@ -14,6 +14,7 @@ class sessionSetup : public QDialog
 public:
     explicit sessionSetup(QWidget *parent = 0);
     ~sessionSetup();
+    static void createSessionSetup(QWidget *parent = 0);
     static sessionSetup* getSessionSetup();
 
 private:
