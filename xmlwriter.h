@@ -7,6 +7,8 @@
 #include <QString>
 #include <QXmlStreamWriter>
 #include <QFile>
+#include <tobiiEyetracker.h>
+#include <tobii_research_streams.h>
 
 using namespace std;
 
@@ -28,7 +30,19 @@ public:
 private:
     void xmlSetup();
     char *tracker_name;
+    char *serial;
+    char *model;
+    char *version;
     float screen_height;
     float screen_width;
+    float dmeter;
+    int64_t system_time;
+    int64_t tracker_time;
+    TobiiResearchPupilData pupilData;
+    TobiiResearchEyeData left_eye;
+    TobiiResearchEyeData right_eye;
+    TobiiResearchEyeData* currEye;
+    TobiiResearchGazeData gazeData;
+
 };
 #endif // XMLWRITER_H

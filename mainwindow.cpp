@@ -110,7 +110,6 @@ void MainWindow::displayData(){
     if(timer == 0)
     {
         ui->textBrowser->setText(data);
-   // gaze.setGaze(data)
         xmlwrite.writeResponse(data);
     }
     //xmlwrite.writeGaze(data);

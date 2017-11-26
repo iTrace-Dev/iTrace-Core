@@ -11,6 +11,7 @@
 #include <QXmlStreamWriter>
 #include <QIODevice>
 #include <QtXml/qdom.h>
+#include <tobii_research_streams.h>
 
 using namespace std;
 
@@ -47,11 +48,14 @@ void xmlWriter::xmlSetup()
     fs << "<environment>" << endl;
 }
 void xmlWriter::writeEnvironment(){
-    //fs << "       <eye-tracker name=" << tracker_name <<  "/>" << endl;
+    tracker_name = TobiiEyeTracker::tobiiEyeTrackers[0]->getName();
+    //serial = TobiiEyeTracker::tobiiEyeTrackers[0]->getSerialNumber();
+    //model = TobiiEyeTracker::tobiiEyeTrackers[0]->getModel();
+    //version = TobiiEyeTracker::tobiiEyeTrackers[0]->getFirmwareVersion();
+    fs << "       <eye-tracker name=" << tracker_name << "/>" << endl;
     fs << "         <date & time = " << currentDateTime() << "/>" << endl;
     fs << "         <session-id" << "/>" << endl;
     fs << "</environment>" << endl;
-    fs << "<response>" << endl;
 }
 void xmlWriter::setScreenRes(float x, float y){
     screen_height = x;
@@ -73,49 +77,24 @@ void xmlWriter::writeResponse(char * data){
     string ystring = ss.str().substr(i+1);
     newy= stoi(ystring);
     if (newy < 0) return;
-    fs <<"<y=\"" << ystring << "\" x=\"" << xstring << "\"";
+
+   dmeter = pupilData.diameter;
+   system_time = gazeData.system_time_stamp;
+   tracker_time = gazeData.device_time_stamp;
+
+    fs <<"response <y=\"" << ystring << "\" x=\"" << xstring << "\"";
     fs << "   left validation=\"" << "\"     right validation=\"" << "\"";
-    fs << "   tracker time=\"" << trackerTime << "\"";
-    fs << "   system time=\"" << systemTime <<  "\"";
-    fs << "   left-pupil diameter=\"";
+    fs << "   tracker time=\"" << tracker_time << "\"";
+    fs << "   system time=\"" << system_time <<  "\"";
+    fs << "   left-pupil diameter=\"" << dmeter << "\"";
     fs << "   right-pupil diameter=\"  />";
     fs << endl;
 }
 
 void xmlWriter::closeFile()
 {
-    fs << "</response>" << endl;
     fs << "</itrace>" << endl;
-
     fs.close();
-}
-
-
-
-
-/*void xmlWriter::writeGaze(char * data)
-{
-    std::stringstream ss;
-    ss << data;
-    int newx;
-    int newy;
-    int i=0;
-    while(data[i] != ',') i++;
-    string xstring = ss.str().substr(0,i);
-    newx = stoi(xstring);
-    string ystring = ss.str().substr(i+1);
-    newy = stoi(ystring);
-
-    // Temporary solution, need to move this to a parser when all the additional data is to be included.
-
-
-    //fs <<"<gaze";
-    fs <<" y=\"" << newy << "\" x=\"" << newx << "\">" << endl;
-    //fs <<"</gaze>" << endl;
-}*/
-
-void xmlWriter::setTrackerName(char *t){
-    tracker_name=t;
 }
 
 const std::string xmlWriter::currentDateTime(){
