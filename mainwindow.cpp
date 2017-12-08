@@ -103,12 +103,21 @@ void MainWindow::toggleReticle(){
 
 void MainWindow::displayData(){
     timer = (timer+1)%10;
+    int counter = 0, i=0;
+    stringstream ss;
     QDataStream in(socket);
     in.setVersion(QDataStream::Qt_5_8);
     char * data = new char[100];
+    string tmp;
     in.readRawData(data,100);
+    ss << data;
     if(timer == 0)
     {
+        /*while(counter!=2){
+            if(data[i] = ',')counter++;
+            i++;
+        }
+        tmp = ss.str().substr(0,i-1);*/
         ui->textBrowser->setText(data);
         xmlwrite.writeResponse(data);
     }

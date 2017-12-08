@@ -41,7 +41,7 @@ class TobiiEyeTracker: Tracker
     GazeServer* gazeServer;
     float screenWidth;
     float screenHeight;
-    //xmlWriter* writer;
+
 public:
     static vector<TobiiEyeTracker*> tobiiEyeTrackers;
     TobiiEyeTracker(TobiiResearchEyeTracker* eyetracker);

@@ -26,7 +26,7 @@ public:
     void writeSessionTime(char*);
     const string currentDateTime();
     void process();
-
+    void setTimeStamps(int64_t , int64_t);
 private:
     void xmlSetup();
     char *tracker_name;

@@ -61,6 +61,10 @@ void xmlWriter::setScreenRes(float x, float y){
     screen_height = x;
     screen_width = y;
 }
+void xmlWriter::setTimeStamps(int64_t d, int64_t s){
+    tracker_time = d;
+    system_time = s;
+}
 
 void xmlWriter::writeResponse(char * data){
     std::stringstream ss;
@@ -69,7 +73,7 @@ void xmlWriter::writeResponse(char * data){
     int newy;
     int64_t trackerTime = 0;
     int64_t systemTime = 0;
-    int i=0;
+    int i=0, j =0;
     while(data[i] != ',') i++;
     string xstring = ss.str().substr(0,i);
     newx = stoi(xstring);
@@ -78,11 +82,17 @@ void xmlWriter::writeResponse(char * data){
     newy= stoi(ystring);
     if (newy < 0) return;
 
-   dmeter = pupilData.diameter;
-   system_time = gazeData.system_time_stamp;
-   tracker_time = gazeData.device_time_stamp;
+    /*j= i+1;
+    xstring = ss.str().substr(j, i);
+    tracker_time = stoull(xstring);
+    xstring  =ss.str().substr(i+1);
+    system_time = stoull(xstring);*/
 
-    fs <<"response <y=\"" << ystring << "\" x=\"" << xstring << "\"";
+   dmeter = pupilData.diameter;
+   //system_time = gazeData.system_time_stamp;
+   //tracker_time = gazeData.device_time_stamp;
+
+    fs <<"<response y=\"" << newy << "\" x=\"" << newx << "\"";
     fs << "   left validation=\"" << "\"     right validation=\"" << "\"";
     fs << "   tracker time=\"" << tracker_time << "\"";
     fs << "   system time=\"" << system_time <<  "\"";

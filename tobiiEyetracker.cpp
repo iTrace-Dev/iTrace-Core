@@ -17,6 +17,7 @@ GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
 }
 
 void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData){
+    xmlWriter writer;
     memcpy(userData, gazeData, sizeof(*gazeData));
     stringstream ss;
     QRect screen= QApplication::desktop()->screenGeometry();
@@ -24,6 +25,13 @@ void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData){
        << ','
        << (int)(((float)screen.height())*gazeData->left_eye.gaze_point.position_on_display_area.y)
        << '\n';
+       /*<< ','
+       << gazeData->device_time_stamp
+       << ','
+       << gazeData->system_time_stamp
+       << '\n';*/
+    qDebug() << gazeData->device_time_stamp << "," << gazeData->system_time_stamp ;
+    writer.setTimeStamps(gazeData->device_time_stamp,gazeData->system_time_stamp);
     GazeServer::getGazeServer()->sendGazeData(ss.str().c_str(), ss.str().length()+1);
 }
 
