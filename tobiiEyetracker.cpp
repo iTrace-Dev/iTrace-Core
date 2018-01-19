@@ -7,14 +7,14 @@
 
 //using namespace std;
 
-//CALIBRATION_OPERATION(calibrationOperationStub){
-//    return (TobiiResearchStatus)1;
-//}
-//GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
+CALIBRATION_OPERATION(calibrationOperationStub){
+    return (TobiiResearchStatus)1;
+}
+GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
     //*attribute = "Tobii Pro SDK not found!";
     //C++ error, trying to convert char[] to a char *
-    //return (TobiiResearchStatus)1;
-//}
+    return (TobiiResearchStatus)1;
+}
 
 void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData){
     xmlWriter writer;
