@@ -5,16 +5,16 @@
 #include <QApplication>
 #include <QDesktopWidget>
 
-using namespace std;
+//using namespace std;
 
-CALIBRATION_OPERATION(calibrationOperationStub){
-    return (TobiiResearchStatus)1;
-}
-GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
+//CALIBRATION_OPERATION(calibrationOperationStub){
+//    return (TobiiResearchStatus)1;
+//}
+//GET_TRACKER_ATTRIBUTE(GetTrackerAttributeStub){
     //*attribute = "Tobii Pro SDK not found!";
     //C++ error, trying to convert char[] to a char *
-    return (TobiiResearchStatus)1;
-}
+    //return (TobiiResearchStatus)1;
+//}
 
 void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData){
     xmlWriter writer;
@@ -65,6 +65,7 @@ void TobiiEyeTracker::ExtractTobiiFunctions(){
     discardCalibrationData = (DiscardCalibrationData*)GetProcAddress(tobiiLibrary,"tobii_research_screen_based_calibration_discard_data");
     computeCalibration = (ComputeCalibration*)GetProcAddress(tobiiLibrary,"tobii_research_screen_based_calibration_compute_and_apply");
     subscribeToData = (SubscribeToData*)GetProcAddress(tobiiLibrary,"tobii_research_subscribe_to_gaze_data");
+    unsubscribeFromData = (UnsubscribeFromData*)GetProcAddress(tobiiLibrary,"tobii_research_unsubscribe_from_gaze_data");
     qDebug() << computeCalibration << " " << leaveCalibrationMode;
 }
 
@@ -93,6 +94,10 @@ void TobiiEyeTracker::discardCalibrationPoint(float x, float y){
 void TobiiEyeTracker::startTracker(){
     subscribeToData(this->eyetracker, gazeDataCallback, &this->gazeData);
     //timer->start(16);
+}
+
+void TobiiEyeTracker::stopTracker(){
+    unsubscribeFromData(this->eyetracker, gazeDataCallback);
 }
 
 char* TobiiEyeTracker::getName(){
@@ -126,9 +131,5 @@ void TobiiEyeTracker::retrieveData(){
        << '\n';
     //writer->setScreenRes(screenHeight, screenWidth);
     gazeServer->sendGazeData(ss.str().c_str(), ss.str().length()+1);
-}
-
-void TobiiEyeTracker::stopTracking(){
-
 }
 

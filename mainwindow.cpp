@@ -51,7 +51,7 @@ void MainWindow::startTracker(){
     if(ui->xmlCheck->isChecked() || ui->jsonCheck->isChecked()){
         if(ui->trackerBox->currentIndex() == 0){
             if(ui->startServerButton->text() == "Start Server"){
-                mouseTracker->start();
+                mouseTracker->startTracker();
                 xmlwrite.setFile();
                 xmlwrite.writeEnvironment();
             }
@@ -75,8 +75,8 @@ void MainWindow::startTracker(){
             if (reply == QMessageBox::Yes){
              ui->startServerButton->setText("Start Server");
              /*need to stop tracker here */
-             if(ui->trackerBox->currentIndex() == 0) mouseTracker->stop();
-             else TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracking();
+             if(ui->trackerBox->currentIndex() == 0) mouseTracker->stopTracker();
+             else TobiiEyeTracker::tobiiEyeTrackers[ui->trackerBox->currentIndex()-1]->stopTracker();
              xmlwrite.closeFile();
              socket->disconnectFromHost();
              ui->textBrowser->clear();
