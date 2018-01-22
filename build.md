@@ -13,7 +13,7 @@
 
 ### WINDOWS BUILD
 * Clone iTrace-Core repo
-* Download dependency zip to a folder named "deps" in root of
+* Extract contents of [dependency zip](https://drive.google.com/open?id=1BF4X3_PJuH0gf0S6Aua9r8hruPpXnbzr) to a folder named "deps" in root of
 	iTrace-Core repository
 	
 ### BUILDING IN QT CREATOR
