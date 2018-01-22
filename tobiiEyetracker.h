@@ -37,6 +37,7 @@ class TobiiEyeTracker: Tracker
     DiscardCalibrationData* discardCalibrationData;
     ComputeCalibration* computeCalibration;
     SubscribeToData* subscribeToData;
+    UnsubscribeFromData* unsubscribeFromData;
     QTimer* timer;
     GazeServer* gazeServer;
     float screenWidth;
@@ -50,6 +51,7 @@ public:
     void useCalibrationPoint(float x, float y) override;
     void discardCalibrationPoint(float x, float y) override;
     void startTracker() override;
+    void stopTracker() override;
     char* getName();
     char* getAddress();
     char* getSerialNumber();
@@ -59,7 +61,6 @@ public:
 
 public slots:
     void retrieveData();
-    void stopTracking();
 };
 
 #endif // TOBIIEYETRACKER_H

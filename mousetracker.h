@@ -26,13 +26,14 @@ private slots:
 public:
     MouseTracker();
     ~MouseTracker();
-    void start();
-    void stop();
+    //void start();
+    //void stop();
     void enterCalibration() override;
     void leaveCalibration() override;
     void useCalibrationPoint(float x, float y) override;
     void discardCalibrationPoint(float x, float y) override;
     void startTracker() override;
+    void stopTracker() override;
 
 public slots:
     void trackMouse();

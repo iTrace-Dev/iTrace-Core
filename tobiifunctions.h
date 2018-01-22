@@ -39,6 +39,8 @@ typedef GET_TRACKER_TRACKING_MODES(GetTrackingModes);
 #define SUBSCRIBE_TO_DATA(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker, tobii_research_gaze_data_callback callback, void* data)
 typedef SUBSCRIBE_TO_DATA(SubscribeToData);
 
+#define UNSUBSCRIBE_FROM_DATA(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker, tobii_research_gaze_data_callback callback)
+typedef UNSUBSCRIBE_FROM_DATA(UnsubscribeFromData);
 
 #define CALIBRATION_OPERATION(name) TobiiResearchStatus TOBII_RESEARCH_CALL name(TobiiResearchEyeTracker* eyetracker)
 typedef CALIBRATION_OPERATION(EnterCalibrationMode);

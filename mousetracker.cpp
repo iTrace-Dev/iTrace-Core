@@ -18,13 +18,13 @@ MouseTracker::~MouseTracker(){
     delete timer;
 }
 
-void MouseTracker::start(){
+/*void MouseTracker::start(){
     timer->start(16);
-}
+}*/
 
-void MouseTracker::stop(){
+/*void MouseTracker::stop(){
     timer->stop();
-}
+}*/
 
 void MouseTracker::trackMouse(){
     cursor = QCursor::pos();
@@ -50,5 +50,9 @@ void MouseTracker::discardCalibrationPoint(float x, float y){
 }
 
 void MouseTracker::startTracker(){
-    return;
+    timer->start(16);
+}
+
+void MouseTracker::stopTracker() {
+    timer->stop();
 }
