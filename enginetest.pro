@@ -24,44 +24,27 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QT += network
 
-
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    mousetracker.cpp \
-    tobiipro.cpp \
-    calibrationscreen.cpp \
-    tobiiEyetracker.cpp \
-    tracker.cpp \
-    gazeserver.cpp \
-    reticle.cpp \
-    xmlwriter.cpp \
-    jsonwriter.cpp \
-    sessionsetup.cpp
+    tracker_manager.cpp \
+    main_window.cpp \
+    tobii_tracker.cpp \
+    mouse_tracker.cpp
 
-HEADERS  += mainwindow.h \
-    mousetracker.h \
-    tobiifunctions.h \
-    tobiipro.h \
-    calibrationscreen.h \
-    tobiiEyetracker.h \
-    tracker.h \
-    gazeserver.h \
-    reticle.h \
-    xmlwriter.h \
-    jsonwriter.h \
-    sessionsetup.h
+HEADERS  += \
+    tracker_manager.hpp \
+    tobii_tracker.hpp \
+    tracker.hpp \
+    main_window.hpp \
+    mouse_tracker.hpp
 
-HEADERS  += mainwindow.h \
-    mousetracker.h \
-    sessionsetup.h
+HEADERS  +=
 
 FORMS    += mainwindow.ui \
     sessionsetup.ui \
     reticle.ui
 
 
+win32: LIBS += -L$$PWD/deps/x64/release/lib/ -ltobii_research
 
-win32: LIBS += -L$$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/lib/ -ltobii_research
-
-INCLUDEPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
-DEPENDPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
+INCLUDEPATH += $$PWD/deps/include/tobii_sdk
+DEPENDPATH += $$PWD/deps/include/tobii_sdk
