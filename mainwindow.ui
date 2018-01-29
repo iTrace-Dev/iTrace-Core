@@ -24,7 +24,7 @@
      </rect>
     </property>
     <property name="text">
-     <string>Start Server</string>
+     <string>Start Tracker</string>
     </property>
    </widget>
    <widget class="QTextBrowser" name="textBrowser">

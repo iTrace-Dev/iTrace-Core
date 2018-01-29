@@ -33,11 +33,13 @@ void MainWindow::startTracker() {
     }
 
     if (app_state == IDLE) {
+        ui->startServerButton->setText("Stop Tracker");
         trackerManager.setActiveTracker(ui->trackerBox->currentText().toStdString());
         trackerManager.startTracking();
         app_state = TRACKING;
     }
     else {
+        ui->startServerButton->setText("Start Tracker");
         trackerManager.stopTracking();
         app_state = IDLE;
     }

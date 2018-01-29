@@ -4,6 +4,7 @@
 #include <string>
 #include "tobii_research.h"
 #include "tobii_research_eyetracker.h"
+#include "tobii_research_streams.h"
 #include "tracker.hpp"
 
 class TobiiTracker: public Tracker
@@ -33,5 +34,8 @@ class TobiiTracker: public Tracker
  *    to occur.
  */
 TobiiResearchEyeTrackers* get_tobii_trackers();
+
+//Callback function for tobii api
+void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data);
 
 #endif // TOBII_TRACKER_HPP
