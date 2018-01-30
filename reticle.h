@@ -31,6 +31,9 @@ private:
     Ui::Reticle *ui;
     QTcpSocket* socket;
     static Reticle* reticle;
+    int prevPoints[15][2];
+    bool firstPoint = true;
+    int curPoint = 0;
 };
 
 #endif // RETICLE_H

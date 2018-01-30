@@ -1,6 +1,5 @@
 #include "reticle.h"
 #include "ui_reticle.h"
-#include <sstream>
 #include <string>
 
 using namespace std;
@@ -51,17 +50,42 @@ void Reticle::moveReticle(){
     in.setVersion(QDataStream::Qt_5_8);
     char* data = new char[100];
     in.readRawData(data,100);
-    std::stringstream ss;
-    ss << data;
-    int newx;
-    int newy;
+    //qDebug(data);
+    int newx = 0;
+    int newy = 0;
+    int avgx = 0;
+    int avgy = 0;
+    int size = sizeof(prevPoints) / sizeof(prevPoints[0]);
     int i=0;
-    /*
-    while(data[i] != ',') i++;
-    string xstring = ss.str().substr(0,i);
-    newx = stoi(xstring);
-    string ystring = ss.str().substr(i+1);
-    newy = stoi(ystring);
-    if(newx > 0 && newy > 0) this->move(newx-(geometry().width()/2),newy-(geometry().height()/2));
-    */
+
+    while(data[i] != ',' && data[i] != '\n') i++;
+
+    if(data[i] != '\n'){
+    string dataStr(data);
+    newx = stoi(dataStr.substr(0,i));
+    newy = stoi(dataStr.substr(i+1));
+    }
+
+    if(newx > 0 && newy > 0){
+        if(firstPoint){
+            for(int j = 0; j < size; ++j){
+                prevPoints[j][0] = newx;
+                prevPoints[j][1] = newy;
+            }
+            firstPoint = false;
+        }
+        else{
+            prevPoints[curPoint][0] = newx;
+            prevPoints[curPoint][1] = newy;
+            curPoint = (curPoint + 1) % size;
+        }
+
+        for(int j = 0; j < size; ++j){
+            avgx += prevPoints[j][0];
+            avgy += prevPoints[j][1];
+        }
+        avgx = avgx / size;
+        avgy = avgy / size;
+        this->move(avgx-(geometry().width()/2),avgy-(geometry().height()/2));
+    }
 }
