@@ -76,8 +76,8 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     memcpy(user_data, gaze_data, sizeof(*gaze_data));
     //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.gaze_origin.position_in_user_coordinates.x;
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.diameter
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.validity
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->device_time_stamp //int64_t
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->system_time_stamp //int64_t
+    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.diameter;
+    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.validity;
+    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->device_time_stamp; //int64_t
+    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->system_time_stamp; //int64_t
 }
