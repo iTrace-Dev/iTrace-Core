@@ -20,7 +20,6 @@ void TobiiTracker::startTracker() {
     TobiiResearchStatus status = tobii_research_subscribe_to_gaze_data(eyeTracker, gazeDataCallback, &gaze_data);
     if (status != TOBII_RESEARCH_STATUS_OK) {
         qDebug() << "Unable to subscribe to eye tracker data";
-        return;
     }
 }
 
@@ -29,14 +28,38 @@ void TobiiTracker::stopTracker() {
     TobiiResearchStatus status = tobii_research_unsubscribe_from_gaze_data(eyeTracker, gazeDataCallback);
     if (status != TOBII_RESEARCH_STATUS_OK) {
         qDebug() << "Unable to unsubscribe from eye tracker data";
-        return;
     }
 }
 
-void TobiiTracker::enterCalibration() {}
-void TobiiTracker::leaveCalibration(){}
-void TobiiTracker::useCalibrationPoint(float x, float y){}
-void TobiiTracker::discardCalibrationPoint(float x, float y){}
+void TobiiTracker::enterCalibration() {
+    TobiiResearchStatus status = tobii_research_screen_based_calibration_enter_calibration_mode(eyeTracker);
+    if (status != TOBII_RESEARCH_STATUS_OK){
+    }
+}
+void TobiiTracker::leaveCalibration(){
+    TobiiResearchCalibrationResult* calibration_result = NULL;
+    TobiiResearchStatus status = tobii_research_screen_based_calibration_compute_and_apply(eyeTracker, &calibration_result);
+    if (!(status == TOBII_RESEARCH_STATUS_OK && calibration_result->status == TOBII_RESEARCH_CALIBRATION_SUCCESS)) {
+        qDebug() << "Calibration Failed";
+    }
+
+    status = tobii_research_screen_based_calibration_leave_calibration_mode(eyeTracker);
+    if (status != TOBII_RESEARCH_STATUS_OK){
+        qDebug() << "Unable to leave calibration";
+    }
+}
+
+void TobiiTracker::useCalibrationPoint(float x, float y){
+    while (tobii_research_screen_based_calibration_collect_data(eyeTracker, x, y) != TOBII_RESEARCH_STATUS_OK) {
+       qDebug() << "Unable to collect calibration data.\nRetrying...";
+    }
+}
+
+void TobiiTracker::discardCalibrationPoint(float x, float y){
+    while (tobii_research_screen_based_calibration_collect_data(eyeTracker, x, y) != TOBII_RESEARCH_STATUS_OK) {
+       qDebug() << "Unable to collect calibration data.\nRetrying...";
+    }
+}
 
 TobiiResearchEyeTrackers* get_tobii_trackers() {
     TobiiResearchEyeTrackers* eyetrackers = nullptr;

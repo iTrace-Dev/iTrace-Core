@@ -28,14 +28,16 @@ SOURCES += main.cpp\
     tracker_manager.cpp \
     main_window.cpp \
     tobii_tracker.cpp \
-    mouse_tracker.cpp
+    mouse_tracker.cpp \
+    calibration_screen.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
     tobii_tracker.hpp \
     tracker.hpp \
     main_window.hpp \
-    mouse_tracker.hpp
+    mouse_tracker.hpp \
+    calibration_screen.hpp
 
 HEADERS  +=
 

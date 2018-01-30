@@ -25,6 +25,7 @@ public slots:
     void toggleReticle();
     void startCalibration();
     void showSessionSetup();
+    void setActiveTracker();
 
 private:
     Ui::MainWindow *ui;

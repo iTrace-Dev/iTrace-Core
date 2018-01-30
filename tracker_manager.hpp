@@ -13,6 +13,7 @@ class TrackerManager
 
         std::vector<std::string> getTrackerNames();
         void setActiveTracker(const std::string&);
+        Tracker* getActiveTracker();
         void startTracking();
         void stopTracking();
 

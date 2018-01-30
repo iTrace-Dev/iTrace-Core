@@ -48,6 +48,10 @@ void TrackerManager::setActiveTracker(const std::string& name) {
     }
 }
 
+Tracker* TrackerManager::getActiveTracker() {
+    return activeTracker;
+}
+
 void TrackerManager::startTracking() {
     activeTracker->startTracker();
 }

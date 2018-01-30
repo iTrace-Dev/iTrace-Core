@@ -5,6 +5,7 @@
 #include "tobii_research.h"
 #include "tobii_research_eyetracker.h"
 #include "tobii_research_streams.h"
+#include "tobii_research_calibration.h"
 #include "tracker.hpp"
 
 class TobiiTracker: public Tracker

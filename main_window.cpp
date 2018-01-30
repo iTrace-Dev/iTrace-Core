@@ -1,4 +1,5 @@
 #include "main_window.hpp"
+#include "calibration_screen.hpp"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent):
@@ -12,6 +13,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->reticleBox, SIGNAL(stateChanged(int)), this, SLOT(toggleReticle()));
     connect(ui->calibrateButton, SIGNAL(released()), this, SLOT(startCalibration()));
     connect(ui->sessionButton, SIGNAL(released()), this, SLOT(showSessionSetup()));
+    connect(ui->trackerBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setActiveTracker()));
 
     this->setFixedSize(this->geometry().width(),this->geometry().height());
 
@@ -25,6 +27,10 @@ MainWindow::~MainWindow() {
     delete ui;
 }
 
+void MainWindow::setActiveTracker() {
+    trackerManager.setActiveTracker(ui->trackerBox->currentText().toStdString());
+}
+
 void MainWindow::startTracker() {
     if (!(ui->xmlCheck->isChecked() && (!ui->jsonCheck->isChecked()))) {
         //Need to select and output format
@@ -34,7 +40,6 @@ void MainWindow::startTracker() {
 
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
-        trackerManager.setActiveTracker(ui->trackerBox->currentText().toStdString());
         trackerManager.startTracking();
         app_state = TRACKING;
     }
@@ -48,4 +53,8 @@ void MainWindow::startTracker() {
 void MainWindow::toggleReticle() {}
 void MainWindow::displayData() {}
 void MainWindow::showSessionSetup() {}
-void MainWindow::startCalibration() {}
+
+void MainWindow::startCalibration() {
+    CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();
+    calibrationScreen->startCalibration(trackerManager.getActiveTracker());
+}
