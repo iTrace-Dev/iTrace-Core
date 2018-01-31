@@ -4,6 +4,7 @@
 #include "ui_mainwindow.h" //Auto-generated
 #include <QMainWindow>
 #include "tracker_manager.hpp"
+#include "server.hpp"
 
 enum state {IDLE, TRACKING};
 
@@ -30,6 +31,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     TrackerManager trackerManager;
+    Server server;
     state app_state;
     void toggleStartButtonText();
 };

@@ -17,6 +17,7 @@ Server::~Server() {
 }
 
 void Server::newConnection() {
+    qDebug() << "CLIENT CONNECTED!";
     clients.push_back(server->nextPendingConnection());
 }
 

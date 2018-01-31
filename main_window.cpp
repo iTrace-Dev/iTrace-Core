@@ -3,7 +3,7 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager() {
+    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server() {
 
     ui->setupUi(this);
 
