@@ -6,10 +6,12 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect
 server_address = ('localhost', 8008)
-print 'connecting to server'
-sock.connect(server_address)
+print 'attempt connection to server'
 
+while sock.connect_ex(server_address):
+        pass
 
+print 'connected!'
 try:
 	while True:
 		data = sock.recv(1024)

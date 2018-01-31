@@ -1,4 +1,5 @@
 #include "server.hpp"
+#include "gaze_buffer.hpp"
 #include <QDebug>
 
 Server::Server(QObject *parent): QObject(parent) {

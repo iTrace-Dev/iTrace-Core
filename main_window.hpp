@@ -1,10 +1,11 @@
 #ifndef MAIN_WINDOW_HPP
 #define MAIN_WINDOW_HPP
 
-#include "ui_mainwindow.h" //Auto-generated
 #include <QMainWindow>
+#include "ui_mainwindow.h" //Auto-generated
 #include "tracker_manager.hpp"
 #include "server.hpp"
+#include "gaze_buffer.hpp"
 
 enum state {IDLE, TRACKING};
 
@@ -31,6 +32,7 @@ public slots:
 private:
     Ui::MainWindow *ui;
     TrackerManager trackerManager;
+    GazeBuffer* buffer;
     Server server;
     state app_state;
     void toggleStartButtonText();

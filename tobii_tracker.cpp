@@ -1,4 +1,6 @@
 #include "tobii_tracker.hpp"
+#include "gaze_data.hpp"
+#include "gaze_buffer.hpp"
 #include <QDebug>
 
 TobiiTracker::TobiiTracker():eyeTracker(nullptr) {}
@@ -75,9 +77,12 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 
 void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     memcpy(user_data, gaze_data, sizeof(*gaze_data));
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.gaze_origin.position_in_user_coordinates.x;
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.diameter;
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->left_eye.pupil_data.validity;
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->device_time_stamp; //int64_t
-    //qDebug() << static_cast<TobiiResearchGazeData*>(user_data)->system_time_stamp; //int64_t
+    TobiiResearchGazeData* gd = static_cast<TobiiResearchGazeData*>(user_data);
+
+    GazeBuffer* buffer = GazeBuffer::Instance();
+    buffer->enqueue( new GazeData(gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
+                                  gd->left_eye.gaze_point.position_on_display_area.x, gd->left_eye.gaze_point.position_on_display_area.y,
+                                  gd->right_eye.pupil_data.diameter, gd->right_eye.pupil_data.validity,
+                                  gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
+                                  gd->device_time_stamp, gd->system_time_stamp));
 }

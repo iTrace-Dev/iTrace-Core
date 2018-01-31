@@ -5,10 +5,10 @@
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server() {
 
-    ui->setupUi(this);
-
+    buffer = GazeBuffer::Instance();
     app_state = IDLE;
 
+    ui->setupUi(this);
     connect(ui->startServerButton, SIGNAL(released()), this, SLOT(startTracker()));
     connect(ui->reticleBox, SIGNAL(stateChanged(int)), this, SLOT(toggleReticle()));
     connect(ui->calibrateButton, SIGNAL(released()), this, SLOT(startCalibration()));
@@ -24,6 +24,7 @@ MainWindow::MainWindow(QWidget *parent):
 }
 
 MainWindow::~MainWindow() {
+    delete buffer;
     delete ui;
 }
 
