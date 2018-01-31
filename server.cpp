@@ -20,9 +20,9 @@ void Server::newConnection() {
     clients.push_back(server->nextPendingConnection());
 }
 
-void Server::writeData(double value) {
+void Server::writeData(std::string value) {
     for (std::vector<QTcpSocket*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
-        (*it)->write(value);
+        (*it)->write(value.c_str());
         (*it)->flush();
         (*it)->waitForBytesWritten();
     }

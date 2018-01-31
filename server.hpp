@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <string>
 
 class Server: public QObject
 {
@@ -12,7 +13,7 @@ class Server: public QObject
 public:
     explicit Server(QObject *parent = 0);
     ~Server();
-    void writeData();
+    void writeData(std::string data);
 
 public slots:
     void newConnection();
