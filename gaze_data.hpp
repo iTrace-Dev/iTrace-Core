@@ -34,6 +34,14 @@ class GazeData {
                     rightDiameter(rDiam), rightValidity(rValid), rightX(rX), rightY(rY),
                     trackerTime(tTime), systemTime(sTime) {}
 
+
+        // Temporary cheat constructor for mouse ONLY!
+        // I know...just roll with it for now.
+        GazeData(double x, double y): GazeData() {
+            leftX = x;
+            leftY = y;
+        }
+
         ~GazeData() {}
 
     public:

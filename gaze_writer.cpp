@@ -16,7 +16,7 @@ void GazeWriter::run() {
 
     while (gd) {
         //server->writeData(std::to_string(gd->leftX) + ", " + std::to_string(gd->leftY));
-        //qDebug() << gd->leftX << " " << gd->leftY;
+        qDebug() << gd->leftX << " " << gd->leftY;
         delete gd;
         gd = buffer->dequeue();
     }

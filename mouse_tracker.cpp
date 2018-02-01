@@ -1,4 +1,6 @@
 #include "mouse_tracker.hpp"
+#include "gaze_buffer.hpp"
+#include "gaze_data.hpp"
 #include <QDebug>
 
 MouseTracker::MouseTracker()
@@ -19,7 +21,9 @@ void MouseTracker::discardCalibrationPoint(float x, float y) {}
 
 void MouseTracker::trackMouse() {
     cursor = QCursor::pos();
-    qDebug() << "mouse @: " << cursor.x() << ", " << cursor.y();
+    //qDebug() << "mouse @: " << cursor.x() << ", " << cursor.y();
+    GazeBuffer* buffer = GazeBuffer::Instance();
+    buffer->enqueue( new GazeData(cursor.x(), cursor.y()) );
 }
 
 void MouseTracker::startTracker() {
