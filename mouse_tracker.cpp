@@ -21,7 +21,6 @@ void MouseTracker::discardCalibrationPoint(float x, float y) {}
 
 void MouseTracker::trackMouse() {
     cursor = QCursor::pos();
-    //qDebug() << "mouse @: " << cursor.x() << ", " << cursor.y();
     GazeBuffer* buffer = GazeBuffer::Instance();
     buffer->enqueue( new GazeData(cursor.x(), cursor.y()) );
 }
@@ -32,6 +31,8 @@ void MouseTracker::startTracker() {
 
 void MouseTracker::stopTracker() {
     timer->stop();
+    GazeBuffer* buffer = GazeBuffer::Instance();
+    buffer->enqueue(nullptr);
 }
 
 std::string MouseTracker::trackerName() const {

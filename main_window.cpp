@@ -25,7 +25,6 @@ MainWindow::MainWindow(QWidget *parent):
 }
 
 MainWindow::~MainWindow() {
-    qDebug() << __FILE__ << "DESTROY";
     buffer->Delete();
     if (ui)
         delete ui;

@@ -14,7 +14,7 @@ Server::~Server() {
     for (std::vector<QTcpSocket*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
         (*it)->close();
     }
-    delete server;
+    server->close();
 }
 
 void Server::newConnection() {

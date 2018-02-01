@@ -7,6 +7,7 @@
 #include "tobii_research_streams.h"
 #include "tobii_research_calibration.h"
 #include "tracker.hpp"
+#include <QDebug>
 
 class TobiiTracker: public Tracker {
 

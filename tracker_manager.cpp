@@ -24,7 +24,6 @@ TrackerManager::~TrackerManager() {
             delete(*it);
         }
     }
-
     if (tobiiTrackers != nullptr) {
         tobii_research_free_eyetrackers(tobiiTrackers);
     }
