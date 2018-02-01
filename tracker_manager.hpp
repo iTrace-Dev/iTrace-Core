@@ -5,8 +5,8 @@
 #include <vector>
 #include <string>
 
-class TrackerManager
-{
+class TrackerManager {
+
     public:
         TrackerManager();
         ~TrackerManager();

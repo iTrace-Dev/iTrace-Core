@@ -1,4 +1,5 @@
 #include "gaze_buffer.hpp"
+#include <QDebug>
 
 GazeBuffer* GazeBuffer::gbInstance = nullptr;
 
@@ -11,11 +12,10 @@ GazeBuffer* GazeBuffer::Instance(QObject* parent) {
 
 GazeBuffer::GazeBuffer(QObject* parent): QObject(parent), buffer() {}
 
-GazeBuffer::~GazeBuffer() {
-    std::unique_lock<std::mutex> mlock(mutex);
-    while(!buffer.empty()) {
-        delete buffer.front();
-        buffer.pop();
+void GazeBuffer::Delete () {
+    if (gbInstance) {
+        delete gbInstance;
+        gbInstance = nullptr;
     }
 }
 
@@ -35,4 +35,3 @@ GazeData* GazeBuffer::dequeue() {
     buffer.pop();
     return gd;
 }
-

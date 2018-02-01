@@ -1,5 +1,6 @@
 #include "main_window.hpp"
 #include "calibration_screen.hpp"
+#include "gaze_data.hpp"
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent):
@@ -24,8 +25,10 @@ MainWindow::MainWindow(QWidget *parent):
 }
 
 MainWindow::~MainWindow() {
-    delete buffer;
-    delete ui;
+    qDebug() << __FILE__ << "DESTROY";
+    buffer->Delete();
+    if (ui)
+        delete ui;
 }
 
 void MainWindow::setActiveTracker() {
@@ -41,6 +44,10 @@ void MainWindow::startTracker() {
 
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
+
+        writer = new GazeWriter(&server);
+        QThreadPool::globalInstance()->start(writer);
+
         trackerManager.startTracking();
         app_state = TRACKING;
     }

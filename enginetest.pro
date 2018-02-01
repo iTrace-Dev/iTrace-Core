@@ -30,7 +30,9 @@ SOURCES += main.cpp\
     tobii_tracker.cpp \
     mouse_tracker.cpp \
     calibration_screen.cpp \
-    server.cpp
+    server.cpp \
+    gaze_buffer.cpp \
+    gaze_writer.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -39,7 +41,10 @@ HEADERS  += \
     main_window.hpp \
     mouse_tracker.hpp \
     calibration_screen.hpp \
-    server.hpp
+    server.hpp \
+    gaze_data.hpp \
+    gaze_buffer.hpp \
+    gaze_writer.hpp
 
 HEADERS  +=
 

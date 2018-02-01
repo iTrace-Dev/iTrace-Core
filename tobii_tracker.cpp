@@ -31,6 +31,9 @@ void TobiiTracker::stopTracker() {
     if (status != TOBII_RESEARCH_STATUS_OK) {
         qDebug() << "Unable to unsubscribe from eye tracker data";
     }
+
+    GazeBuffer* buffer = GazeBuffer::Instance();
+    buffer->enqueue(nullptr);
 }
 
 void TobiiTracker::enterCalibration() {
@@ -78,6 +81,7 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     memcpy(user_data, gaze_data, sizeof(*gaze_data));
     TobiiResearchGazeData* gd = static_cast<TobiiResearchGazeData*>(user_data);
+    //qDebug() << "CALLBACK " << gd->left_eye.gaze_point.position_on_display_area.x << ", " << gd->left_eye.gaze_point.position_on_display_area.y;
 
     GazeBuffer* buffer = GazeBuffer::Instance();
     buffer->enqueue( new GazeData(gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,

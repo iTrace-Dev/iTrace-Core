@@ -8,8 +8,8 @@
 #include "tobii_research_calibration.h"
 #include "tracker.hpp"
 
-class TobiiTracker: public Tracker
-{
+class TobiiTracker: public Tracker {
+
     public:
         TobiiTracker();
         TobiiTracker(TobiiResearchEyeTracker* tracker);

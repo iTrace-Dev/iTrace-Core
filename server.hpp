@@ -6,22 +6,21 @@
 #include <QTcpServer>
 #include <string>
 
-class Server: public QObject
-{
+class Server: public QObject {
     Q_OBJECT
 
-public:
-    explicit Server(QObject *parent = nullptr);
-    ~Server();
-    void writeData(std::string data);
+    public:
+        explicit Server(QObject *parent = nullptr);
+        ~Server();
+        void writeData(const std::string& data);
 
-public slots:
-    void newConnection();
+    public slots:
+        void newConnection();
 
-private:
-    QTcpServer *server;
-    std::vector<QTcpSocket*> clients;
-    const int PORT = 8008;
+    private:
+        QTcpServer *server;
+        std::vector<QTcpSocket*> clients;
+        const int PORT = 8008;
 };
 
 #endif // SERVER_HPP

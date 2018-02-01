@@ -17,37 +17,38 @@
  */
 
 #include <cstdint>
+#include <QDebug>
 
-class GazeData
-{
-public:
+class GazeData {
 
-    GazeData(): leftDiameter(0), leftValidity(0), leftX(0), leftY(0),
-                rightDiameter(0), rightValidity(0), rightX(0), rightY(0),
-                trackerTime(0), systemTime(0) {}
+    public:
 
-    GazeData(double lDiam, double lValid, double lX, double lY,
-             double rDiam, double rValid, double rX, double rY,
-             int64_t tTime, int64_t sTime):
-                leftDiameter(lDiam), leftValidity(lValid), leftX(lX), leftY(lY),
-                rightDiameter(rDiam), rightValidity(rValid), rightX(rX), rightY(rY),
-                trackerTime(tTime), systemTime(sTime) {}
+        GazeData(): leftDiameter(0), leftValidity(0), leftX(0), leftY(0),
+                    rightDiameter(0), rightValidity(0), rightX(0), rightY(0),
+                    trackerTime(0), systemTime(0) {}
 
-    ~GazeData() {}
+        GazeData(double lDiam, double lValid, double lX, double lY,
+                 double rDiam, double rValid, double rX, double rY,
+                 int64_t tTime, int64_t sTime):
+                    leftDiameter(lDiam), leftValidity(lValid), leftX(lX), leftY(lY),
+                    rightDiameter(rDiam), rightValidity(rValid), rightX(rX), rightY(rY),
+                    trackerTime(tTime), systemTime(sTime) {}
 
-public:
-    double leftDiameter;
-    double leftValidity;
-    double leftX;
-    double leftY;
+        ~GazeData() {}
 
-    double rightDiameter;
-    double rightValidity;
-    double rightX;
-    double rightY;
+    public:
+        double leftDiameter;
+        double leftValidity;
+        double leftX;
+        double leftY;
 
-    int64_t trackerTime;
-    int64_t systemTime;
+        double rightDiameter;
+        double rightValidity;
+        double rightX;
+        double rightY;
+
+        int64_t trackerTime;
+        int64_t systemTime;
 };
 
 #endif // GAZE_DATA_HPP

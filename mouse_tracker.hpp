@@ -7,28 +7,27 @@
 #include "tracker.hpp"
 
 class MouseTracker: public Tracker {
-
     Q_OBJECT
 
-public:
-    MouseTracker();
-    ~MouseTracker();
+    public:
+        MouseTracker();
+        ~MouseTracker();
 
-    void enterCalibration();
-    void leaveCalibration();
-    void useCalibrationPoint(float x, float y);
-    void discardCalibrationPoint(float x, float y);
-    void startTracker();
-    void stopTracker();
-    std::string trackerName() const;
+        void enterCalibration();
+        void leaveCalibration();
+        void useCalibrationPoint(float x, float y);
+        void discardCalibrationPoint(float x, float y);
+        void startTracker();
+        void stopTracker();
+        std::string trackerName() const;
 
-public slots:
-    void trackMouse();
+    public slots:
+        void trackMouse();
 
-private:
-    QTimer* timer;
-    QPoint cursor;
-    std::string deviceName;
+    private:
+        QTimer* timer;
+        QPoint cursor;
+        std::string deviceName;
 };
 
 #endif // MOUSE_TRACKER_HPP
