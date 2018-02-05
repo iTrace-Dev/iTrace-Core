@@ -31,8 +31,6 @@ void MouseTracker::startTracker() {
 
 void MouseTracker::stopTracker() {
     timer->stop();
-    GazeBuffer* buffer = GazeBuffer::Instance();
-    buffer->enqueue(nullptr);
 }
 
 std::string MouseTracker::trackerName() const {

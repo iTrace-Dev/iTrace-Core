@@ -2,6 +2,7 @@
 #include <QDebug>
 #include "tracker_manager.hpp"
 #include "mouse_tracker.hpp"
+#include "gaze_buffer.hpp"
 
 TrackerManager::TrackerManager():activeTracker(nullptr), tobiiTrackers(nullptr) {
 
@@ -57,4 +58,7 @@ void TrackerManager::startTracking() {
 
 void TrackerManager::stopTracking() {
     activeTracker->stopTracker();
+
+    GazeBuffer* buffer = GazeBuffer::Instance();
+    buffer->enqueue(nullptr);
 }

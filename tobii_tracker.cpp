@@ -31,9 +31,6 @@ void TobiiTracker::stopTracker() {
     if (status != TOBII_RESEARCH_STATUS_OK) {
         qDebug() << "Unable to unsubscribe from eye tracker data";
     }
-
-    GazeBuffer* buffer = GazeBuffer::Instance();
-    buffer->enqueue(nullptr);
 }
 
 void TobiiTracker::enterCalibration() {
