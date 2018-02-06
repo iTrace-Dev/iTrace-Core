@@ -1,12 +1,12 @@
-#include "gaze_writer.hpp"
+#include "gaze_handler.hpp"
 #include "gaze_data.hpp"
 #include <QDebug>
 
-GazeWriter::GazeWriter() {
+GazeHandler::GazeHandler() {
     buffer = GazeBuffer::Instance();
 }
 
-void GazeWriter::run() {
+void GazeHandler::run() {
     GazeData* gd = buffer->dequeue();
 
     while (gd) {

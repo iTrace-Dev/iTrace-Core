@@ -1,5 +1,5 @@
-#ifndef GAZE_WRITER_HPP
-#define GAZE_WRITER_HPP
+#ifndef GAZE_HANDLER_HPP
+#define GAZE_HANDLER_HPP
 
 #include <QObject>
 #include <QThreadPool>
@@ -8,12 +8,12 @@
 #include "gaze_buffer.hpp"
 #include "server.hpp"
 
-class GazeWriter : public QObject, public QRunnable {
+class GazeHandler : public QObject, public QRunnable {
     Q_OBJECT
 
     public:
-        GazeWriter();
-        ~GazeWriter() {}
+        GazeHandler();
+        ~GazeHandler() {}
         void run();
 
     signals:
@@ -24,4 +24,4 @@ class GazeWriter : public QObject, public QRunnable {
         GazeBuffer* buffer;
 };
 
-#endif // GAZE_WRITER_HPP
+#endif // GAZE_HANDLER_HPP
