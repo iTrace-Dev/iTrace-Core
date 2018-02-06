@@ -6,6 +6,10 @@
 #include <QTcpServer>
 #include <string>
 
+/*
+ * The server is strictly used for communication between
+ * the Core and any plugins. Data is sent as a string.
+ */
 class Server: public QObject {
     Q_OBJECT
 

@@ -4,6 +4,9 @@
 #include <QObject>
 #include <string>
 
+/*
+ * Abstract interface that all trackers must implement
+ */
 class Tracker: public QObject {
 
     public:

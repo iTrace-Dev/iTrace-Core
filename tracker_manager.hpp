@@ -5,6 +5,12 @@
 #include <vector>
 #include <string>
 
+/*
+ * Coordinates the collection of available
+ * trackers and the active tracker (as determined
+ * by the user). All general tracker actions are
+ * handled by this class.
+ */
 class TrackerManager {
 
     public:

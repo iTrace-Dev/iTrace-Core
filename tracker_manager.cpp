@@ -59,7 +59,11 @@ void TrackerManager::startTracking() {
 void TrackerManager::stopTracking() {
     activeTracker->stopTracker();
 
-    // Signals to gaze_writer thread to stop processing the queue
+    /*
+     * Signals to gaze_writer thread to terminate
+     * MUST BE DONE AFTER THE TRACKER IS STOPPED OR GAZE_BUFFER
+     * WILL HAVE LEFT OVER DATA FROM SUBSEQUENT TRACKER RUNS
+     */
     GazeBuffer* buffer = GazeBuffer::Instance();
     buffer->enqueue(nullptr);
 }
