@@ -18,6 +18,7 @@ class GazeWriter : public QObject, public QRunnable {
 
     signals:
         void socketOut(std::string);
+        void reticleOut(double x, double y);
 
     private:
         GazeBuffer* buffer;

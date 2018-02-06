@@ -8,6 +8,7 @@
 #include "server.hpp"
 #include "gaze_buffer.hpp"
 #include "gaze_writer.hpp"
+#include "reticle.hpp"
 
 Q_DECLARE_METATYPE(std::string)
 
@@ -37,6 +38,7 @@ class MainWindow : public QMainWindow {
         TrackerManager trackerManager;
         GazeBuffer* buffer;
         GazeWriter* writer;
+        Reticle* reticle;
 
         Server server;
         state app_state;

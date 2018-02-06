@@ -32,7 +32,8 @@ SOURCES += main.cpp\
     calibration_screen.cpp \
     server.cpp \
     gaze_buffer.cpp \
-    gaze_writer.cpp
+    gaze_writer.cpp \
+    reticle.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -44,7 +45,8 @@ HEADERS  += \
     server.hpp \
     gaze_data.hpp \
     gaze_buffer.hpp \
-    gaze_writer.hpp
+    gaze_writer.hpp \
+    reticle.hpp
 
 HEADERS  +=
 

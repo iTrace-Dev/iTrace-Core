@@ -5,8 +5,11 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server() {
+
     qRegisterMetaType<std::string>();
 
+    Reticle::createReticle((QWidget*) this->parent());
+    reticle = Reticle::getReticle();
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
 
@@ -48,6 +51,8 @@ void MainWindow::startTracker() {
         writer = new GazeWriter();
         QThreadPool::globalInstance()->start(writer);
         connect(writer, &GazeWriter::socketOut, &server, &Server::writeData);
+        connect(writer, &GazeWriter::reticleOut, reticle, &Reticle::moveReticle);
+
         trackerManager.startTracking();
         app_state = TRACKING;
     }
@@ -58,7 +63,14 @@ void MainWindow::startTracker() {
     }
 }
 
-void MainWindow::toggleReticle() {}
+void MainWindow::toggleReticle() {
+    if (ui->reticleBox->isChecked()) {
+        reticle->show();
+    } else {
+        reticle->hide();
+    }
+}
+
 void MainWindow::displayData() {}
 void MainWindow::showSessionSetup() {}
 
