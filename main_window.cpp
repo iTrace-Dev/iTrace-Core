@@ -5,6 +5,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server() {
+    qRegisterMetaType<std::string>();
 
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
@@ -44,9 +45,9 @@ void MainWindow::startTracker() {
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
 
-        writer = new GazeWriter(&server);
+        writer = new GazeWriter();
         QThreadPool::globalInstance()->start(writer);
-
+        connect(writer, &GazeWriter::socketOut, &server, &Server::writeData);
         trackerManager.startTracking();
         app_state = TRACKING;
     }

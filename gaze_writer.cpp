@@ -4,17 +4,13 @@
 
 GazeWriter::GazeWriter() {
     buffer = GazeBuffer::Instance();
-    server = nullptr;
-}
-
-GazeWriter::GazeWriter(Server* serv): GazeWriter() {
-    server = serv;
 }
 
 void GazeWriter::run() {
     GazeData* gd = buffer->dequeue();
 
     while (gd) {
+        emit socketOut(gd->toString());
         //server->writeData(std::to_string(gd->leftX) + ", " + std::to_string(gd->leftY));
         //qDebug() << gd->leftX << " " << gd->leftY;
         delete gd;

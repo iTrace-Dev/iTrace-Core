@@ -2,11 +2,14 @@
 #define MAIN_WINDOW_HPP
 
 #include <QMainWindow>
+#include <string>
 #include "ui_mainwindow.h" //Auto-generated
 #include "tracker_manager.hpp"
 #include "server.hpp"
 #include "gaze_buffer.hpp"
 #include "gaze_writer.hpp"
+
+Q_DECLARE_METATYPE(std::string)
 
 enum state {IDLE, TRACKING};
 

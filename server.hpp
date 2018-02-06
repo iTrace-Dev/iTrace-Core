@@ -12,10 +12,10 @@ class Server: public QObject {
     public:
         explicit Server(QObject *parent = nullptr);
         ~Server();
-        void writeData(const std::string& data);
 
     public slots:
         void newConnection();
+        void writeData(std::string data);
 
     private:
         QTcpServer *server;

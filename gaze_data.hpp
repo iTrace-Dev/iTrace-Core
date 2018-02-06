@@ -16,7 +16,8 @@
  *
  */
 
-#include <cstdint>
+#include <cstdint> //provides int64_t
+#include <string>
 #include <QDebug>
 
 class GazeData {
@@ -40,6 +41,10 @@ class GazeData {
         GazeData(double x, double y): GazeData() {
             leftX = x;
             leftY = y;
+        }
+
+        std::string toString() {
+            return std::to_string(trackerTime) + ',' + std::to_string(leftX) + "," + std::to_string(leftY) + '\n';
         }
 
         ~GazeData() {}
