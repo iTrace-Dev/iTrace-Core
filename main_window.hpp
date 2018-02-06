@@ -7,7 +7,7 @@
 #include "tracker_manager.hpp"
 #include "server.hpp"
 #include "gaze_buffer.hpp"
-#include "gaze_writer.hpp"
+#include "gaze_handler.hpp"
 #include "reticle.hpp"
 
 Q_DECLARE_METATYPE(std::string)
@@ -37,7 +37,7 @@ class MainWindow : public QMainWindow {
         Ui::MainWindow *ui;
         TrackerManager trackerManager;
         GazeBuffer* buffer;
-        GazeWriter* writer;
+        GazeHandler* writer;
         Reticle* reticle;
 
         Server server;
