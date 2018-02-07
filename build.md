@@ -2,10 +2,10 @@
 	* x64 (QT libraries are 64bit only for Visual Studio 2017)
 	
 ### DEPENDENCY STRUCTURE NOTES
-	* Tobii pro sdk dlls and lib files must be in the same directory (for dynamic loading)
+	* Tobii pro sdk dlls and lib files must be in the same directory
 	
 ### REQUIREMENTS
-* QT 5.9.3 (5.10.0 not supported)
+* QT 5.10.0
 * Git
 * Visual Studio 2017
 * Tobii Pro SDK v1.2.0.33 (newer versions not supported)
@@ -13,11 +13,13 @@
 
 ### WINDOWS BUILD
 * Clone iTrace-Core repo
-* Extract contents of [dependency zip](https://drive.google.com/open?id=1BF4X3_PJuH0gf0S6Aua9r8hruPpXnbzr) to a folder named "deps" in root of
+* Extract contents of [dependency zip](https://drive.google.com/file/d/1kiDMIgbbvRWB2h_rz3nkJZsjFLu56SYg/view?usp=sharing) to a folder named "deps" in root of
 	iTrace-Core repository
 	
 ### BUILDING IN QT CREATOR
-* Ensure project is type is set to: Desktop QT 5.9.3 MSVC2017 64bit
+* Project paths should be configured correctly for Windows if the above steps are followed. If not, follow instructions below for QT Creator.
+
+* Ensure project is type is set to: Desktop QT 5.10.0 MSVC2017 64bit
 * Double click enginetest.pro 
 	* If it contains any path/build information for the tobii sdk as seen below, remove it
 	
@@ -37,11 +39,8 @@
 		* linkage
 			* static
 		* uncheck add "d" for debug libraries
-* Click "Projects" (Need to do this step for each release mode (release, debug, profile))
-	* Find Build Environment
-	* Hit details
-		* Add environment variable called TOBII_HOME
-		* Set path to tobii_research.dll (..\iTrace-Core\deps\x64\release\lib)
+
+## THE INFORMATION BELOW IS OUT-DATED FOR THE NEW ARCHITECTURE..
 
 ### BUILDING WITH CMAKE (ONLY SUPPORTS RELEASE BUILDS...FOR NOW)
 * Create a user or system environment variable called "QT_CMAKE_DIR"
@@ -75,7 +74,3 @@
 * In solution explorer right click itrace and select "set as startup project"
 * In solution explorer right click itrace and select "build"
 * You should now be able to use the play button to run iTrace-Core
-
-
-
-
