@@ -24,44 +24,44 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 QT += network
 
-
 SOURCES += main.cpp\
-        mainwindow.cpp \
-    mousetracker.cpp \
-    tobiipro.cpp \
-    calibrationscreen.cpp \
-    tobiiEyetracker.cpp \
-    tracker.cpp \
-    gazeserver.cpp \
+    tracker_manager.cpp \
+    main_window.cpp \
+    tobii_tracker.cpp \
+    mouse_tracker.cpp \
+    calibration_screen.cpp \
+    server.cpp \
+    gaze_buffer.cpp \
     reticle.cpp \
-    xmlwriter.cpp \
-    jsonwriter.cpp \
-    sessionsetup.cpp
+    gaze_handler.cpp
 
-HEADERS  += mainwindow.h \
-    mousetracker.h \
-    tobiifunctions.h \
-    tobiipro.h \
-    calibrationscreen.h \
-    tobiiEyetracker.h \
-    tracker.h \
-    gazeserver.h \
-    reticle.h \
-    xmlwriter.h \
-    jsonwriter.h \
-    sessionsetup.h
+HEADERS  += \
+    tracker_manager.hpp \
+    tobii_tracker.hpp \
+    tracker.hpp \
+    main_window.hpp \
+    mouse_tracker.hpp \
+    calibration_screen.hpp \
+    server.hpp \
+    gaze_data.hpp \
+    gaze_buffer.hpp \
+    reticle.hpp \
+    gaze_handler.hpp
 
-HEADERS  += mainwindow.h \
-    mousetracker.h \
-    sessionsetup.h
+HEADERS  +=
 
 FORMS    += mainwindow.ui \
     sessionsetup.ui \
     reticle.ui
 
 
+win32: LIBS += -L$$PWD/deps/x64/release/lib/ -ltobii_research
 
-win32: LIBS += -L$$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/lib/ -ltobii_research
+INCLUDEPATH += $$PWD/deps/include/tobii_sdk
+DEPENDPATH += $$PWD/deps/include/tobii_sdk
 
-INCLUDEPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
-DEPENDPATH += $$PWD/../../../Downloads/TobiiPro.SDK.C_Binding.Windows_1.2.0.33/64/include
+
+macx: LIBS += -L$$PWD/../../../../usr/local/lib/tobii_research/ -ltobii_research.1.3.0
+
+INCLUDEPATH += $$PWD/../../../../usr/local/include/tobii_research
+DEPENDPATH += $$PWD/../../../../usr/local/include/tobii_research

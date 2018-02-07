@@ -1,8 +1,6 @@
-#include "reticle.h"
+#include "reticle.hpp"
 #include "ui_reticle.h"
-#include <string>
-
-using namespace std;
+#include <QDebug>
 
 Reticle* Reticle::reticle = 0;
 
@@ -16,17 +14,11 @@ Reticle* Reticle::getReticle(){
     return reticle;
 }
 
-Reticle::Reticle(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Reticle)
-{
+Reticle::Reticle(QWidget *parent) : QWidget(parent), ui(new Ui::Reticle) {
     ui->setupUi(this);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_QuitOnClose, false);
     this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    socket = new QTcpSocket(this);
-    connect(socket, SIGNAL(readyRead()), this, SLOT(moveReticle()));
-    socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
 }
 
 Reticle::~Reticle()
@@ -45,26 +37,16 @@ void Reticle::paintEvent(QPaintEvent* /*event*/){
     painter.drawEllipse(5,5,geometry().width()-10,geometry().height()-10);
 }
 
-void Reticle::moveReticle(){
-    QDataStream in(socket);
-    in.setVersion(QDataStream::Qt_5_8);
-    char* data = new char[100];
-    in.readRawData(data,100);
+void Reticle::moveReticle(double x, double y){
     //qDebug(data);
     int newx = 0;
     int newy = 0;
     int avgx = 0;
     int avgy = 0;
     int size = sizeof(prevPoints) / sizeof(prevPoints[0]);
-    int i=0;
 
-    while(data[i] != ',' && data[i] != '\n') i++;
-
-    if(data[i] != '\n'){
-    string dataStr(data);
-    newx = stoi(dataStr.substr(0,i));
-    newy = stoi(dataStr.substr(i+1));
-    }
+    newx = x;
+    newy = y;
 
     if(newx > 0 && newy > 0){
         if(firstPoint){

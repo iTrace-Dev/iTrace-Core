@@ -1,5 +1,5 @@
-#include "calibrationscreen.h"
-#include <windows.h>
+#include "calibration_screen.hpp"
+
 CalibrationScreen* CalibrationScreen::calibrationScreen = 0;
 
 CalibrationScreen* CalibrationScreen::getCalibrationScreen(){
@@ -39,7 +39,6 @@ void CalibrationScreen::startCalibration(Tracker* selectedTracker){
 void CalibrationScreen::stopCalibration(){
     tracker->leaveCalibration();
     timer->stop();
-    Sleep(250);
     this->hide();
 }
 
