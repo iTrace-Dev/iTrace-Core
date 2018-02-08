@@ -9,6 +9,7 @@
 #include "gaze_buffer.hpp"
 #include "gaze_handler.hpp"
 #include "reticle.hpp"
+#include "session_setup.hpp"
 
 Q_DECLARE_METATYPE(std::string)
 
@@ -39,6 +40,7 @@ class MainWindow : public QMainWindow {
         GazeBuffer* buffer;
         GazeHandler* writer;
         Reticle* reticle;
+        SessionSetup* sessionDialog;
 
         Server server;
         state app_state;

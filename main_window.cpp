@@ -10,6 +10,10 @@ MainWindow::MainWindow(QWidget *parent):
 
     Reticle::createReticle((QWidget*) this->parent());
     reticle = Reticle::getReticle();
+
+    SessionSetup::createSessionSetup((QWidget*) this->parent());
+    sessionDialog = SessionSetup::getSessionSetup();
+
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
 
@@ -72,7 +76,10 @@ void MainWindow::toggleReticle() {
 }
 
 void MainWindow::displayData() {}
-void MainWindow::showSessionSetup() {}
+
+void MainWindow::showSessionSetup() {
+    sessionDialog->show();
+}
 
 void MainWindow::startCalibration() {
     CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();

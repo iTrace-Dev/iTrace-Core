@@ -33,7 +33,8 @@ SOURCES += main.cpp\
     server.cpp \
     gaze_buffer.cpp \
     reticle.cpp \
-    gaze_handler.cpp
+    gaze_handler.cpp \
+    session_setup.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -46,7 +47,8 @@ HEADERS  += \
     gaze_data.hpp \
     gaze_buffer.hpp \
     reticle.hpp \
-    gaze_handler.hpp
+    gaze_handler.hpp \
+    session_setup.hpp
 
 HEADERS  +=
 
