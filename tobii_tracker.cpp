@@ -58,8 +58,8 @@ void TobiiTracker::useCalibrationPoint(float x, float y){
 }
 
 void TobiiTracker::discardCalibrationPoint(float x, float y){
-    while (tobii_research_screen_based_calibration_collect_data(eyeTracker, x, y) != TOBII_RESEARCH_STATUS_OK) {
-       qDebug() << "Unable to collect calibration data.\nRetrying...";
+    if (tobii_research_screen_based_calibration_discard_data(eyeTracker, x, y) != TOBII_RESEARCH_STATUS_OK) {
+       qDebug() << "Unable to discard calibration data point.\n";
     }
 }
 
