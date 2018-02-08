@@ -34,7 +34,7 @@ SOURCES += main.cpp\
     gaze_buffer.cpp \
     reticle.cpp \
     gaze_handler.cpp \
-    session_setup.cpp
+    session_window.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -48,13 +48,14 @@ HEADERS  += \
     gaze_buffer.hpp \
     reticle.hpp \
     gaze_handler.hpp \
-    session_setup.hpp
+    session_window.hpp
 
 HEADERS  +=
 
-FORMS    += mainwindow.ui \
-    sessionsetup.ui \
-    reticle.ui
+FORMS    += \
+    reticle.ui \
+    session_window.ui \
+    main_window.ui
 
 
 win32: LIBS += -L$$PWD/deps/x64/release/lib/ -ltobii_research

@@ -5,6 +5,7 @@
 #include <QPainter>
 #include <QPalette>
 #include <list>
+#include "ui_reticle.h" //Auto-generated
 
 namespace Ui {
 class Reticle;

@@ -3,13 +3,13 @@
 
 #include <QMainWindow>
 #include <string>
-#include "ui_mainwindow.h" //Auto-generated
+#include "ui_main_window.h" //Auto-generated
 #include "tracker_manager.hpp"
 #include "server.hpp"
 #include "gaze_buffer.hpp"
 #include "gaze_handler.hpp"
 #include "reticle.hpp"
-#include "session_setup.hpp"
+#include "session_window.hpp"
 
 Q_DECLARE_METATYPE(std::string)
 
@@ -40,7 +40,7 @@ class MainWindow : public QMainWindow {
         GazeBuffer* buffer;
         GazeHandler* writer;
         Reticle reticle;
-        SessionSetup sessionDialog;
+        SessionWindow sessionDialog;
 
         Server server;
         state app_state;
