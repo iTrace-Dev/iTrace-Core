@@ -11,8 +11,7 @@ MainWindow::MainWindow(QWidget *parent):
     Reticle::createReticle((QWidget*) this->parent());
     reticle = Reticle::getReticle();
 
-    SessionSetup::createSessionSetup((QWidget*) this->parent());
-    sessionDialog = SessionSetup::getSessionSetup();
+    sessionDialog = new SessionSetup((QWidget*) this->parent());
 
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
