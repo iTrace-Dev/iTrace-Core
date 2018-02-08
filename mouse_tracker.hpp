@@ -13,13 +13,16 @@ class MouseTracker: public Tracker {
         MouseTracker();
         ~MouseTracker();
 
-        void enterCalibration();
-        void leaveCalibration();
-        void useCalibrationPoint(float x, float y);
-        void discardCalibrationPoint(float x, float y);
         void startTracker();
         void stopTracker();
         std::string trackerName() const;
+
+        // These don't and probablly never will apply to the mouse
+        // They still need to be here to conform to the tracker interface
+        void enterCalibration() {}
+        void leaveCalibration() {}
+        void useCalibrationPoint(float, float) {}
+        void discardCalibrationPoint(float, float) {}
 
     public slots:
         void trackMouse();

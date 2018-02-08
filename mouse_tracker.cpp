@@ -14,11 +14,6 @@ MouseTracker::~MouseTracker() {
     delete timer;
 }
 
-void MouseTracker::enterCalibration() {}
-void MouseTracker::leaveCalibration() {}
-void MouseTracker::useCalibrationPoint(float x, float y) {}
-void MouseTracker::discardCalibrationPoint(float x, float y) {}
-
 void MouseTracker::trackMouse() {
     cursor = QCursor::pos();
     GazeBuffer* buffer = GazeBuffer::Instance();
