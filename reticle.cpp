@@ -7,6 +7,10 @@ Reticle::Reticle(QWidget *parent) : QWidget(parent), ui(new Ui::Reticle) {
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_QuitOnClose, false);
     this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
+
+    //Setup for efficent running average
+    totalX = 0;
+    totalY = 0;
 }
 
 Reticle::~Reticle()
@@ -26,36 +30,36 @@ void Reticle::paintEvent(QPaintEvent* /*event*/){
 }
 
 void Reticle::moveReticle(double x, double y){
-    //qDebug(data);
-    int newx = 0;
-    int newy = 0;
-    int avgx = 0;
-    int avgy = 0;
-    int size = sizeof(prevPoints) / sizeof(prevPoints[0]);
 
-    newx = x;
-    newy = y;
+    // No reason to do anything if it can't be seen...
+    if (!(this->isVisible()))
+        return;
 
-    if(newx > 0 && newy > 0){
-        if(firstPoint){
-            for(int j = 0; j < size; ++j){
-                prevPoints[j][0] = newx;
-                prevPoints[j][1] = newy;
-            }
-            firstPoint = false;
-        }
-        else{
-            prevPoints[curPoint][0] = newx;
-            prevPoints[curPoint][1] = newy;
-            curPoint = (curPoint + 1) % size;
-        }
+    //Sum up all the x and y we have seen
+    totalX += x;
+    totalY += y;
 
-        for(int j = 0; j < size; ++j){
-            avgx += prevPoints[j][0];
-            avgy += prevPoints[j][1];
-        }
-        avgx = avgx / size;
-        avgy = avgy / size;
-        this->move(avgx-(geometry().width()/2),avgy-(geometry().height()/2));
+    //Add them to the list of values we have seen
+    xPoints.push_front(x);
+    yPoints.push_front(y);
+
+    /*
+     * If we have enough points (MAX_NUM_POINTS) for desired smoothness
+     * then we take an average of the points and move the reticle.
+     *
+     * To save re-totaling the points, we then just remove the oldest value from the
+     * total and the lists (back) so the next time the function is called we only
+     * evaluate the last MAX_NUM_POINTS.
+     */
+    if (xPoints.size() == MAX_NUM_POINTS) {
+        double avgX = totalX/MAX_NUM_POINTS;
+        double avgY = totalY/MAX_NUM_POINTS;
+        this->move(avgX-(geometry().width()/2), avgY-(geometry().height()/2));
+
+        //Remove oldest points from totals and lists
+        totalX -= xPoints.back();
+        totalY -= yPoints.back();
+        xPoints.pop_back();
+        yPoints.pop_back();
     }
 }

@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QPalette>
+#include <list>
 
 namespace Ui {
 class Reticle;
@@ -24,10 +25,12 @@ protected:
     void paintEvent(QPaintEvent *event) override;
 
 private:
+    const size_t MAX_NUM_POINTS = 15;
     Ui::Reticle *ui;
-    int prevPoints[15][2];
-    bool firstPoint = true;
-    int curPoint = 0;
+    std::list<double> xPoints;
+    std::list<double> yPoints;
+    double totalX;
+    double totalY;
 };
 
 #endif // RETICLE_HPP
