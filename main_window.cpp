@@ -4,14 +4,10 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server() {
+    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server(),
+    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
-
-    Reticle::createReticle((QWidget*) this->parent());
-    reticle = Reticle::getReticle();
-
-    sessionDialog = new SessionSetup((QWidget*) this->parent());
 
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
@@ -33,6 +29,7 @@ MainWindow::MainWindow(QWidget *parent):
 
 MainWindow::~MainWindow() {
     buffer->Delete();
+
     if (ui)
         delete ui;
 }
@@ -54,7 +51,7 @@ void MainWindow::startTracker() {
         writer = new GazeHandler();
         QThreadPool::globalInstance()->start(writer);
         connect(writer, &GazeHandler::socketOut, &server, &Server::writeData);
-        connect(writer, &GazeHandler::reticleOut, reticle, &Reticle::moveReticle);
+        connect(writer, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
 
         trackerManager.startTracking();
         app_state = TRACKING;
@@ -68,16 +65,16 @@ void MainWindow::startTracker() {
 
 void MainWindow::toggleReticle() {
     if (ui->reticleBox->isChecked()) {
-        reticle->show();
+        reticle.show();
     } else {
-        reticle->hide();
+        reticle.hide();
     }
 }
 
 void MainWindow::displayData() {}
 
 void MainWindow::showSessionSetup() {
-    sessionDialog->show();
+    sessionDialog.show();
 }
 
 void MainWindow::startCalibration() {

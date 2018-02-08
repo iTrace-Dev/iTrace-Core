@@ -2,18 +2,6 @@
 #include "ui_reticle.h"
 #include <QDebug>
 
-Reticle* Reticle::reticle = 0;
-
-void Reticle::createReticle(QWidget *parent){
-    if(!reticle){
-        reticle = new Reticle(parent);
-    }
-}
-
-Reticle* Reticle::getReticle(){
-    return reticle;
-}
-
 Reticle::Reticle(QWidget *parent) : QWidget(parent), ui(new Ui::Reticle) {
     ui->setupUi(this);
     setAttribute(Qt::WA_TranslucentBackground);

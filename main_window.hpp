@@ -39,8 +39,8 @@ class MainWindow : public QMainWindow {
         TrackerManager trackerManager;
         GazeBuffer* buffer;
         GazeHandler* writer;
-        Reticle* reticle;
-        SessionSetup* sessionDialog;
+        Reticle reticle;
+        SessionSetup sessionDialog;
 
         Server server;
         state app_state;

@@ -16,8 +16,6 @@ class Reticle : public QWidget
 public:
     explicit Reticle(QWidget *parent = 0);
     ~Reticle();
-    static Reticle* getReticle();
-    static void createReticle(QWidget *parent = 0);
 
 public slots:
     void moveReticle(double x, double y);
@@ -27,7 +25,6 @@ protected:
 
 private:
     Ui::Reticle *ui;
-    static Reticle* reticle;
     int prevPoints[15][2];
     bool firstPoint = true;
     int curPoint = 0;
