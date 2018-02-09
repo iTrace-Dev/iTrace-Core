@@ -10,6 +10,7 @@
 #include "gaze_handler.hpp"
 #include "reticle.hpp"
 #include "session_window.hpp"
+#include "xml_writer.hpp"
 
 Q_DECLARE_METATYPE(std::string)
 
@@ -26,7 +27,7 @@ class MainWindow : public QMainWindow {
         explicit MainWindow(QWidget *parent = 0);
         ~MainWindow();
 
-    public slots:
+    private slots:
         void startTracker();
         void displayData();
         void toggleReticle();
@@ -38,9 +39,10 @@ class MainWindow : public QMainWindow {
         Ui::MainWindow *ui;
         TrackerManager trackerManager;
         GazeBuffer* buffer;
-        GazeHandler* writer;
+        GazeHandler* bufferHandler;
         Reticle reticle;
         SessionWindow sessionDialog;
+        XMLWriter xml;
 
         Server server;
         state app_state;

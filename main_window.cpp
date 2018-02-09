@@ -48,10 +48,12 @@ void MainWindow::startTracker() {
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
 
-        writer = new GazeHandler();
-        QThreadPool::globalInstance()->start(writer);
-        connect(writer, &GazeHandler::socketOut, &server, &Server::writeData);
-        connect(writer, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
+
+        xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
+        bufferHandler = new GazeHandler();
+        QThreadPool::globalInstance()->start(bufferHandler);
+        connect(bufferHandler, &GazeHandler::socketOut, &server, &Server::writeData);
+        connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
 
         trackerManager.startTracking();
         app_state = TRACKING;

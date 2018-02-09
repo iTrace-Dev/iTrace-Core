@@ -34,7 +34,8 @@ SOURCES += main.cpp\
     gaze_buffer.cpp \
     reticle.cpp \
     gaze_handler.cpp \
-    session_window.cpp
+    session_window.cpp \
+    xml_writer.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -48,7 +49,8 @@ HEADERS  += \
     gaze_buffer.hpp \
     reticle.hpp \
     gaze_handler.hpp \
-    session_window.hpp
+    session_window.hpp \
+    xml_writer.hpp
 
 HEADERS  +=
 
