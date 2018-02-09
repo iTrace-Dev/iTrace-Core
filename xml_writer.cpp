@@ -37,6 +37,10 @@ void XMLWriter::writeResponse(GazeData gaze) {
     writer.writeEmptyElement("response");
     writer.writeAttribute("x", QString::number(gaze.leftX));
     writer.writeAttribute("y", QString::number(gaze.leftY));
+    writer.writeAttribute("left_validation", QString::number(gaze.leftValidity));
+    writer.writeAttribute("right_validation", QString::number(gaze.rightValidity));
+    writer.writeAttribute("tracker_time", QString::number(gaze.trackerTime));
+    writer.writeAttribute("system_time", QString::number(gaze.systemTime));
 }
 
 XMLWriter::~XMLWriter() {
