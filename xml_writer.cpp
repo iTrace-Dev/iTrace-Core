@@ -1,4 +1,5 @@
 #include "xml_writer.hpp"
+#include "gaze_data.hpp"
 #include <QString>
 #include <chrono>
 #include <ctime>
@@ -30,6 +31,12 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
 
 
         writer.writeEndElement(); //Close "environment"
+}
+
+void XMLWriter::writeResponse(GazeData gaze) {
+    writer.writeEmptyElement("response");
+    writer.writeAttribute("x", QString::number(gaze.leftX));
+    writer.writeAttribute("y", QString::number(gaze.leftY));
 }
 
 XMLWriter::~XMLWriter() {

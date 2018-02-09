@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent):
     reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
+    qRegisterMetaType<GazeData>();
 
     buffer = GazeBuffer::Instance();
     app_state = IDLE;
@@ -54,6 +55,7 @@ void MainWindow::startTracker() {
         QThreadPool::globalInstance()->start(bufferHandler);
         connect(bufferHandler, &GazeHandler::socketOut, &server, &Server::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
+        connect(bufferHandler, &GazeHandler::xmlOut, &xml, &XMLWriter::writeResponse);
 
         trackerManager.startTracking();
         app_state = TRACKING;

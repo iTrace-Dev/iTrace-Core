@@ -13,6 +13,7 @@
 #include "xml_writer.hpp"
 
 Q_DECLARE_METATYPE(std::string)
+Q_DECLARE_METATYPE(GazeData)
 
 enum state {IDLE, TRACKING};
 

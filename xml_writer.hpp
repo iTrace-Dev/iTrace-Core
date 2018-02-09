@@ -4,6 +4,7 @@
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <QObject>
+#include "gaze_data.hpp"
 
 class XMLWriter: public QObject {
     Q_OBJECT
@@ -12,6 +13,9 @@ class XMLWriter: public QObject {
         explicit XMLWriter(QObject *parent = nullptr);
         ~XMLWriter();
         void setEnvironment(const std::string& trackerID);
+
+    public slots:
+        void writeResponse(GazeData gaze);
 
     private:
         QXmlStreamWriter writer;
