@@ -7,7 +7,7 @@
 #include <string>
 #include "gaze_buffer.hpp"
 #include "server.hpp"
-
+#include <QDebug>
 /*
  * Worker thread that removes gaze data from the gaze buffer
  * and coordinates with sources that need the data (output,
@@ -25,7 +25,7 @@ class GazeHandler : public QObject, public QRunnable {
 
     public:
         GazeHandler();
-        ~GazeHandler() {}
+        ~GazeHandler() { buffer->Delete(); }
         void run();
 
     signals:

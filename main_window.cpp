@@ -10,7 +10,6 @@ MainWindow::MainWindow(QWidget *parent):
     qRegisterMetaType<std::string>();
     qRegisterMetaType<GazeData>();
 
-    buffer = GazeBuffer::Instance();
     app_state = IDLE;
 
     ui->setupUi(this);
@@ -28,8 +27,6 @@ MainWindow::MainWindow(QWidget *parent):
 }
 
 MainWindow::~MainWindow() {
-    buffer->Delete();
-
     if (ui)
         delete ui;
 }

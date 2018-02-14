@@ -46,7 +46,6 @@ class MainWindow : public QMainWindow {
         TrackerManager trackerManager;
         XMLWriter xml;
         Server server;
-        GazeBuffer* buffer;
         GazeHandler* bufferHandler;
 };
 
