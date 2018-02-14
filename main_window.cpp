@@ -21,7 +21,6 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->trackerBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setActiveTracker()));
 
     this->setFixedSize(this->geometry().width(),this->geometry().height());
-
     std::vector<std::string> trackerNames = trackerManager.getTrackerNames();
     for (std::vector<std::string>::const_iterator it = trackerNames.begin(); it != trackerNames.end(); ++it) {
         ui->trackerBox->addItem(it->c_str());

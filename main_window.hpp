@@ -38,16 +38,16 @@ class MainWindow : public QMainWindow {
 
     private:
         Ui::MainWindow *ui;
-        TrackerManager trackerManager;
-        GazeBuffer* buffer;
-        GazeHandler* bufferHandler;
         Reticle reticle;
         SessionWindow sessionDialog;
-        XMLWriter xml;
 
-        Server server;
         state app_state;
-        void toggleStartButtonText();
+
+        TrackerManager trackerManager;
+        XMLWriter xml;
+        Server server;
+        GazeBuffer* buffer;
+        GazeHandler* bufferHandler;
 };
 
 #endif // MAIN_WINDOW_HPP
