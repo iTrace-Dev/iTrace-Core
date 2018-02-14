@@ -40,15 +40,8 @@ void MainWindow::setActiveTracker() {
 }
 
 void MainWindow::startTracker() {
-    if (!(ui->xmlCheck->isChecked() && (!ui->jsonCheck->isChecked()))) {
-        //Need to select and output format
-        qDebug() << "Must select xml or json output";
-        return;
-    }
-
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
-
 
         xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
         bufferHandler = new GazeHandler();
