@@ -3,14 +3,14 @@
 
 GazeBuffer* GazeBuffer::gbInstance = nullptr;
 
-GazeBuffer* GazeBuffer::Instance(QObject* parent) {
+GazeBuffer* GazeBuffer::Instance() {
     if (!gbInstance)
-        gbInstance = new GazeBuffer(parent);
+        gbInstance = new GazeBuffer();
 
     return gbInstance;
 }
 
-GazeBuffer::GazeBuffer(QObject* parent): QObject(parent), buffer() {}
+GazeBuffer::GazeBuffer(): buffer() {}
 
 void GazeBuffer::Delete () {
     if (gbInstance) {

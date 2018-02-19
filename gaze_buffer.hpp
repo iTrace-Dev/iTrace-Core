@@ -1,7 +1,6 @@
 #ifndef GAZE_BUFFER_HPP
 #define GAZE_BUFFER_HPP
 
-#include <QObject>
 #include <queue>
 #include <mutex>
 #include <condition_variable>
@@ -14,11 +13,10 @@
  * Data flow:
  *  Tracker -> GazeBuffer -> Output (Reticle, File, Socket, etc.)
  */
-class GazeBuffer: public QObject {
-    Q_OBJECT
+class GazeBuffer {
 
     public:
-        static GazeBuffer* Instance( QObject* parent = nullptr);
+        static GazeBuffer* Instance();
         static void Delete ();
         GazeData* dequeue();
         void enqueue(GazeData*);
@@ -26,7 +24,7 @@ class GazeBuffer: public QObject {
     private:
         static GazeBuffer* gbInstance;
 
-        GazeBuffer(QObject* parent);
+        GazeBuffer();
         GazeBuffer(GazeData const&) {}
         GazeBuffer& operator=(GazeData const&) {}
         ~GazeBuffer() {}
