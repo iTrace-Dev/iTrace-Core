@@ -80,8 +80,8 @@ void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     TobiiResearchGazeData* gd = static_cast<TobiiResearchGazeData*>(user_data);
     //qDebug() << "CALLBACK " << gd->left_eye.gaze_point.position_on_display_area.x << ", " << gd->left_eye.gaze_point.position_on_display_area.y;
 
-    GazeBuffer* buffer = GazeBuffer::Instance();
-    buffer->enqueue( new GazeData(gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
+    GazeBuffer& buffer = GazeBuffer::Instance();
+    buffer.enqueue( new GazeData(gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
                                   gd->left_eye.gaze_point.position_on_display_area.x, gd->left_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.pupil_data.diameter, gd->right_eye.pupil_data.validity,
                                   gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,

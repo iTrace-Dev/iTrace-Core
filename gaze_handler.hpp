@@ -5,8 +5,8 @@
 #include <QThreadPool>
 #include <QXmlStreamWriter>
 #include <string>
-#include "gaze_buffer.hpp"
 #include "server.hpp"
+#include "gaze_data.hpp"
 #include <QDebug>
 /*
  * Worker thread that removes gaze data from the gaze buffer
@@ -25,16 +25,13 @@ class GazeHandler : public QObject, public QRunnable {
 
     public:
         GazeHandler();
-        ~GazeHandler() { buffer->Delete(); }
+        ~GazeHandler() {}
         void run();
 
     signals:
         void socketOut(std::string);
         void reticleOut(double x, double y);
         void xmlOut(GazeData gd);
-
-    private:
-        GazeBuffer* buffer;
 };
 
 #endif // GAZE_HANDLER_HPP

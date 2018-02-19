@@ -1,19 +1,17 @@
 #include "gaze_handler.hpp"
-#include "gaze_data.hpp"
+#include "gaze_buffer.hpp"
 #include <QDebug>
 
-GazeHandler::GazeHandler() {
-    buffer = GazeBuffer::Instance();
-}
+GazeHandler::GazeHandler() {}
 
 void GazeHandler::run() {
-    GazeData* gd = buffer->dequeue();
+    GazeData* gd = GazeBuffer::Instance().dequeue();
 
     while (gd) {
         emit socketOut(gd->toString());
         emit reticleOut(gd->leftX, gd->leftY);
         emit xmlOut(*gd);
         delete gd;
-        gd = buffer->dequeue();
+        gd = GazeBuffer::Instance().dequeue();
     }
 }

@@ -16,23 +16,21 @@
 class GazeBuffer {
 
     public:
-        static GazeBuffer* Instance();
-        static void Delete ();
+        static GazeBuffer& Instance();
+
         GazeData* dequeue();
         void enqueue(GazeData*);
 
     private:
-        static GazeBuffer* gbInstance;
 
-        GazeBuffer();
-        GazeBuffer(GazeData const&) {}
-        GazeBuffer& operator=(GazeData const&) {}
-        ~GazeBuffer() {}
+        GazeBuffer()=default;
+        ~GazeBuffer()=default;
+        GazeBuffer(GazeData const&)=delete;
+        GazeBuffer& operator=(GazeData const&)=delete;
 
         std::queue<GazeData*> buffer;
         std::mutex mutex;
         std::condition_variable cv;
-
 };
 
 #endif // GAZE_BUFFER_HPP

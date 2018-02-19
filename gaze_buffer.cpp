@@ -1,22 +1,8 @@
 #include "gaze_buffer.hpp"
-#include <QDebug>
 
-GazeBuffer* GazeBuffer::gbInstance = nullptr;
-
-GazeBuffer* GazeBuffer::Instance() {
-    if (!gbInstance)
-        gbInstance = new GazeBuffer();
-
-    return gbInstance;
-}
-
-GazeBuffer::GazeBuffer(): buffer() {}
-
-void GazeBuffer::Delete () {
-    if (gbInstance) {
-        delete gbInstance;
-        gbInstance = nullptr;
-    }
+GazeBuffer& GazeBuffer::Instance() {
+    static GazeBuffer singleton;
+    return singleton;
 }
 
 void GazeBuffer::enqueue(GazeData* gd) {

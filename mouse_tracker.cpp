@@ -16,8 +16,8 @@ MouseTracker::~MouseTracker() {
 
 void MouseTracker::trackMouse() {
     cursor = QCursor::pos();
-    GazeBuffer* buffer = GazeBuffer::Instance();
-    buffer->enqueue( new GazeData(cursor.x(), cursor.y()) );
+    GazeBuffer& buffer = GazeBuffer::Instance();
+    buffer.enqueue( new GazeData(cursor.x(), cursor.y()) );
 }
 
 void MouseTracker::startTracker() {

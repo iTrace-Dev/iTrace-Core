@@ -64,6 +64,5 @@ void TrackerManager::stopTracking() {
      * MUST BE DONE AFTER THE TRACKER IS STOPPED OR GAZE_BUFFER
      * WILL HAVE LEFT OVER DATA FROM SUBSEQUENT TRACKER RUNS
      */
-    GazeBuffer* buffer = GazeBuffer::Instance();
-    buffer->enqueue(nullptr);
+    GazeBuffer::Instance().enqueue(nullptr);
 }
