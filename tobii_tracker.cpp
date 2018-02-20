@@ -86,7 +86,6 @@ void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     QScreen* screenDimensions = QGuiApplication::primaryScreen();
     int height = screenDimensions->geometry().height();
     int width = screenDimensions->geometry().width();
-    delete screenDimensions;
 
     GazeBuffer& buffer = GazeBuffer::Instance();
     buffer.enqueue( new GazeData( gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
