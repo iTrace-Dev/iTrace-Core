@@ -28,10 +28,14 @@ void Reticle::paintEvent(QPaintEvent* /*event*/){
     painter.drawEllipse(5,5,geometry().width()-10,geometry().height()-10);
 }
 
-void Reticle::moveReticle(double x, double y){
+void Reticle::moveReticle(int x, int y){
 
     // No reason to do anything if it can't be seen...
     if (!(this->isVisible()))
+        return;
+
+    // Invalid scrren coordinates...
+    if (x < 0 || y < 0)
         return;
 
     //Sum up all the x and y we have seen

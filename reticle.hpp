@@ -20,7 +20,7 @@ public:
     ~Reticle();
 
 public slots:
-    void moveReticle(double x, double y);
+    void moveReticle(int x, int y);
 
 protected:
     void paintEvent(QPaintEvent *event) override;

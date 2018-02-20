@@ -9,7 +9,7 @@ void GazeHandler::run() {
 
     while (gd) {
         emit socketOut(gd->toString());
-        emit reticleOut(gd->leftX, gd->leftY);
+        emit reticleOut(int(gd->leftX), int(gd->leftY));
         emit xmlOut(*gd);
         delete gd;
         gd = GazeBuffer::Instance().dequeue();
