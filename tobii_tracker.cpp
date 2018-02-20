@@ -1,3 +1,5 @@
+#include <QScreen>
+#include <QGuiApplication>
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
 #include "gaze_buffer.hpp"
@@ -78,12 +80,18 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     memcpy(user_data, gaze_data, sizeof(*gaze_data));
     TobiiResearchGazeData* gd = static_cast<TobiiResearchGazeData*>(user_data);
-    //qDebug() << "CALLBACK " << gd->left_eye.gaze_point.position_on_display_area.x << ", " << gd->left_eye.gaze_point.position_on_display_area.y;
+
+    // THIS IS A QUICK FIX!!
+    // We want to do this another way to avoid having to create this object for each callback
+    QScreen* screenDimensions = QGuiApplication::primaryScreen();
+    int height = screenDimensions->geometry().height();
+    int width = screenDimensions->geometry().width();
+    delete screenDimensions;
 
     GazeBuffer& buffer = GazeBuffer::Instance();
-    buffer.enqueue( new GazeData(gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
-                                  gd->left_eye.gaze_point.position_on_display_area.x, gd->left_eye.gaze_point.position_on_display_area.y,
+    buffer.enqueue( new GazeData( gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
+                                  width * gd->left_eye.gaze_point.position_on_display_area.x, height * gd->left_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.pupil_data.diameter, gd->right_eye.pupil_data.validity,
-                                  gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
-                                  gd->device_time_stamp, gd->system_time_stamp));
+                                  width * gd->right_eye.gaze_point.position_on_display_area.x, height * gd->right_eye.gaze_point.position_on_display_area.y,
+                                  gd->device_time_stamp, gd->system_time_stamp) );
 }
