@@ -1,2 +1,4 @@
 *.user
 deps/*
+*~
+.DS_Store
