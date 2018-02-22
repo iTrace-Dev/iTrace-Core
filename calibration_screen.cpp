@@ -37,9 +37,10 @@ void CalibrationScreen::startCalibration(Tracker* selectedTracker){
 }
 
 void CalibrationScreen::stopCalibration(){
-    tracker->leaveCalibration();
     timer->stop();
-    this->hide();
+    tracker->leaveCalibration();
+    this->showNormal();
+    this->close();
 }
 
 void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
@@ -79,5 +80,10 @@ void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
 void CalibrationScreen::updatePosition(){
     t++;
     t %= 1800;
-    update();
+    if (t >= 1699) {
+        stopCalibration();
+    }
+    else {
+        update();
+    }
 }
