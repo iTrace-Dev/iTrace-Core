@@ -4,6 +4,7 @@
 #include <QObject>
 #include <QTcpSocket>
 #include <QTcpServer>
+#include <vector>
 #include <string>
 
 /*
@@ -19,7 +20,6 @@ class SocketServer: public QObject {
 
     public slots:
         void newConnection();
-        void clientDisconnect();
         void writeData(std::string data);
 
     private:

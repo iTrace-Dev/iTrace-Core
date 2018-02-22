@@ -9,6 +9,7 @@ void GazeHandler::run() {
 
     while (gd) {
         emit socketOut(gd->toString());
+        emit websocketOut(gd->toString());
         emit reticleOut(int(gd->leftX), int(gd->leftY));
         emit xmlOut(*gd);
         delete gd;

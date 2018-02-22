@@ -30,6 +30,7 @@ class GazeHandler : public QObject, public QRunnable {
 
     signals:
         void socketOut(std::string);
+        void websocketOut(std::string);
         void reticleOut(int x, int y);
         void xmlOut(GazeData gd);
 };

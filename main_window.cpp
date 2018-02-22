@@ -4,7 +4,7 @@
 #include <QDebug>
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), server(),
+    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(),
     reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
@@ -42,7 +42,8 @@ void MainWindow::startTracker() {
         xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
         bufferHandler = new GazeHandler();
         QThreadPool::globalInstance()->start(bufferHandler);
-        connect(bufferHandler, &GazeHandler::socketOut, &server, &SocketServer::writeData);
+        connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
+        connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
         connect(bufferHandler, &GazeHandler::xmlOut, &xml, &XMLWriter::writeResponse);
 

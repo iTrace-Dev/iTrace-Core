@@ -12,7 +12,7 @@ sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Connect to iTrace-Core
 server_address = ('localhost', 8008)
-print 'attempt connection to server'
+print 'Attempt connection to iTrace socket'
 
 # Continually Attempt Connection (wait for server to be ready) 
 while sock.connect_ex(server_address):

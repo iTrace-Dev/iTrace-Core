@@ -22,7 +22,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 # You can also select to disable deprecated APIs only up to a certain version of Qt.
 #DEFINES += QT_DISABLE_DEPRECATED_BEFORE=0x060000    # disables all the APIs deprecated before Qt 6.0.0
 
-QT += network
+QT += network websockets
 
 SOURCES += main.cpp\
     tracker_manager.cpp \
@@ -35,7 +35,8 @@ SOURCES += main.cpp\
     gaze_handler.cpp \
     session_window.cpp \
     xml_writer.cpp \
-    socket_server.cpp
+    socket_server.cpp \
+    websocket_server.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -50,7 +51,8 @@ HEADERS  += \
     gaze_handler.hpp \
     session_window.hpp \
     xml_writer.hpp \
-    socket_server.hpp
+    socket_server.hpp \
+    websocket_server.hpp
 
 HEADERS  +=
 

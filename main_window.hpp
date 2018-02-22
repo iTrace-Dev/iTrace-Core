@@ -6,6 +6,7 @@
 #include "ui_main_window.h" //Auto-generated
 #include "tracker_manager.hpp"
 #include "socket_server.hpp"
+#include "websocket_server.hpp"
 #include "gaze_buffer.hpp"
 #include "gaze_handler.hpp"
 #include "reticle.hpp"
@@ -45,7 +46,8 @@ class MainWindow : public QMainWindow {
 
         TrackerManager trackerManager;
         XMLWriter xml;
-        SocketServer server;
+        SocketServer socketServer;
+        WebsocketServer websocketServer;
         GazeHandler* bufferHandler;
 };
 
