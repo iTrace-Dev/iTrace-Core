@@ -4,6 +4,7 @@
 #include <QWidget>
 #include <QPainter>
 #include <QTimer>
+#include <cstdlib>
 #include "tracker.hpp"
 
 class CalibrationScreen : public QWidget {
