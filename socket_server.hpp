@@ -1,5 +1,5 @@
-#ifndef SERVER_HPP
-#define SERVER_HPP
+#ifndef SOCKET_SERVER_HPP
+#define SOCKET_SERVER_HPP
 
 #include <QObject>
 #include <QTcpSocket>
@@ -10,12 +10,12 @@
  * The server is strictly used for communication between
  * the Core and any plugins. Data is sent as a string.
  */
-class Server: public QObject {
+class SocketServer: public QObject {
     Q_OBJECT
 
     public:
-        explicit Server(QObject *parent = nullptr);
-        ~Server();
+        explicit SocketServer(QObject *parent = nullptr);
+        ~SocketServer();
 
     public slots:
         void newConnection();
@@ -28,4 +28,4 @@ class Server: public QObject {
         const int PORT = 8008;
 };
 
-#endif // SERVER_HPP
+#endif // SOCKET_SERVER_HPP

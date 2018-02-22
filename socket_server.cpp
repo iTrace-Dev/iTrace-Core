@@ -1,8 +1,8 @@
-#include "server.hpp"
+#include "socket_server.hpp"
 #include "gaze_buffer.hpp"
 #include <QDebug>
 
-Server::Server(QObject *parent): QObject(parent) {
+SocketServer::SocketServer(QObject *parent): QObject(parent) {
     server = new QTcpServer(this);
     connect(server, SIGNAL(newConnection()), this, SLOT(newConnection()));
     if (!server->listen(QHostAddress::Any, PORT)) {
@@ -10,7 +10,7 @@ Server::Server(QObject *parent): QObject(parent) {
     }
 }
 
-Server::~Server() {
+SocketServer::~SocketServer() {
     //Proper Socket Clean-up
     while (!clients.empty()) {
         QTcpSocket* client = clients.back();
@@ -22,15 +22,15 @@ Server::~Server() {
     server->deleteLater();
 }
 
-void Server::newConnection() {
-    qDebug() << "CLIENT CONNECTED!";
+void SocketServer::newConnection() {
+    qDebug() << "SOCKET CLIENT CONNECTED!";
     QTcpSocket* client_conn = server->nextPendingConnection();
     connect(client_conn, SIGNAL(disconnected()), this, SLOT(clientDisconnect()));
     clients.push_back(client_conn);
 }
 
-void Server::clientDisconnect() {
-    qDebug() << "CLIENT DISCONNECTED!";
+void SocketServer::clientDisconnect() {
+    qDebug() << "SOCKET CLIENT DISCONNECTED!";
 
     std::vector<QTcpSocket*>::iterator client = clients.begin();
 
@@ -43,7 +43,7 @@ void Server::clientDisconnect() {
     }
 }
 
-void Server::writeData(std::string value) {
+void SocketServer::writeData(std::string value) {
     for (std::vector<QTcpSocket*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
         (*it)->write(value.c_str());
         (*it)->flush();

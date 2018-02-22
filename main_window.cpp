@@ -42,7 +42,7 @@ void MainWindow::startTracker() {
         xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
         bufferHandler = new GazeHandler();
         QThreadPool::globalInstance()->start(bufferHandler);
-        connect(bufferHandler, &GazeHandler::socketOut, &server, &Server::writeData);
+        connect(bufferHandler, &GazeHandler::socketOut, &server, &SocketServer::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
         connect(bufferHandler, &GazeHandler::xmlOut, &xml, &XMLWriter::writeResponse);
 

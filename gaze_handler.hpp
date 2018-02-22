@@ -5,7 +5,7 @@
 #include <QThreadPool>
 #include <QXmlStreamWriter>
 #include <string>
-#include "server.hpp"
+#include "socket_server.hpp"
 #include "gaze_data.hpp"
 #include <QDebug>
 /*
