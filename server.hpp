@@ -19,6 +19,7 @@ class Server: public QObject {
 
     public slots:
         void newConnection();
+        void clientDisconnect();
         void writeData(std::string data);
 
     private:
