@@ -23,21 +23,20 @@ CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
     points[7] = QPointF(0.5,0.9);
     points[8] = QPointF(0.9,0.9);
 
-    srand(time(NULL));
-    for(int i = 0; i < 9; i++)
-    {
-        QPointF tmp = points[i];
-        int j = rand() % (9 - i) + i;
-        points[i] = points[j];
-        points[j] = tmp;
-    }
-
     timer = new QTimer(this);
     size = 50;
     connect(timer, SIGNAL(timeout()), this, SLOT(updatePosition()));
 }
 
 void CalibrationScreen::startCalibration(Tracker* selectedTracker){
+    for(int i = 0; i < 9; i++)
+    {
+        QPointF tmp = points[i];
+        int j = QRandomGenerator::system()->bounded(i, 9);
+        points[i] = points[j];
+        points[j] = tmp;
+    }
+
     tracker = selectedTracker;
     tracker->enterCalibration();
     this->show();
