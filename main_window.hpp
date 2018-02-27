@@ -2,6 +2,7 @@
 #define MAIN_WINDOW_HPP
 
 #include <QMainWindow>
+#include <QCloseEvent>
 #include <string>
 #include "ui_main_window.h" //Auto-generated
 #include "tracker_manager.hpp"
@@ -38,6 +39,8 @@ class MainWindow : public QMainWindow {
         void setActiveTracker();
 
     private:
+        void closeEvent(QCloseEvent *event);
+
         Ui::MainWindow *ui;
         Reticle reticle;
         SessionWindow sessionDialog;

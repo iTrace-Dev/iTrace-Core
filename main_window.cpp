@@ -26,6 +26,17 @@ MainWindow::MainWindow(QWidget *parent):
     }
 }
 
+// Called when user clicks the application close button in titlebar
+void MainWindow::closeEvent(QCloseEvent *event) {
+
+    // Need to clean-up any worker thread and resources before closing
+    if (app_state == TRACKING)
+        trackerManager.stopTracking();
+
+    // Allow application to close
+    event->accept();
+}
+
 MainWindow::~MainWindow() {
     if (ui)
         delete ui;
