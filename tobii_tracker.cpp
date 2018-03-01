@@ -88,9 +88,13 @@ void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data) {
     int width = screenDimensions->geometry().width();
 
     GazeBuffer& buffer = GazeBuffer::Instance();
+
+    //The GazeData Constructor is gross and needs to be made better...
     buffer.enqueue( new GazeData( gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
                                   width * gd->left_eye.gaze_point.position_on_display_area.x, height * gd->left_eye.gaze_point.position_on_display_area.y,
+                                  gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
                                   gd->right_eye.pupil_data.diameter, gd->right_eye.pupil_data.validity,
+                                  gd->left_eye.gaze_origin.position_in_user_coordinates.x, gd->left_eye.gaze_origin.position_in_user_coordinates.y, gd->left_eye.gaze_origin.position_in_user_coordinates.z,
                                   width * gd->right_eye.gaze_point.position_on_display_area.x, height * gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->device_time_stamp, gd->system_time_stamp) );
 }
