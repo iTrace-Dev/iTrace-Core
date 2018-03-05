@@ -67,6 +67,7 @@ void MainWindow::startTracker() {
         ui->startServerButton->setText("Start Tracker");
         trackerManager.stopTracking();
         app_state = IDLE;
+
         ui->reticleBox->setEnabled(true);
     }
 }
