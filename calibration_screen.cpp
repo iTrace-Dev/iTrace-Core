@@ -12,7 +12,6 @@ CalibrationScreen* CalibrationScreen::getCalibrationScreen(){
 CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
     setWindowFlags(Qt::FramelessWindowHint|Qt::CustomizeWindowHint);
     resize(1000,1000);
-    setWindowState(Qt::WindowFullScreen);
     points[0] = QPointF(0.1,0.1);
     points[1] = QPointF(0.5,0.1);
     points[2] = QPointF(0.9,0.1);
@@ -30,7 +29,7 @@ CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
 }
 
 void CalibrationScreen::startCalibration(Tracker* selectedTracker){
-
+    setWindowState(Qt::WindowFullScreen);
     for(int i = 0; i < 9; i++)
     {
         QPointF tmp = points[i];
