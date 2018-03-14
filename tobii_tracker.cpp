@@ -1,7 +1,4 @@
-#include <QScreen>
-#include <QGuiApplication>
 #include <QApplication>
-#include <QObject>
 #include <QDesktopWidget>
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
