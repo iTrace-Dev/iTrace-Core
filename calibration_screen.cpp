@@ -84,7 +84,6 @@ void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
     painter.setBrush(Qt::black);
     painter.setPen(Qt::black);
     painter.drawEllipse(dotx,doty,4,4);
-    if(t == 1699) stopCalibration();
 }
 
 void CalibrationScreen::updatePosition(){
