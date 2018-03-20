@@ -1,5 +1,3 @@
-#include <QApplication>
-#include <QDesktopWidget>
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
 #include "gaze_buffer.hpp"
@@ -80,17 +78,13 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 void gazeDataCallback(TobiiResearchGazeData* gd, void* user_data) {
     GazeBuffer& buffer = GazeBuffer::Instance();
 
-    QRect screen= QApplication::desktop()->screenGeometry();
-    int width = screen.width();
-    int height = screen.height();
-
     //The GazeData Constructor is gross and needs to be made better...
     buffer.enqueue( new GazeData( gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
-                                  width * gd->left_eye.gaze_point.position_on_display_area.x, height * gd->left_eye.gaze_point.position_on_display_area.y,
+                                  gd->left_eye.gaze_point.position_on_display_area.x, gd->left_eye.gaze_point.position_on_display_area.y,
                                   gd->left_eye.gaze_origin.position_in_user_coordinates.x, gd->left_eye.gaze_origin.position_in_user_coordinates.y, gd->left_eye.gaze_origin.position_in_user_coordinates.z,
 
                                   gd->right_eye.pupil_data.diameter, gd->right_eye.pupil_data.validity,
-                                  width * gd->right_eye.gaze_point.position_on_display_area.x, height* gd->right_eye.gaze_point.position_on_display_area.y,
+                                  gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
 
                                   gd->device_time_stamp, gd->system_time_stamp) );

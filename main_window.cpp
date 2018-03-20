@@ -1,7 +1,9 @@
 #include "main_window.hpp"
 #include "calibration_screen.hpp"
 #include "gaze_data.hpp"
+#include <QDesktopWidget>
 #include <QDebug>
+
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(),
@@ -51,7 +53,11 @@ void MainWindow::startTracker() {
         ui->startServerButton->setText("Stop Tracker");
 
         xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
-        bufferHandler = new GazeHandler();
+
+        // Determine screen dimensions before starting tracker (this causes issues when run from threads)
+        QRect screen= QApplication::desktop()->screenGeometry();
+        bufferHandler = new GazeHandler(screen.width(), screen.height());
+
         QThreadPool::globalInstance()->start(bufferHandler);
         connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
         connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);

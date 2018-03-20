@@ -24,7 +24,7 @@ class GazeHandler : public QObject, public QRunnable {
     Q_OBJECT
 
     public:
-        GazeHandler();
+        GazeHandler(int x, int y);
         ~GazeHandler() {}
         void run();
 
@@ -33,6 +33,10 @@ class GazeHandler : public QObject, public QRunnable {
         void websocketOut(std::string);
         void reticleOut(int x, int y);
         void xmlOut(GazeData gd);
+
+    private:
+        int screenWidth;
+        int screenHeight;
 };
 
 #endif // GAZE_HANDLER_HPP
