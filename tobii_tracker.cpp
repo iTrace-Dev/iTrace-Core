@@ -87,5 +87,6 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* user_data) {
                                   gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
 
-                                  gd->device_time_stamp, gd->system_time_stamp) );
+                                  gd->device_time_stamp, gd->system_time_stamp, "tobii"));
+
 }

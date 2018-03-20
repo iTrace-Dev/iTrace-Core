@@ -8,11 +8,13 @@ void GazeHandler::run() {
     GazeData* gd = GazeBuffer::Instance().dequeue();
 
     while (gd) {
-        //Update gaze coordinates for display
-        gd->leftX *= screenWidth;
-        gd->leftY *= screenHeight;
-        gd->rightX *= screenWidth;
-        gd->rightY *= screenHeight;
+        //Update gaze coordinates for display (does not apply to mouse)
+        if (gd->trackerType != "mouse") {
+            gd->leftX *= screenWidth;
+            gd->leftY *= screenHeight;
+            gd->rightX *= screenWidth;
+            gd->rightY *= screenHeight;
+        }
 
         emit socketOut(gd->toString());
         emit websocketOut(gd->toString());
