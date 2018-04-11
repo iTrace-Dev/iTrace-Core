@@ -38,6 +38,8 @@ class TobiiTracker: public Tracker {
 TobiiResearchEyeTrackers* get_tobii_trackers();
 
 //Callback function for tobii api
-void gazeDataCallback(TobiiResearchGazeData* gaze_data, void* user_data);
+void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData);
+
+void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData);
 
 #endif // TOBII_TRACKER_HPP
