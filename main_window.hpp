@@ -10,6 +10,7 @@
 #include "websocket_server.hpp"
 #include "gaze_buffer.hpp"
 #include "gaze_handler.hpp"
+#include "session_manager.hpp"
 #include "reticle.hpp"
 #include "session_window.hpp"
 #include "xml_writer.hpp"
@@ -51,6 +52,7 @@ class MainWindow : public QMainWindow {
         XMLWriter xml;
         SocketServer socketServer;
         WebsocketServer websocketServer;
+        SessionManager sessionManager;
         GazeHandler* bufferHandler;
 };
 

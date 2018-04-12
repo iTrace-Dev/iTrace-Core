@@ -7,7 +7,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(),
-    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
+    reticle((QWidget*) this->parent()), sessionManager(), sessionDialog(&sessionManager, (QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
     qRegisterMetaType<GazeData>();
@@ -52,6 +52,9 @@ void MainWindow::startTracker() {
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
 
+        /* This should probably get refactored to where session manager deals with this logic
+         * and remove most of this from mainwindow.
+         */
         xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)

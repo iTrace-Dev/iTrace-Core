@@ -36,7 +36,8 @@ SOURCES += main.cpp\
     session_window.cpp \
     xml_writer.cpp \
     socket_server.cpp \
-    websocket_server.cpp
+    websocket_server.cpp \
+    session_manager.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -52,7 +53,8 @@ HEADERS  += \
     session_window.hpp \
     xml_writer.hpp \
     socket_server.hpp \
-    websocket_server.hpp
+    websocket_server.hpp \
+    session_manager.hpp
 
 HEADERS  +=
 
