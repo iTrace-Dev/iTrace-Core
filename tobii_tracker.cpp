@@ -3,7 +3,6 @@
 #include "gaze_buffer.hpp"
 #include <QXmlStreamWriter>
 #include <QFile>
-#include <chrono>
 #include <ctime>
 #include <QDebug>
 
@@ -103,11 +102,15 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
 
 // WRITE OUT CALIBRATION DATA
 void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData) {
+
     std::time_t t = std::time(nullptr);
-    std::string startDateTime(ctime(&t));
+    char buffer[100];
+    qDebug() << std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", std::localtime(&t));
+
+    std::string startDateTime(buffer);
 
     QFile calibrationOutputFile;
-    calibrationOutputFile.setFileName(QString::fromStdString("calibration.xml"));
+    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + startDateTime + ".xml"));
     calibrationOutputFile.open(QIODevice::WriteOnly);
 
     QXmlStreamWriter writer;
