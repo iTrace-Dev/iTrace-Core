@@ -1,6 +1,9 @@
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
 #include "gaze_buffer.hpp"
+#include <QXmlStreamWriter>
+#include <QFile>
+#include <ctime>
 #include <QDebug>
 
 TobiiTracker::TobiiTracker():eyeTracker(nullptr) {}
@@ -18,8 +21,8 @@ std::string TobiiTracker::trackerName() const {
 
 void TobiiTracker::startTracker() {
     qDebug() << "Start";
-    TobiiResearchGazeData gaze_data;
-    TobiiResearchStatus status = tobii_research_subscribe_to_gaze_data(eyeTracker, gazeDataCallback, &gaze_data);
+    TobiiResearchGazeData gazeData;
+    TobiiResearchStatus status = tobii_research_subscribe_to_gaze_data(eyeTracker, gazeDataCallback, &gazeData);
     if (status != TOBII_RESEARCH_STATUS_OK) {
         qDebug() << "Unable to subscribe to eye tracker data";
     }
@@ -39,9 +42,9 @@ void TobiiTracker::enterCalibration() {
     }
 }
 void TobiiTracker::leaveCalibration(){
-    TobiiResearchCalibrationResult* calibration_result = NULL;
-    TobiiResearchStatus status = tobii_research_screen_based_calibration_compute_and_apply(eyeTracker, &calibration_result);
-    if (!(status == TOBII_RESEARCH_STATUS_OK && calibration_result->status == TOBII_RESEARCH_CALIBRATION_SUCCESS)) {
+    TobiiResearchCalibrationResult* calibrationResult = NULL;
+    TobiiResearchStatus status = tobii_research_screen_based_calibration_compute_and_apply(eyeTracker, &calibrationResult);
+    if (!(status == TOBII_RESEARCH_STATUS_OK && calibrationResult->status == TOBII_RESEARCH_CALIBRATION_SUCCESS)) {
         qDebug() << "Calibration Failed";
     }
 
@@ -49,6 +52,9 @@ void TobiiTracker::leaveCalibration(){
     if (status != TOBII_RESEARCH_STATUS_OK){
         qDebug() << "Unable to leave calibration";
     }
+
+    writeCalibrationData("calibration", calibrationResult);
+    tobii_research_free_screen_based_calibration_result(calibrationResult);
 }
 
 void TobiiTracker::useCalibrationPoint(float x, float y){
@@ -75,7 +81,10 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
     return eyetrackers;
 }
 
-void gazeDataCallback(TobiiResearchGazeData* gd, void* user_data) {
+
+// FREE FUNCTIONS
+// TRACKER DATA CALLBACK
+void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
     GazeBuffer& buffer = GazeBuffer::Instance();
 
     //The GazeData Constructor is gross and needs to be made better...
@@ -89,4 +98,48 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* user_data) {
 
                                   gd->device_time_stamp, gd->system_time_stamp, "tobii"));
 
+}
+
+// WRITE OUT CALIBRATION DATA
+void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData) {
+
+    std::time_t t = std::time(nullptr);
+    char buffer[100];
+    qDebug() << std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", std::localtime(&t));
+
+    std::string startDateTime(buffer);
+
+    QFile calibrationOutputFile;
+    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + startDateTime + ".xml"));
+    calibrationOutputFile.open(QIODevice::WriteOnly);
+
+    QXmlStreamWriter writer;
+    writer.setDevice(&calibrationOutputFile);
+    writer.setAutoFormatting(true); //Human readable formatting (can disable later)
+
+    writer.writeStartDocument();
+    writer.writeStartElement("calibration");
+    writer.writeAttribute("status", QString::number(calibrationData->status));
+
+    for (size_t i = 0; i < calibrationData->calibration_point_count; ++i) {
+        TobiiResearchCalibrationPoint& calibrationPoint = calibrationData->calibration_points[i];
+        writer.writeStartElement("point");
+        writer.writeAttribute("x", QString::number(calibrationPoint.position_on_display_area.x));
+        writer.writeAttribute("y", QString::number(calibrationPoint.position_on_display_area.y));
+
+        for (size_t j = 0; j < calibrationPoint.calibration_sample_count; ++j) {
+            TobiiResearchCalibrationSample& calibrationSample = calibrationPoint.calibration_samples[j];
+            writer.writeEmptyElement("sample");
+            writer.writeAttribute("left_x", QString::number(calibrationSample.left_eye.position_on_display_area.x));
+            writer.writeAttribute("left_y", QString::number(calibrationSample.left_eye.position_on_display_area.y));
+            writer.writeAttribute("left_validity", QString::number(calibrationSample.left_eye.validity));
+            writer.writeAttribute("right_x", QString::number(calibrationSample.right_eye.position_on_display_area.x));
+            writer.writeAttribute("right_y", QString::number(calibrationSample.right_eye.position_on_display_area.y));
+            writer.writeAttribute("right_validity", QString::number(calibrationSample.right_eye.validity));
+        }
+        writer.writeEndElement();
+    }
+    writer.writeEndElement();
+    writer.writeEndDocument();
+    calibrationOutputFile.close();
 }
