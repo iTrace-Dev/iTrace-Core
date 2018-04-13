@@ -6,7 +6,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(),
+    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(), xml(nullptr),
     reticle((QWidget*) this->parent()), sessionManager(), sessionDialog(&sessionManager, (QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
@@ -40,8 +40,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 MainWindow::~MainWindow() {
-    if (ui)
+    if (ui == nullptr)
         delete ui;
+
+    if (xml == nullptr)
+        delete xml;
 }
 
 void MainWindow::setActiveTracker() {
@@ -55,7 +58,10 @@ void MainWindow::startTracker() {
         /* This should probably get refactored to where session manager deals with this logic
          * and remove most of this from mainwindow.
          */
-        xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
+        sessionManager.startSession();
+
+        xml = new XMLWriter(&sessionManager);
+        xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)
         QRect screen= QApplication::desktop()->screenGeometry();
@@ -65,7 +71,7 @@ void MainWindow::startTracker() {
         connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
         connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
-        connect(bufferHandler, &GazeHandler::xmlOut, &xml, &XMLWriter::writeResponse);
+        connect(bufferHandler, &GazeHandler::xmlOut, xml, &XMLWriter::writeResponse);
 
         trackerManager.startTracking();
         app_state = TRACKING;
@@ -78,6 +84,7 @@ void MainWindow::startTracker() {
         app_state = IDLE;
 
         ui->reticleBox->setEnabled(true);
+        delete xml;
     }
 }
 
@@ -97,5 +104,6 @@ void MainWindow::showSessionSetup() {
 
 void MainWindow::startCalibration() {
     CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();
+    trackerManager.getActiveTracker();
     calibrationScreen->startCalibration(trackerManager.getActiveTracker());
 }

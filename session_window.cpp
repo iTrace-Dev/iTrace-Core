@@ -14,10 +14,10 @@ SessionWindow::SessionWindow(SessionManager *sessionManager, QWidget *parent) : 
 }
 
 void SessionWindow::okClick() {
-    session->setStudyName(ui->textEdit->toPlainText().toStdString());
-    session->setResearcherName(ui->textEdit_2->toPlainText().toStdString());
-    session->setParticipantID(ui->textEdit_3->toPlainText().toStdString());
-    session->setDataRootDirectory(ui->textEdit_4->toPlainText().toStdString());
+    session->sessionSetup(ui->textEdit->toPlainText().toStdString(),
+                          ui->textEdit_2->toPlainText().toStdString(),
+                          ui->textEdit_3->toPlainText().toStdString(),
+                          ui->textEdit_4->toPlainText().toStdString());
 }
 
 void SessionWindow::directorySelect() {

@@ -1,11 +1,11 @@
+#include <QDir>
+#include <QString>
+#include <ctime>
 #include "xml_writer.hpp"
 #include "gaze_data.hpp"
-#include <QString>
-#include <chrono>
-#include <ctime>
 
-XMLWriter::XMLWriter(QObject *parent): QObject(parent) {
-    outputFile.setFileName("test.xml");
+XMLWriter::XMLWriter(SessionManager* sessionInfo, QObject *parent): QObject(parent), session(sessionInfo) {
+    outputFile.setFileName(QString::fromStdString(session->getSessionPath() + QDir::separator().toLatin1() + "session_" + session->getSessionID() + ".xml"));
     outputFile.open(QIODevice::WriteOnly);
     writer.setDevice(&outputFile);
     writer.setAutoFormatting(true); //Human readable formatting (can disable later)
@@ -21,14 +21,14 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
     writer.writeAttribute("type", QString::fromStdString(trackerID));
 
     std::time_t t = std::time(nullptr);
-    std::string startDateTime(ctime(&t));
+    std::string startDateTime(std::to_string(long(t)));
     writer.writeTextElement("date", QString::fromStdString(startDateTime));
     writer.writeTextElement("time", QString::fromStdString(startDateTime));
 
     // Still need to get these
-    writer.writeEmptyElement("session-id");
+    writer.writeEmptyElement("session");
+    writer.writeAttribute("id", QString::fromStdString(session->getSessionID()));
     writer.writeEmptyElement("calibration");
-
 
     writer.writeEndElement(); //Close "environment"
 }

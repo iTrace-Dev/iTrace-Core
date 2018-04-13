@@ -34,10 +34,10 @@ SOURCES += main.cpp\
     reticle.cpp \
     gaze_handler.cpp \
     session_window.cpp \
-    xml_writer.cpp \
     socket_server.cpp \
     websocket_server.cpp \
-    session_manager.cpp
+    session_manager.cpp \
+    xml_writer.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -51,10 +51,10 @@ HEADERS  += \
     reticle.hpp \
     gaze_handler.hpp \
     session_window.hpp \
-    xml_writer.hpp \
     socket_server.hpp \
     websocket_server.hpp \
-    session_manager.hpp
+    session_manager.hpp \
+    xml_writer.hpp
 
 HEADERS  +=
 

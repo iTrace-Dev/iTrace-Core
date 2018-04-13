@@ -49,7 +49,7 @@ class MainWindow : public QMainWindow {
         state app_state;
 
         TrackerManager trackerManager;
-        XMLWriter xml;
+        XMLWriter* xml;
         SocketServer socketServer;
         WebsocketServer websocketServer;
         SessionManager sessionManager;
