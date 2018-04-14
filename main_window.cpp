@@ -61,6 +61,7 @@ void MainWindow::startTracker() {
         SessionManager& session = SessionManager::Instance();
         session.startSession();
 
+        xml = new XMLWriter();
         xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)

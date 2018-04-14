@@ -7,8 +7,6 @@
 
 SessionWindow::SessionWindow(QWidget *parent) : QDialog(parent), ui(new Ui::SessionWindow) {
     ui->setupUi(this);
-    SessionManager& session = SessionManager::Instance();
-
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(okClick()));
     connect(ui->pushButton, SIGNAL(released()), this, SLOT(directorySelect()));
 }

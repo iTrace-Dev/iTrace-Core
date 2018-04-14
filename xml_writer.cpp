@@ -7,7 +7,7 @@
 
 XMLWriter::XMLWriter(QObject *parent): QObject(parent) {
     SessionManager& session = SessionManager::Instance();
-    outputFile.setFileName(QString::fromStdString(session.getSessionPath() + QDir::separator().toLatin1() + "session_" + session.getSessionID() + ".xml"));
+    outputFile.setFileName(QString::fromStdString(session.getSessionPath() + QDir::separator().toLatin1() + "core_" + session.getSessionID() + ".xml"));
     outputFile.open(QIODevice::WriteOnly);
     writer.setDevice(&outputFile);
     writer.setAutoFormatting(true); //Human readable formatting (can disable later)

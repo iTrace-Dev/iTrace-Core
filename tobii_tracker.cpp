@@ -106,7 +106,10 @@ void writeCalibrationData(TobiiResearchCalibrationResult* calibrationData) {
     std::string startDateTime = std::to_string(long(std::time(nullptr)));
 
     QFile calibrationOutputFile;
-    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + SessionManager::Instance().getCalibrationID() + ".xml"));
+    SessionManager& session = SessionManager::Instance();
+    calibrationOutputFile.setFileName(QString::fromStdString(session.getStudyPath() + QDir::separator().toLatin1() +
+                                                             "calibration" + QDir::separator().toLatin1() +
+                                                             SessionManager::Instance().getCalibrationID() + ".xml"));
     calibrationOutputFile.open(QIODevice::WriteOnly);
 
     QXmlStreamWriter writer;
