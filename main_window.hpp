@@ -52,7 +52,6 @@ class MainWindow : public QMainWindow {
         XMLWriter* xml;
         SocketServer socketServer;
         WebsocketServer websocketServer;
-        SessionManager sessionManager;
         GazeHandler* bufferHandler;
 };
 

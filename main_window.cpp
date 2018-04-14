@@ -7,7 +7,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(), xml(nullptr),
-    reticle((QWidget*) this->parent()), sessionManager(), sessionDialog(&sessionManager, (QWidget*) this->parent()) {
+    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
     qRegisterMetaType<GazeData>();
@@ -58,9 +58,9 @@ void MainWindow::startTracker() {
         /* This should probably get refactored to where session manager deals with this logic
          * and remove most of this from mainwindow.
          */
-        sessionManager.startSession();
+        SessionManager& session = SessionManager::Instance();
+        session.startSession();
 
-        xml = new XMLWriter(&sessionManager);
         xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)

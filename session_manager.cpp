@@ -1,5 +1,10 @@
 #include "session_manager.hpp"
 
+SessionManager& SessionManager::Instance() {
+    static SessionManager singleton;
+    return singleton;
+}
+
 void SessionManager::sessionSetup(const std::string& study, const std::string& researcher,
                   const std::string& participant, const std::string& dataRoot) {
     studyName = study;
@@ -16,8 +21,11 @@ void SessionManager::startSession() {
     currentSessionID = std::to_string(long(std::time(nullptr)));
     currentSessionDir = currentStudyDir + QDir::separator().toLatin1() + currentSessionID;
     QDir dir;
-    dir.mkpath(QString::fromStdString(currentStudyDir + QDir::separator().toLatin1() + "calibration"));
     dir.mkpath(QString::fromStdString(currentSessionDir));
 }
 
-
+void SessionManager::generateCalibrationID() {
+    currentCalibrationID = std::to_string(long(std::time(nullptr)));
+    QDir dir;
+    dir.mkpath(QString::fromStdString(currentStudyDir + QDir::separator().toLatin1() + "calibration"));
+}

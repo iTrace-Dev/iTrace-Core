@@ -1,6 +1,7 @@
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
 #include "gaze_buffer.hpp"
+#include "session_manager.hpp"
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <ctime>
@@ -53,7 +54,7 @@ void TobiiTracker::leaveCalibration(){
         qDebug() << "Unable to leave calibration";
     }
 
-    writeCalibrationData("calibration", calibrationResult);
+    writeCalibrationData(calibrationResult);
     tobii_research_free_screen_based_calibration_result(calibrationResult);
 }
 
@@ -81,7 +82,6 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
     return eyetrackers;
 }
 
-
 // FREE FUNCTIONS
 // TRACKER DATA CALLBACK
 void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
@@ -101,16 +101,12 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
 }
 
 // WRITE OUT CALIBRATION DATA
-void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData) {
+void writeCalibrationData(TobiiResearchCalibrationResult* calibrationData) {
 
-    std::time_t t = std::time(nullptr);
-    char buffer[100];
-    qDebug() << std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", std::localtime(&t));
-
-    std::string startDateTime(buffer);
+    std::string startDateTime = std::to_string(long(std::time(nullptr)));
 
     QFile calibrationOutputFile;
-    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + startDateTime + ".xml"));
+    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + SessionManager::Instance().getCalibrationID() + ".xml"));
     calibrationOutputFile.open(QIODevice::WriteOnly);
 
     QXmlStreamWriter writer;
