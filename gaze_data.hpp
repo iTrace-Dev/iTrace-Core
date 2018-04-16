@@ -40,7 +40,8 @@ class GazeData {
 
         // Temporary cheat constructor for mouse ONLY!
         // I know...just roll with it for now.
-        GazeData(double x, double y, std::string tracker): GazeData() {
+        GazeData(int64_t timestamp, double x, double y, std::string tracker): GazeData() {
+            systemTime = timestamp;
             leftX = x;
             leftY = y;
             trackerType = tracker;
