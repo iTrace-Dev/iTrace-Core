@@ -58,9 +58,22 @@ void MainWindow::startTracker() {
         /* This should probably get refactored to where session manager deals with this logic
          * and remove most of this from mainwindow.
          */
+
+        /* Start a session
+            1) Give the session a unique ID
+            2) Create a path based in the ID to store data
+        */
         SessionManager& session = SessionManager::Instance();
         session.startSession();
 
+        std::string sessionInfo = "session,";
+        sessionInfo += session.getSessionPath() + '\n';
+
+        //Notify web/socket clients of the session data location (this should be handled elsewhere)
+        socketServer.writeData(sessionInfo);
+        websocketServer.writeData(sessionInfo);
+
+        //Get an xmlwriter ready to write gaze and environment data from the core
         xml = new XMLWriter();
         xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
