@@ -4,7 +4,8 @@
 #include "session_manager.hpp"
 #include <QXmlStreamWriter>
 #include <QFile>
-#include <ctime>
+#include <QDateTime>
+#include <cstdint> //provides int64_t
 #include <QDebug>
 
 TobiiTracker::TobiiTracker():eyeTracker(nullptr) {}
@@ -103,7 +104,7 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
 // WRITE OUT CALIBRATION DATA
 void writeCalibrationData(TobiiResearchCalibrationResult* calibrationData) {
 
-    std::string startDateTime = std::to_string(long(std::time(nullptr)));
+    std::string startDateTime = std::to_string(int64_t(QDateTime::currentDateTime().toTime_t()));
 
     QFile calibrationOutputFile;
     SessionManager& session = SessionManager::Instance();

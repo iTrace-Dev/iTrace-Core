@@ -2,7 +2,7 @@
 #include "gaze_buffer.hpp"
 #include "gaze_data.hpp"
 #include <cstdint> //provides int64_t
-#include <ctime>
+#include <QDateTime>
 #include <QDebug>
 
 MouseTracker::MouseTracker()
@@ -19,7 +19,7 @@ MouseTracker::~MouseTracker() {
 void MouseTracker::trackMouse() {
     cursor = QCursor::pos();
     GazeBuffer& buffer = GazeBuffer::Instance();
-    buffer.enqueue( new GazeData(int64_t(std::time(nullptr)), cursor.x(), cursor.y(), "mouse") );
+    buffer.enqueue( new GazeData(int64_t(QDateTime::currentDateTime().toTime_t()), cursor.x(), cursor.y(), "mouse") );
 }
 
 void MouseTracker::startTracker() {

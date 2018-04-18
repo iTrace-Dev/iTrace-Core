@@ -2,7 +2,6 @@
 #define SESSION_MANAGER_HPP
 
 #include <QDir>
-#include <ctime>
 #include <string>
 #include <QDebug>
 
