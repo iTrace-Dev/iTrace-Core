@@ -1,6 +1,6 @@
 #include <QDir>
 #include <QString>
-#include <QDateTime>
+#include <ctime>
 #include <cstdint> //provides int64_t
 #include "xml_writer.hpp"
 #include "gaze_data.hpp"
@@ -23,7 +23,7 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
     writer.writeEmptyElement("eye-tracker");
     writer.writeAttribute("type", QString::fromStdString(trackerID));
 
-    std::string startDateTime(std::to_string(int64_t(QDateTime::currentDateTime().toTime_t())));
+    std::string startDateTime(std::to_string(std::time(nullptr)));
     writer.writeTextElement("date", QString::fromStdString(startDateTime));
     writer.writeTextElement("time", QString::fromStdString(startDateTime));
 
