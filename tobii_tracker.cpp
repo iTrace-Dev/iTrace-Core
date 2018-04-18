@@ -97,7 +97,7 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
                                   gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
 
-                                  gd->device_time_stamp, gd->system_time_stamp, "tobii"));
+                                  gd->device_time_stamp, int64_t(QDateTime::currentDateTime().toTime_t()), "tobii"));
 
 }
 
