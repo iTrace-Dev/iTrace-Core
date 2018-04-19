@@ -40,6 +40,6 @@ TobiiResearchEyeTrackers* get_tobii_trackers();
 //Callback function for tobii api
 void gazeDataCallback(TobiiResearchGazeData* gazeData, void* userData);
 
-void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData);
+void writeCalibrationData(TobiiResearchCalibrationResult* calibrationData);
 
 #endif // TOBII_TRACKER_HPP

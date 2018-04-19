@@ -18,6 +18,10 @@ public:
     explicit SessionWindow(QWidget *parent = 0);
     ~SessionWindow();
 
+private slots:
+    void okClick();
+    void directorySelect();
+
 private:
     Ui::SessionWindow *ui;
 };

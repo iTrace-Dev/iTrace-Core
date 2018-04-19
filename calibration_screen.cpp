@@ -1,4 +1,5 @@
 #include "calibration_screen.hpp"
+#include "session_manager.hpp"
 
 CalibrationScreen* CalibrationScreen::calibrationScreen = 0;
 
@@ -29,6 +30,7 @@ CalibrationScreen::CalibrationScreen(QWidget *parent) : QWidget(parent){
 }
 
 void CalibrationScreen::startCalibration(Tracker* selectedTracker){
+    SessionManager::Instance().generateCalibrationID();
     setWindowState(Qt::WindowFullScreen);
     for(int i = 0; i < 9; i++)
     {
@@ -43,7 +45,6 @@ void CalibrationScreen::startCalibration(Tracker* selectedTracker){
     this->show();
     timer->start(16);
     t = 0;
-    return;
 }
 
 void CalibrationScreen::stopCalibration(){

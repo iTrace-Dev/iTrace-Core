@@ -6,7 +6,7 @@
 
 
 MainWindow::MainWindow(QWidget *parent):
-    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(),
+    QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(), xml(nullptr),
     reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
@@ -40,8 +40,11 @@ void MainWindow::closeEvent(QCloseEvent *event) {
 }
 
 MainWindow::~MainWindow() {
-    if (ui)
+    if (ui == nullptr)
         delete ui;
+
+    if (xml == nullptr)
+        delete xml;
 }
 
 void MainWindow::setActiveTracker() {
@@ -52,7 +55,27 @@ void MainWindow::startTracker() {
     if (app_state == IDLE) {
         ui->startServerButton->setText("Stop Tracker");
 
-        xml.setEnvironment(trackerManager.getActiveTracker()->trackerName());
+        /* This should probably get refactored to where session manager deals with this logic
+         * and remove most of this from mainwindow.
+         */
+
+        /* Start a session
+            1) Give the session a unique ID
+            2) Create a path based in the ID to store data
+        */
+        SessionManager& session = SessionManager::Instance();
+        session.startSession();
+
+        std::string sessionInfo = "session,";
+        sessionInfo += session.getSessionPath() + '\n';
+
+        //Notify web/socket clients of the session data location (this should be handled elsewhere)
+        socketServer.writeData(sessionInfo);
+        websocketServer.writeData(sessionInfo);
+
+        //Get an xmlwriter ready to write gaze and environment data from the core
+        xml = new XMLWriter();
+        xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)
         QRect screen= QApplication::desktop()->screenGeometry();
@@ -62,7 +85,7 @@ void MainWindow::startTracker() {
         connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
         connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
-        connect(bufferHandler, &GazeHandler::xmlOut, &xml, &XMLWriter::writeResponse);
+        connect(bufferHandler, &GazeHandler::xmlOut, xml, &XMLWriter::writeResponse);
 
         trackerManager.startTracking();
         app_state = TRACKING;
@@ -75,6 +98,7 @@ void MainWindow::startTracker() {
         app_state = IDLE;
 
         ui->reticleBox->setEnabled(true);
+        delete xml;
     }
 }
 
@@ -94,5 +118,6 @@ void MainWindow::showSessionSetup() {
 
 void MainWindow::startCalibration() {
     CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();
+    trackerManager.getActiveTracker();
     calibrationScreen->startCalibration(trackerManager.getActiveTracker());
 }

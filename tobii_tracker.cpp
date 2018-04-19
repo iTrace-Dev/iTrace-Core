@@ -1,9 +1,11 @@
 #include "tobii_tracker.hpp"
 #include "gaze_data.hpp"
 #include "gaze_buffer.hpp"
+#include "session_manager.hpp"
 #include <QXmlStreamWriter>
 #include <QFile>
 #include <ctime>
+#include <cstdint> //provides int64_t
 #include <QDebug>
 
 TobiiTracker::TobiiTracker():eyeTracker(nullptr) {}
@@ -53,7 +55,7 @@ void TobiiTracker::leaveCalibration(){
         qDebug() << "Unable to leave calibration";
     }
 
-    writeCalibrationData("calibration", calibrationResult);
+    writeCalibrationData(calibrationResult);
     tobii_research_free_screen_based_calibration_result(calibrationResult);
 }
 
@@ -81,7 +83,6 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
     return eyetrackers;
 }
 
-
 // FREE FUNCTIONS
 // TRACKER DATA CALLBACK
 void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
@@ -96,21 +97,20 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
                                   gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
 
-                                  gd->device_time_stamp, gd->system_time_stamp, "tobii"));
+                                  gd->device_time_stamp, int64_t(std::time(nullptr)), "tobii"));
 
 }
 
 // WRITE OUT CALIBRATION DATA
-void writeCalibrationData(const std::string& directory, TobiiResearchCalibrationResult* calibrationData) {
+void writeCalibrationData(TobiiResearchCalibrationResult* calibrationData) {
 
-    std::time_t t = std::time(nullptr);
-    char buffer[100];
-    qDebug() << std::strftime(buffer, sizeof(buffer), "%Y-%m-%d_%H-%M-%S", std::localtime(&t));
-
-    std::string startDateTime(buffer);
+    std::string startDateTime = std::to_string(std::time(nullptr));
 
     QFile calibrationOutputFile;
-    calibrationOutputFile.setFileName(QString::fromStdString("calibration_" + startDateTime + ".xml"));
+    SessionManager& session = SessionManager::Instance();
+    calibrationOutputFile.setFileName(QString::fromStdString(session.getStudyPath() + QDir::separator().toLatin1() +
+                                                             "calibration" + QDir::separator().toLatin1() +
+                                                             SessionManager::Instance().getCalibrationID() + ".xml"));
     calibrationOutputFile.open(QIODevice::WriteOnly);
 
     QXmlStreamWriter writer;
