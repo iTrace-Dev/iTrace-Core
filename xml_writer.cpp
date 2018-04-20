@@ -43,13 +43,15 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
 
 void XMLWriter::writeResponse(GazeData gaze) {
     writer.writeEmptyElement("response");
-    writer.writeAttribute("left_x", QString::number(gaze.leftX));
-    writer.writeAttribute("left_y", QString::number(gaze.leftY));
-    writer.writeAttribute("right_x", QString::number(gaze.rightX));
-    writer.writeAttribute("right_y", QString::number(gaze.leftY));
     writer.writeAttribute("x", QString::number((gaze.leftX + gaze.rightX) / 2));
     writer.writeAttribute("y", QString::number((gaze.leftY + gaze.rightY) / 2));
+    writer.writeAttribute("left_x", QString::number(gaze.leftX));
+    writer.writeAttribute("left_y", QString::number(gaze.leftY));
+    writer.writeAttribute("left_pupil_diameter", QString::number(gaze.leftDiameter));
     writer.writeAttribute("left_validation", QString::number(gaze.leftValidity));
+    writer.writeAttribute("right_x", QString::number(gaze.rightX));
+    writer.writeAttribute("right_y", QString::number(gaze.leftY));
+    writer.writeAttribute("right_pupil_diameter", QString::number(gaze.rightDiameter));
     writer.writeAttribute("right_validation", QString::number(gaze.rightValidity));
     writer.writeAttribute("tracker_time", QString::number(gaze.trackerTime));
     writer.writeAttribute("system_time", QString::number(gaze.systemTime));
