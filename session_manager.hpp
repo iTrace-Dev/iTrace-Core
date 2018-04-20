@@ -17,10 +17,17 @@ class SessionManager {
 
         void startSession();
 
+        void setScreenDimensions(int width, int height) {
+            screenWidth = width;
+            screenHeight = height;
+        }
+
         std::string getSessionPath() const { return currentSessionDir; }
         std::string getStudyPath() const { return currentStudyDir; }
         std::string getSessionID() const { return currentSessionID; }
         std::string getCalibrationID() const { return currentCalibrationID; }
+        int getScreenWidth() const { return screenWidth; }
+        int getScreenHeight() const { return screenHeight; }
 
     private:
         // Singleton Protection
@@ -46,6 +53,9 @@ class SessionManager {
         // Current Calibration Infrmation
         std::string currentCalibrationID;
 
+        // Screen Size
+        int screenWidth;
+        int screenHeight;
 };
 
 #endif // SESSION_MANAGER_HPP

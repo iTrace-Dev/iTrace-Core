@@ -73,13 +73,15 @@ void MainWindow::startTracker() {
         socketServer.writeData(sessionInfo);
         websocketServer.writeData(sessionInfo);
 
+        // Determine screen dimensions before starting tracker (this causes issues when run from threads)
+        QRect screen= QApplication::desktop()->screenGeometry();
+        session.setScreenDimensions(screen.width(), screen.height());
+
         //Get an xmlwriter ready to write gaze and environment data from the core
         xml = new XMLWriter();
         xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
-        // Determine screen dimensions before starting tracker (this causes issues when run from threads)
-        QRect screen= QApplication::desktop()->screenGeometry();
-        bufferHandler = new GazeHandler(screen.width(), screen.height());
+        bufferHandler = new GazeHandler();
 
         QThreadPool::globalInstance()->start(bufferHandler);
         connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);

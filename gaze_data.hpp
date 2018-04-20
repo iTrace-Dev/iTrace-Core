@@ -48,7 +48,7 @@ class GazeData {
         }
 
         std::string toString() {
-            return std::string("gaze") + ',' + std::to_string(systemTime) + ',' + std::to_string(leftX) + "," + std::to_string(leftY) + '\n';
+            return std::string("gaze") + ',' + std::to_string(systemTime) + ',' + std::to_string((leftX + rightX) / 2) + "," + std::to_string((leftY + rightY) / 2) + '\n';
         }
 
         ~GazeData() {}

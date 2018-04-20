@@ -18,7 +18,13 @@ XMLWriter::XMLWriter(QObject *parent): QObject(parent) {
 }
 
 void XMLWriter::setEnvironment(const std::string& trackerID) {
+    SessionManager& session = SessionManager::Instance();
+
     writer.writeStartElement("environment");
+
+    writer.writeEmptyElement("screen-size");
+    writer.writeAttribute("width", QString::number(session.getScreenWidth()));
+    writer.writeAttribute("height", QString::number(session.getScreenHeight()));
 
     writer.writeEmptyElement("eye-tracker");
     writer.writeAttribute("type", QString::fromStdString(trackerID));
@@ -27,7 +33,6 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
     writer.writeTextElement("date", QString::fromStdString(startDateTime));
     writer.writeTextElement("time", QString::fromStdString(startDateTime));
 
-    SessionManager& session = SessionManager::Instance();
     writer.writeEmptyElement("session");
     writer.writeAttribute("id", QString::fromStdString(session.getSessionID()));
     writer.writeEmptyElement("calibration");
@@ -38,8 +43,12 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
 
 void XMLWriter::writeResponse(GazeData gaze) {
     writer.writeEmptyElement("response");
-    writer.writeAttribute("x", QString::number(gaze.leftX));
-    writer.writeAttribute("y", QString::number(gaze.leftY));
+    writer.writeAttribute("left_x", QString::number(gaze.leftX));
+    writer.writeAttribute("left_y", QString::number(gaze.leftY));
+    writer.writeAttribute("right_x", QString::number(gaze.rightX));
+    writer.writeAttribute("right_y", QString::number(gaze.leftY));
+    writer.writeAttribute("x", QString::number((gaze.leftX + gaze.rightX) / 2));
+    writer.writeAttribute("y", QString::number((gaze.leftY + gaze.rightY) / 2));
     writer.writeAttribute("left_validation", QString::number(gaze.leftValidity));
     writer.writeAttribute("right_validation", QString::number(gaze.rightValidity));
     writer.writeAttribute("tracker_time", QString::number(gaze.trackerTime));

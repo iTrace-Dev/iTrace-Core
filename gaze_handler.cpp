@@ -1,19 +1,19 @@
 #include "gaze_handler.hpp"
 #include "gaze_buffer.hpp"
+#include "session_manager.hpp"
 #include <QDebug>
-
-GazeHandler::GazeHandler(int displayWidth, int displayHeight): screenWidth(displayWidth), screenHeight(displayHeight) {}
 
 void GazeHandler::run() {
     GazeData* gd = GazeBuffer::Instance().dequeue();
+    SessionManager& session = SessionManager::Instance();
 
     while (gd) {
         //Update gaze coordinates for display (does not apply to mouse)
         if (gd->trackerType != "mouse") {
-            gd->leftX *= screenWidth;
-            gd->leftY *= screenHeight;
-            gd->rightX *= screenWidth;
-            gd->rightY *= screenHeight;
+            gd->leftX *= session.getScreenWidth();
+            gd->leftY *= session.getScreenHeight();
+            gd->rightX *= session.getScreenWidth();
+            gd->rightY *= session.getScreenHeight();
         }
 
         emit socketOut(gd->toString());
