@@ -21,6 +21,11 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->sessionButton, SIGNAL(released()), this, SLOT(showSessionSetup()));
     connect(ui->trackerBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setActiveTracker()));
 
+    // Hide reticle checkbox.
+    //  This might be useful to enable as a debugging feature.
+    //  For now, just comment out to show.
+    ui->reticleBox->hide();
+
     this->setFixedSize(this->geometry().width(),this->geometry().height());
     std::vector<std::string> trackerNames = trackerManager.getTrackerNames();
     for (std::vector<std::string>::const_iterator it = trackerNames.begin(); it != trackerNames.end(); ++it) {
