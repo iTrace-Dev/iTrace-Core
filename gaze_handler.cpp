@@ -16,11 +16,17 @@ void GazeHandler::run() {
             gd->rightY *= session.getScreenHeight();
         }
 
-        emit socketOut(gd->toString());
-        emit websocketOut(gd->toString());
+        std::string gazeString = createPluginData(gd->systemTime, gd->getCalculatedX(), gd->getCalculatedY());
+
+        emit socketOut(gazeString);
+        emit websocketOut(gazeString);
         emit reticleOut(int(gd->leftX), int(gd->leftY));
         emit xmlOut(*gd);
         delete gd;
         gd = GazeBuffer::Instance().dequeue();
     }
+}
+
+std::string GazeHandler::createPluginData(int64_t eventID, double x, double y) {
+    return std::string("gaze") + ',' + std::to_string(eventID) + ',' + std::to_string(x) + ',' + std::to_string(y) + '\n';
 }

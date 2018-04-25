@@ -43,8 +43,8 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
 
 void XMLWriter::writeResponse(GazeData gaze) {
     writer.writeEmptyElement("response");
-    writer.writeAttribute("x", QString::number((gaze.leftX + gaze.rightX) / 2));
-    writer.writeAttribute("y", QString::number((gaze.leftY + gaze.rightY) / 2));
+    writer.writeAttribute("x", QString::number(gaze.getCalculatedX()));
+    writer.writeAttribute("y", QString::number(gaze.getCalculatedY()));
     writer.writeAttribute("left_x", QString::number(gaze.leftX));
     writer.writeAttribute("left_y", QString::number(gaze.leftY));
     writer.writeAttribute("left_pupil_diameter", QString::number(gaze.leftDiameter));

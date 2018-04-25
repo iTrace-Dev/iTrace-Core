@@ -5,6 +5,7 @@
 #include <QThreadPool>
 #include <QXmlStreamWriter>
 #include <string>
+#include <cstdint> //provides int64_t
 #include "socket_server.hpp"
 #include "gaze_data.hpp"
 #include <QDebug>
@@ -27,6 +28,8 @@ class GazeHandler : public QObject, public QRunnable {
         GazeHandler() {};
         ~GazeHandler() {}
         void run();
+    private:
+        std::string createPluginData(int64_t eventID, double x, double y);
 
     signals:
         void socketOut(std::string);

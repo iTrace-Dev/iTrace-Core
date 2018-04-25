@@ -18,6 +18,7 @@
 
 #include <cstdint> //provides int64_t
 #include <string>
+#include <cmath>
 #include <QDebug>
 
 class GazeData {
@@ -42,13 +43,60 @@ class GazeData {
         // I know...just roll with it for now.
         GazeData(int64_t timestamp, double x, double y, std::string tracker): GazeData() {
             systemTime = timestamp;
+
+            // Set them both to be the same so when they are averaged it comes out correct
             leftX = x;
             leftY = y;
+            rightX = x;
+            rightY = y;
+
+            //Data will always be valid
+            leftValidity = 1;
+            rightValidity = 1;
+
+
             trackerType = tracker;
         }
 
-        std::string toString() {
-            return std::string("gaze") + ',' + std::to_string(systemTime) + ',' + std::to_string((leftX + rightX) / 2) + "," + std::to_string((leftY + rightY) / 2) + '\n';
+        double getCalculatedX() {
+
+            // Perfect data for both eyes
+            if ( !(std::isnan(rightX)) && !(std::isnan(leftX)) )
+                if (rightValidity && leftValidity && rightX >= 0 && leftX >= 0)
+                    return ( (rightX + leftX) / 2 );
+
+            // Perfect right eye data
+            if ( !(std::isnan(rightX)) )
+                if (rightValidity && rightX >= 0)
+                    return rightX;
+
+            // Perfect left eye data
+            if ( !(std::isnan(leftX)) )
+                if (leftValidity && leftX >= 0)
+                    return leftX;
+
+            // Everything is bad....
+            return std::numeric_limits<double>::quiet_NaN();
+        }
+
+        double getCalculatedY() {
+            // Perfect data for both eyes
+            if ( !(std::isnan(rightY)) && !(std::isnan(leftY)) )
+                if (rightValidity && leftValidity && rightY >= 0 && leftY >= 0)
+                    return ( (rightY + leftY) / 2 );
+
+            // Perfect right eye data
+            if ( !(std::isnan(rightY)) )
+                if (rightValidity && rightY >= 0)
+                    return rightY;
+
+            // Perfect left eye data
+            if ( !(std::isnan(leftY)) )
+                if (leftValidity && leftY >= 0)
+                    return leftY;
+
+            // Everything is bad....
+            return std::numeric_limits<double>::quiet_NaN();
         }
 
         ~GazeData() {}
