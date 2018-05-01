@@ -19,6 +19,8 @@
 #include <cstdint> //provides int64_t
 #include <string>
 #include <cmath>
+#include <ctime>
+#include <chrono>
 #include <QDebug>
 
 class GazeData {
@@ -31,18 +33,24 @@ class GazeData {
 
         GazeData(double lDiam, double lValid, double lX, double lY, double user_lX, double user_lY, double user_lZ,
                  double rDiam, double rValid, double rX, double rY, double user_rX, double user_rY, double user_rZ,
-                 int64_t tTime, int64_t sTime, std::string tracker):
+                 int64_t tTime, const std::string& tracker):
                     leftDiameter(lDiam), leftValidity(lValid), leftX(lX), leftY(lY),              // LEFT EYE BASIC DATA
                     user_pos_leftX(user_lX), user_pos_leftY(user_lY), user_pos_leftZ(user_lZ),    // LEFT EYE BASED USER POSITIONS
                     rightDiameter(rDiam), rightValidity(rValid), rightX(rX), rightY(rY),          // RIGHT EYE BASIC DATA
                     user_pos_rightX(user_rX), user_pos_rightY(user_rY), user_pos_rightZ(user_rZ), // RIGHT EYE BASED USER POSITIONS
-                    trackerTime(tTime), systemTime(sTime), trackerType(tracker) {}                // TRACKER TYPES AND TIMESTAMPS
+                    trackerTime(tTime), trackerType(tracker) {                                    // TRACKER TYPES AND SYSTEM TIMESTAMPS
+
+            systemTime = setSystemTime();
+            eventTime = setEventTime();
+        }
 
 
         // Temporary cheat constructor for mouse ONLY!
         // I know...just roll with it for now.
-        GazeData(int64_t timestamp, double x, double y, std::string tracker): GazeData() {
-            systemTime = timestamp;
+        GazeData(double x, double y, std::string tracker): GazeData() {
+
+            systemTime = setSystemTime();
+            eventTime = setEventTime();
 
             // Set them both to be the same so when they are averaged it comes out correct
             leftX = x;
@@ -122,6 +130,16 @@ class GazeData {
 
         int64_t trackerTime;
         int64_t systemTime;
+        int64_t eventTime;
+
+    private:
+        int64_t setSystemTime() {
+            return int64_t(std::time(nullptr));
+        }
+
+        int64_t setEventTime() {
+            return std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now()).time_since_epoch().count();
+        }
 };
 
 #endif // GAZE_DATA_HPP

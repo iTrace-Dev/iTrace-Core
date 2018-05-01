@@ -4,8 +4,6 @@
 #include "session_manager.hpp"
 #include <QXmlStreamWriter>
 #include <QFile>
-#include <ctime>
-#include <chrono>
 #include <ratio>
 #include <cstdint> //provides int64_t
 #include <QDebug>
@@ -90,7 +88,7 @@ TobiiResearchEyeTrackers* get_tobii_trackers() {
 void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
     GazeBuffer& buffer = GazeBuffer::Instance();
 
-    int64_t systemTimeNanoseconds = std::chrono::time_point_cast<std::chrono::nanoseconds>(std::chrono::steady_clock::now()).time_since_epoch().count();
+
     //The GazeData Constructor is gross and needs to be made better...
     buffer.enqueue( new GazeData( gd->left_eye.pupil_data.diameter, gd->left_eye.pupil_data.validity,
                                   gd->left_eye.gaze_point.position_on_display_area.x, gd->left_eye.gaze_point.position_on_display_area.y,
@@ -100,7 +98,7 @@ void gazeDataCallback(TobiiResearchGazeData* gd, void* userData) {
                                   gd->right_eye.gaze_point.position_on_display_area.x, gd->right_eye.gaze_point.position_on_display_area.y,
                                   gd->right_eye.gaze_origin.position_in_user_coordinates.x, gd->right_eye.gaze_origin.position_in_user_coordinates.y, gd->right_eye.gaze_origin.position_in_user_coordinates.z,
 
-                                  gd->device_time_stamp, systemTimeNanoseconds,"tobii"));
+                                  gd->device_time_stamp, "tobii"));
 }
 
 // WRITE OUT CALIBRATION DATA

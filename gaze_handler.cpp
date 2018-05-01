@@ -16,7 +16,7 @@ void GazeHandler::run() {
             gd->rightY *= session.getScreenHeight();
         }
 
-        std::string gazeString = createPluginData(gd->systemTime, gd->getCalculatedX(), gd->getCalculatedY());
+        std::string gazeString = createPluginData(gd->eventTime, gd->getCalculatedX(), gd->getCalculatedY());
 
         emit socketOut(gazeString);
         emit websocketOut(gazeString);
