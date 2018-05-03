@@ -56,6 +56,7 @@ void XMLWriter::writeResponse(GazeData gaze) {
     writer.writeAttribute("tracker_time", QString::number(gaze.trackerTime));
     writer.writeAttribute("system_time", QString::number(gaze.systemTime));
     writer.writeAttribute("event_time", QString::number(gaze.eventTime));
+    writer.writeAttribute("fixation_id", QString("NA"));
 }
 
 XMLWriter::~XMLWriter() {
