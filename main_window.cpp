@@ -79,7 +79,11 @@ void MainWindow::startTracker() {
         websocketServer.writeData(sessionInfo);
 
         // Determine screen dimensions before starting tracker (this causes issues when run from threads)
-        QRect screen= QApplication::desktop()->screenGeometry();
+        //  iTrace always records from the primary desktop screen.
+        //  Secondary screen should be used for study monitoring.
+        QDesktopWidget* desktop = QApplication::desktop();
+        QRect screen = desktop->screen(desktop->primaryScreen())->geometry();
+
         session.setScreenDimensions(screen.width(), screen.height());
 
         //Get an xmlwriter ready to write gaze and environment data from the core
