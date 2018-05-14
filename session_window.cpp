@@ -7,6 +7,10 @@
 
 SessionWindow::SessionWindow(QWidget *parent) : QDialog(parent), ui(new Ui::SessionWindow) {
     ui->setupUi(this);
+    ui->textEdit->setTabChangesFocus(true);
+    ui->textEdit_2->setTabChangesFocus(true);
+    ui->textEdit_3->setTabChangesFocus(true);
+    ui->textEdit_4->setTabChangesFocus(true);
     connect(ui->buttonBox, SIGNAL(accepted()), this, SLOT(okClick()));
     connect(ui->pushButton, SIGNAL(released()), this, SLOT(directorySelect()));
 }
