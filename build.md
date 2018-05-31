@@ -40,6 +40,8 @@
 		* linkage
 			* static
 		* uncheck add "d" for debug libraries
+* Issues
+	* When performing a fresh installation of the latest QT/QT Creator it is possible that iTrace core will be built, but QT Creator will refuse to run the application. A potential solution to this issue is to add the windows system32 directory to the user's environment variable path.
 
 ## THE INFORMATION BELOW IS OUT-DATED FOR THE NEW ARCHITECTURE..
 
