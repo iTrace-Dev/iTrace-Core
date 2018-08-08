@@ -37,7 +37,8 @@ SOURCES += main.cpp\
     socket_server.cpp \
     websocket_server.cpp \
     session_manager.cpp \
-    xml_writer.cpp
+    xml_writer.cpp \
+    status_window.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -54,23 +55,19 @@ HEADERS  += \
     socket_server.hpp \
     websocket_server.hpp \
     session_manager.hpp \
-    xml_writer.hpp
-
-HEADERS  +=
+    xml_writer.hpp \
+    status_window.h
 
 FORMS    += \
     reticle.ui \
     session_window.ui \
-    main_window.ui
+    main_window.ui \
+    status_window.ui
 
-
-win32: LIBS += -L$$PWD/deps/x64/release/lib/ -ltobii_research
+win32: LIBS += -L$$PWD/deps/x64/debug/lib/ -ltobii_research
 
 INCLUDEPATH += $$PWD/deps/include/tobii_sdk
 DEPENDPATH += $$PWD/deps/include/tobii_sdk
 
-
-macx: LIBS += -L$$PWD/../../../../usr/local/lib/tobii_research/ -ltobii_research.1.3.0
-
-INCLUDEPATH += $$PWD/../../../../usr/local/include/tobii_research
-DEPENDPATH += $$PWD/../../../../usr/local/include/tobii_research
+win32:!win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/tobii_research.lib
+else:win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/libtobii_research.a
