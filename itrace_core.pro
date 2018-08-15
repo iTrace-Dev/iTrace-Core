@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl widgets
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -38,7 +38,8 @@ SOURCES += main.cpp\
     websocket_server.cpp \
     session_manager.cpp \
     xml_writer.cpp \
-    status_window.cpp
+    status_window.cpp \
+    status_window_display.cpp
 
 HEADERS  += \
     tracker_manager.hpp \
@@ -56,13 +57,16 @@ HEADERS  += \
     websocket_server.hpp \
     session_manager.hpp \
     xml_writer.hpp \
-    status_window.h
+    status_window.hpp \
+    status_window_display.hpp
 
 FORMS    += \
     reticle.ui \
     session_window.ui \
     main_window.ui \
     status_window.ui
+
+LIBS    += -lOpenGL32
 
 win32: LIBS += -L$$PWD/deps/x64/debug/lib/ -ltobii_research
 

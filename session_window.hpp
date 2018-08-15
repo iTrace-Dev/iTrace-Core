@@ -10,8 +10,7 @@ namespace Ui {
  class SessionWindow;
 }
 
-class SessionWindow : public QDialog
-{
+class SessionWindow : public QDialog {
     Q_OBJECT
 
 public:

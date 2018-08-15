@@ -1,25 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>SessionWindow</class>
- <widget class="QDialog" name="SessionWindow">
+ <class>StatusWindow</class>
+ <widget class="QWidget" name="StatusWindow">
+  <property name="windowModality">
+   <enum>Qt::ApplicationModal</enum>
+  </property>
   <property name="geometry">
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>378</width>
-    <height>363</height>
+    <width>400</width>
+    <height>300</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Form</string>
   </property>
-  <widget class="QOpenGLWidget" name="openGLWidget">
+  <widget class="StatusWindowDisplay" name="openGLWidget">
    <property name="geometry">
     <rect>
      <x>20</x>
      <y>40</y>
-     <width>301</width>
-     <height>271</height>
+     <width>341</width>
+     <height>241</height>
     </rect>
    </property>
   </widget>
@@ -29,49 +32,21 @@
      <x>20</x>
      <y>10</y>
      <width>101</width>
-     <height>31</height>
+     <height>16</height>
     </rect>
    </property>
    <property name="text">
     <string>Eye Status Window</string>
    </property>
   </widget>
-  <widget class="QSlider" name="verticalSlider">
-   <property name="geometry">
-    <rect>
-     <x>340</x>
-     <y>60</y>
-     <width>22</width>
-     <height>231</height>
-    </rect>
-   </property>
-   <property name="orientation">
-    <enum>Qt::Vertical</enum>
-   </property>
-   <property name="invertedAppearance">
-    <bool>false</bool>
-   </property>
-   <property name="invertedControls">
-    <bool>false</bool>
-   </property>
-   <property name="tickPosition">
-    <enum>QSlider::TicksBothSides</enum>
-   </property>
-  </widget>
-  <widget class="QPushButton" name="pushButton">
-   <property name="geometry">
-    <rect>
-     <x>290</x>
-     <y>330</y>
-     <width>75</width>
-     <height>23</height>
-    </rect>
-   </property>
-   <property name="text">
-    <string>Exit</string>
-   </property>
-  </widget>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>StatusWindowDisplay</class>
+   <extends>QOpenGLWidget</extends>
+   <header>status_window_display.hpp</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>

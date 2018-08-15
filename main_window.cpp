@@ -7,7 +7,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(), xml(nullptr),
-    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()) {
+    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()), statusWindow((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
     qRegisterMetaType<GazeData>();
@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent):
     connect(ui->calibrateButton, SIGNAL(released()), this, SLOT(startCalibration()));
     connect(ui->sessionButton, SIGNAL(released()), this, SLOT(showSessionSetup()));
     connect(ui->trackerBox, SIGNAL(currentTextChanged(QString)), this, SLOT(setActiveTracker()));
+    connect(ui->statusButton, SIGNAL(released()), this, SLOT(eyeStatus()));
 
     // Hide reticle checkbox.
     //  This might be useful to enable as a debugging feature.
@@ -131,4 +132,8 @@ void MainWindow::startCalibration() {
     CalibrationScreen* calibrationScreen = CalibrationScreen::getCalibrationScreen();
     trackerManager.getActiveTracker();
     calibrationScreen->startCalibration(trackerManager.getActiveTracker());
+}
+
+void MainWindow::eyeStatus() {
+    statusWindow.show();
 }
