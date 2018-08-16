@@ -48,6 +48,7 @@ class MainWindow : public QMainWindow {
         Reticle reticle;
         SessionWindow sessionDialog;
         StatusWindow statusWindow;
+        StatusWindowDisplay statusDisplay;
 
         state app_state;
 

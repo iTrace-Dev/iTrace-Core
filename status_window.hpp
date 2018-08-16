@@ -5,6 +5,7 @@
 #include <QWidget>
 #include <QDialog>
 #include "ui_status_window.h"
+#include "status_window_display.hpp"
 
 namespace Ui {
  class StatusWindow;
@@ -13,16 +14,15 @@ namespace Ui {
 class StatusWindow : public QDialog {
     Q_OBJECT
 
-public:
-    explicit StatusWindow(QWidget *parent = 0);
-    ~StatusWindow();
+    public:
+        explicit StatusWindow(QWidget *parent = 0);
+        ~StatusWindow();
 
-private slots:
-    void closeWindow();
+    private slots:
+        void closeWindow();
 
-private:
-    Ui::StatusWindow *ui;
-
+    private:
+        Ui::StatusWindow *ui;
 };
 
 #endif // STATUS_WINDOW_HPP
