@@ -25,7 +25,7 @@ class GazeHandler : public QObject, public QRunnable {
     Q_OBJECT
 
     public:
-        GazeHandler() {};
+        GazeHandler() {}
         ~GazeHandler() {}
         void run();
     private:

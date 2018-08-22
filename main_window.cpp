@@ -7,8 +7,7 @@
 
 MainWindow::MainWindow(QWidget *parent):
     QMainWindow(parent), ui(new Ui::MainWindow), trackerManager(), socketServer(), websocketServer(), xml(nullptr),
-    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()), statusWindow((QWidget*) this->parent()),
-    statusDisplay((QWidget*) this->parent()) {
+    reticle((QWidget*) this->parent()), sessionDialog((QWidget*) this->parent()), statusWindow((QWidget*) this->parent()) {
 
     qRegisterMetaType<std::string>();
     qRegisterMetaType<GazeData>();
@@ -99,7 +98,7 @@ void MainWindow::startTracker() {
         connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
         connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
         connect(bufferHandler, &GazeHandler::xmlOut, xml, &XMLWriter::writeResponse);
-        connect(bufferHandler, &GazeHandler::eyeStatusOut, &statusDisplay, &StatusWindowDisplay::setEyePos);
+        connect(bufferHandler, &GazeHandler::eyeStatusOut, &statusWindow, &StatusWindow::getEyePos);
 
         trackerManager.startTracking();
         app_state = TRACKING;

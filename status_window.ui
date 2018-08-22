@@ -39,6 +39,34 @@
     <string>Eye Status Window</string>
    </property>
   </widget>
+  <widget class="QSlider" name="verticalSlider">
+   <property name="geometry">
+    <rect>
+     <x>400</x>
+     <y>39</y>
+     <width>22</width>
+     <height>351</height>
+    </rect>
+   </property>
+   <property name="maximum">
+    <number>90</number>
+   </property>
+   <property name="singleStep">
+    <number>30</number>
+   </property>
+   <property name="sliderPosition">
+    <number>45</number>
+   </property>
+   <property name="orientation">
+    <enum>Qt::Vertical</enum>
+   </property>
+   <property name="invertedAppearance">
+    <bool>true</bool>
+   </property>
+   <property name="tickPosition">
+    <enum>QSlider::TicksBothSides</enum>
+   </property>
+  </widget>
  </widget>
  <customwidgets>
   <customwidget>
