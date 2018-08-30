@@ -17,7 +17,7 @@ void StatusWindow::getEyePos(GazeData gaze){
     ui->openGLWidget->setEyePos(gaze);
 
     if (gaze.rightValidity == 1) {
-        pos = gaze.user_pos_rightZ / 100;
+        pos = gaze.user_pos_rightZ / 10;
         ui->verticalSlider->setValue(pos);
     }
 }
