@@ -68,9 +68,3 @@ win32: LIBS += -L$$PWD/deps/x64/release/lib/ -ltobii_research
 
 INCLUDEPATH += $$PWD/deps/include/tobii_sdk
 DEPENDPATH += $$PWD/deps/include/tobii_sdk
-
-
-macx: LIBS += -L$$PWD/../../../../usr/local/lib/tobii_research/ -ltobii_research.1.3.0
-
-INCLUDEPATH += $$PWD/../../../../usr/local/include/tobii_research
-DEPENDPATH += $$PWD/../../../../usr/local/include/tobii_research
