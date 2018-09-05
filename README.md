@@ -1,6 +1,6 @@
-# iTrace Core
+# iTrace-Core
 
-iTrace Core gathers data from an eye tracker and sends screen coordinates to all connected plugins. Each plugin determines if the received coordinates are visible within its application and can record data about areas of interest that are being focused on.
+iTrace Core is a component of the iTrace platform. The core is responsible for managing all aspects of the physical eye tracking devices. It also maintains the session state and maintains any gaze related data files produced during the study. Lastly, the core assists with plugin management indicating when to start and stop recording information in the IDE.
 
 ### BASIC USAGE:
 1) Start iTrace-Core
