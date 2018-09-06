@@ -4,6 +4,10 @@
 #include <QWidget>
 #include <QPainter>
 #include <QTimer>
+#include <QFile>
+#include <QString>
+#include <QXmlStreamReader>
+#include <QMouseEvent>
 #include <cstdlib>
 #include <ctime>
 #include "tracker.hpp"
@@ -21,6 +25,7 @@ class CalibrationScreen : public QWidget {
 
     protected:
         void paintEvent(QPaintEvent* event) override;
+        void mousePressEvent(QMouseEvent*  event) override;
 
     private:
         static CalibrationScreen* calibrationScreen;
@@ -28,12 +33,16 @@ class CalibrationScreen : public QWidget {
         QPointF points[9];
         QTimer * timer;
         Tracker* tracker;
+        QXmlStreamReader reader;
+        QList<QPointF> lPoints;
+        QList<QPointF> rPoints;
         int t;
         int x;
         int y;
         int dotx;
         int doty;
         float size;
+        bool complete;
 };
 
 #endif // CALIBRATION_SCREEN_HPP

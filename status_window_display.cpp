@@ -5,7 +5,7 @@
 StatusWindowDisplay::StatusWindowDisplay(QWidget *parent) : QOpenGLWidget(parent) {
     timer = new QTimer(this);
     connect(timer, SIGNAL(timeout()), this, SLOT(update()));
-    timer->start(50);
+    timer->start(80);
     xPos = 0; yPos = 0;
     gCol = 1; rCol = 1; bCol = 1;
 }
@@ -25,7 +25,6 @@ void StatusWindowDisplay::paintGL() {
     drawCircle(xPos + .08, -1*yPos, .05f, 12);
     drawCircle(xPos - .08, -1*yPos, .05f, 12);
     glFlush();
-
 }
 
 void StatusWindowDisplay::resizeGL(int w, int h) {
