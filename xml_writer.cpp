@@ -37,6 +37,12 @@ void XMLWriter::setEnvironment(const std::string& trackerID) {
     writer.writeAttribute("id", QString::fromStdString(session.getSessionID()));
     writer.writeEmptyElement("calibration");
     writer.writeAttribute("id", QString::fromStdString(session.getCalibrationID()));
+    writer.writeEmptyElement("study");
+    writer.writeAttribute("name", QString::fromStdString(session.getStudyName()));
+    writer.writeEmptyElement("researcher");
+    writer.writeAttribute("name", QString::fromStdString(session.getResearcherName()));
+    writer.writeEmptyElement("participant");
+    writer.writeAttribute("id", QString::fromStdString(session.getParticipantID()));
 
     writer.writeEndElement(); //Close "environment"
 }

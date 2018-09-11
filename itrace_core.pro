@@ -73,5 +73,12 @@ win32: LIBS += -L$$PWD/deps/x64/debug/lib/ -ltobii_research
 INCLUDEPATH += $$PWD/deps/include/tobii_sdk
 DEPENDPATH += $$PWD/deps/include/tobii_sdk
 
-win32:!win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/tobii_research.lib
-else:win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/libtobii_research.a
+CONFIG( debug, debug|release ) {
+    # debug
+    win32:!win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/tobii_research.lib
+    else:win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/debug/lib/libtobii_research.a
+} else {
+    # release
+    win32:!win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/release/lib/tobii_research.lib
+    else:win32-g++: PRE_TARGETDEPS += $$PWD/deps/x64/release/lib/libtobii_research.a
+}
