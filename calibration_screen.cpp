@@ -1,6 +1,7 @@
 #include "calibration_screen.hpp"
 #include "session_manager.hpp"
-#include <QDebug>
+#include <QDesktopWidget>
+#include <QApplication>
 
 CalibrationScreen* CalibrationScreen::calibrationScreen = 0;
 
@@ -46,6 +47,10 @@ void CalibrationScreen::startCalibration(Tracker* selectedTracker){
     tracker = selectedTracker;
     tracker->enterCalibration();
     this->show();
+    // Move the calibration screen so it always appears on the primary display (where tracking will take place)
+    QDesktopWidget* desktop = QApplication::desktop();
+    QRect screen = desktop->screen(desktop->primaryScreen())->geometry();
+    this->move(screen.x(), screen.y());
     timer->start(16);
     t = 0;
 }

@@ -26,6 +26,11 @@ class SessionManager {
         std::string getStudyPath() const { return currentStudyDir; }
         std::string getSessionID() const { return currentSessionID; }
         std::string getCalibrationID() const { return currentCalibrationID; }
+
+        std::string getResearcherName() const {return researcherName; }
+        std::string getStudyName() const { return studyName; }
+        std::string getParticipantID() const { return participantID; }
+
         int getScreenWidth() const { return screenWidth; }
         int getScreenHeight() const { return screenHeight; }
 
