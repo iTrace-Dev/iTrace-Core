@@ -117,14 +117,6 @@ void CalibrationScreen::paintEvent(QPaintEvent * /*event*/){
         }
         QPainter painter(this);
         painter.setRenderHint(QPainter::Antialiasing, true);
-        //Draw each calibration point
-        painter.setBrush(Qt::black);
-        painter.setPen(Qt::black);
-        for(int i = 0; i < 9; ++i) {
-            int ptX = (int)((points[i].x()*(float)width())-2);
-            int ptY = (int)((points[i].y()*(float)height())-2);
-            painter.drawEllipse(ptX,ptY,4,4);
-        }
         //Draw the reticle
         painter.setBrush(Qt::red);
         painter.setPen(Qt::red);
