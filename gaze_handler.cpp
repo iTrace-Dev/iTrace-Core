@@ -22,7 +22,6 @@ void GazeHandler::run() {
         emit websocketOut(gazeString);
         emit reticleOut(int(gd->leftX), int(gd->leftY));
         emit xmlOut(*gd);
-        emit eyeStatusOut(*gd);
         delete gd;
         gd = GazeBuffer::Instance().dequeue();
     }

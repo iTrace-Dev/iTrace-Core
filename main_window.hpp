@@ -13,7 +13,6 @@
 #include "session_manager.hpp"
 #include "reticle.hpp"
 #include "session_window.hpp"
-#include "status_window.hpp"
 #include "xml_writer.hpp"
 
 Q_DECLARE_METATYPE(std::string)
@@ -39,7 +38,6 @@ class MainWindow : public QMainWindow {
         void startCalibration();
         void showSessionSetup();
         void setActiveTracker();
-        void eyeStatus();
 
     private:
         void closeEvent(QCloseEvent *event);
@@ -47,8 +45,6 @@ class MainWindow : public QMainWindow {
         Ui::MainWindow *ui;
         Reticle reticle;
         SessionWindow sessionDialog;
-        StatusWindow statusWindow;
-        StatusWindowDisplay statusDisplay;
 
         state app_state;
 
