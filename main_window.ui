@@ -115,19 +115,6 @@
      <string>Show Reticle</string>
     </property>
    </widget>
-   <widget class="QPushButton" name="statusButton">
-    <property name="geometry">
-     <rect>
-      <x>240</x>
-      <y>60</y>
-      <width>101</width>
-      <height>23</height>
-     </rect>
-    </property>
-    <property name="text">
-     <string>Eye Status</string>
-    </property>
-   </widget>
   </widget>
   <widget class="QMenuBar" name="menuBar">
    <property name="geometry">
