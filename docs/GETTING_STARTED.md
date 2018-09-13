@@ -1,6 +1,10 @@
 ### Getting Started with iTrace Core
 
-Launch iTrace Core ensuring that all eye-trackers are connected to the computer and the respective device drivers have been installed.
+Before staring using iTrace Core and associated plugins, it is important to ensure that your environment is configured properly. iTrace Core uses the monitor designated as "main" or "primary" by the Windows operating system for eye positions and screen dimensions. Use the Windows display settings window to verify that your eye tracker is beneath the display set to be "main" or "primary". Additionally, communication between iTrace Core and plugins relies on socket communication over port 8080. If other applications or devices are also running on that port this will interfere with iTrace communcation.
+
+### General Usage
+
+Launch iTrace Core ensuring that all eye-trackers are connected to the computer and the respective device drivers have been installed. 
 
 When the iTrace Core interface loads, select the tracker you wish to use from the drop down menu of connected devices. Once a tracker has been selected, use the button `Session Setup` to configure information about the data recording session and destination directory for data storage. To help organize the data collection process, iTrace Core will use the data directory provided as a root directory to create a folder structure in the following manner:
 
