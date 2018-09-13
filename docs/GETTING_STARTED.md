@@ -12,7 +12,7 @@ When the iTrace Core interface loads, select the tracker you wish to use from th
 
 Researcher id along with study name and participant id are stored in the output files as well (discussed in output format).
 
-Once the session settings have been configured, the tracker can then be calibrated using the `Calibrate` button. Note that if calibration appears to "hang" this is due to the fact that the eye tracker is unable to get an acceptable reading from the user at the given point. Once the tracker can aquire a data point, calibration will resume. Calibration data will be stored in the same folder structure above in a directory called `calibration`. Each calibration attempt will produce a file named using a standard unix style timestamp.
+Once the session settings have been configured, the tracker can then be calibrated using the `Calibrate` button. Note that if calibration appears to "hang" this is due to the fact that the eye tracker is unable to get an acceptable reading from the user at the given point. Once the tracker can aquire a data point, calibration will resume. When Calibration is complete a screen will show all data points captured during calibration to show accuracy represented by blue and red dots for left and right eyes respectively. To exit the calibration results screen simply left click the mouse in the calibration window. The calibration data will be stored in xml format in the same folder structure described above in a directory called `calibration`. Each calibration attempt will produce a new xml file named using a standard unix style timestamp.
 
 After calibration, iTrace plugins (supporting Visual Studio 2017 and Eclipse) can be connected to the core.
 
