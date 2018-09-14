@@ -17,6 +17,8 @@ class SocketServer: public QObject {
     public:
         explicit SocketServer(QObject *parent = nullptr);
         ~SocketServer();
+        size_t clientCount();
+        void clientCleanup();
 
     public slots:
         void newConnection();

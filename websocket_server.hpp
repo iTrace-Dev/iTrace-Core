@@ -17,6 +17,8 @@ class WebsocketServer: public QObject {
     public:
         explicit WebsocketServer(QObject *parent = nullptr);
         ~WebsocketServer();
+        size_t clientCount();
+        void clientCleanup();
 
     public slots:
         void newConnection();

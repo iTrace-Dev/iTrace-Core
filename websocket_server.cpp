@@ -15,6 +15,10 @@ void WebsocketServer::newConnection() {
     clients.push_back(client_conn);
 }
 
+size_t WebsocketServer::clientCount() {
+    return clients.size();
+}
+
 WebsocketServer::~WebsocketServer() {
     //Proper Socket Clean-up
     for (std::vector<QWebSocket*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {
@@ -26,6 +30,21 @@ WebsocketServer::~WebsocketServer() {
     server->deleteLater();
 }
 
+void WebsocketServer::clientCleanup() {
+    std::vector<QWebSocket*>::const_iterator it = clients.begin();
+    while (it != clients.end()) {
+        if ((*it)->state() == QAbstractSocket::UnconnectedState) {
+            (*it)->close();
+            (*it)->deleteLater();
+            it = clients.erase(it);
+            qDebug() << "Web Client Cleaned Up!";
+        }
+        else {
+            ++it;
+        }
+    }
+}
+
 void WebsocketServer::writeData(std::string value) {
     std::vector<QWebSocket*>::const_iterator it = clients.begin();
     while (it != clients.end()) {
@@ -33,6 +52,7 @@ void WebsocketServer::writeData(std::string value) {
             (*it)->close();
             (*it)->deleteLater();
             it = clients.erase(it);
+            qDebug() << "Remove Disconnected Web Client!";
         }
         else{
             (*it)->sendTextMessage(QString::fromStdString(value));

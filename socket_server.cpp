@@ -26,6 +26,25 @@ void SocketServer::newConnection() {
     clients.push_back(client_conn);
 }
 
+size_t SocketServer::clientCount() {
+    return clients.size();
+}
+
+void SocketServer::clientCleanup() {
+    std::vector<QTcpSocket*>::const_iterator it = clients.begin();
+    while (it != clients.end()) {
+        if ((*it)->state() == QAbstractSocket::UnconnectedState) {
+            (*it)->close();
+            (*it)->deleteLater();
+            it = clients.erase(it);
+            qDebug() << "Client Cleaned Up!";
+        }
+        else {
+            ++it;
+        }
+    }
+}
+
 void SocketServer::writeData(std::string value) {
     std::vector<QTcpSocket*>::const_iterator it = clients.begin();
     while (it != clients.end()) {
@@ -33,6 +52,7 @@ void SocketServer::writeData(std::string value) {
             (*it)->close();
             (*it)->deleteLater();
             it = clients.erase(it);
+            qDebug() << "Remove Disconnected Client!";
         }
         else{
             (*it)->write(value.c_str());
