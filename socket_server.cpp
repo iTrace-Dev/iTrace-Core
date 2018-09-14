@@ -26,6 +26,10 @@ void SocketServer::newConnection() {
     clients.push_back(client_conn);
 }
 
+size_t SocketServer::clientCount() {
+    return clients.size();
+}
+
 void SocketServer::writeData(std::string value) {
     std::vector<QTcpSocket*>::const_iterator it = clients.begin();
     while (it != clients.end()) {

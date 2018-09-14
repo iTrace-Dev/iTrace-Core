@@ -15,6 +15,10 @@ void WebsocketServer::newConnection() {
     clients.push_back(client_conn);
 }
 
+size_t WebsocketServer::clientCount() {
+    return clients.size();
+}
+
 WebsocketServer::~WebsocketServer() {
     //Proper Socket Clean-up
     for (std::vector<QWebSocket*>::const_iterator it = clients.begin(); it != clients.end(); ++it) {

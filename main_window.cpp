@@ -2,6 +2,7 @@
 #include "calibration_screen.hpp"
 #include "gaze_data.hpp"
 #include <QDesktopWidget>
+#include <QMessageBox>
 #include <QDebug>
 
 
@@ -57,60 +58,78 @@ void MainWindow::setActiveTracker() {
 }
 
 void MainWindow::startTracker() {
-    if (app_state == IDLE) {
-        ui->startServerButton->setText("Stop Tracker");
+    if (clientCheck()) {
+        if (app_state == IDLE) {
+            ui->startServerButton->setText("Stop Tracker");
 
-        /* This should probably get refactored to where session manager deals with this logic
-         * and remove most of this from mainwindow.
-         */
+            /* This should probably get refactored to where session manager deals with this logic
+             * and remove most of this from mainwindow.
+             */
 
-        /* Start a session
-            1) Give the session a unique ID
-            2) Create a path based in the ID to store data
-        */
-        SessionManager& session = SessionManager::Instance();
-        session.startSession();
+            /* Start a session
+                1) Give the session a unique ID
+                2) Create a path based in the ID to store data
+            */
+            SessionManager& session = SessionManager::Instance();
+            session.startSession();
 
-        std::string sessionInfo = "session,";
-        sessionInfo += session.getSessionPath() + '\n';
+            std::string sessionInfo = "session,";
+            sessionInfo += session.getSessionPath() + '\n';
 
-        //Notify web/socket clients of the session data location (this should be handled elsewhere)
-        socketServer.writeData(sessionInfo);
-        websocketServer.writeData(sessionInfo);
+            //Notify web/socket clients of the session data location (this should be handled elsewhere)
+            socketServer.writeData(sessionInfo);
+            websocketServer.writeData(sessionInfo);
 
-        // Determine screen dimensions before starting tracker (this causes issues when run from threads)
-        //  iTrace always records from the primary desktop screen.
-        //  Secondary screen should be used for study monitoring.
-        QDesktopWidget* desktop = QApplication::desktop();
-        QRect screen = desktop->screen(desktop->primaryScreen())->geometry();
+            // Determine screen dimensions before starting tracker (this causes issues when run from threads)
+            //  iTrace always records from the primary desktop screen.
+            //  Secondary screen should be used for study monitoring.
+            QDesktopWidget* desktop = QApplication::desktop();
+            QRect screen = desktop->screen(desktop->primaryScreen())->geometry();
 
-        session.setScreenDimensions(screen.width(), screen.height());
+            session.setScreenDimensions(screen.width(), screen.height());
 
-        //Get an xmlwriter ready to write gaze and environment data from the core
-        xml = new XMLWriter();
-        xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
+            //Get an xmlwriter ready to write gaze and environment data from the core
+            xml = new XMLWriter();
+            xml->setEnvironment(trackerManager.getActiveTracker()->trackerName());
 
-        bufferHandler = new GazeHandler();
+            bufferHandler = new GazeHandler();
 
-        QThreadPool::globalInstance()->start(bufferHandler);
-        connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
-        connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
-        connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
-        connect(bufferHandler, &GazeHandler::xmlOut, xml, &XMLWriter::writeResponse);
+            QThreadPool::globalInstance()->start(bufferHandler);
+            connect(bufferHandler, &GazeHandler::socketOut, &socketServer, &SocketServer::writeData);
+            connect(bufferHandler, &GazeHandler::websocketOut, &websocketServer, &WebsocketServer::writeData);
+            connect(bufferHandler, &GazeHandler::reticleOut, &reticle, &Reticle::moveReticle);
+            connect(bufferHandler, &GazeHandler::xmlOut, xml, &XMLWriter::writeResponse);
 
-        trackerManager.startTracking();
-        app_state = TRACKING;
+            trackerManager.startTracking();
+            app_state = TRACKING;
 
-        ui->reticleBox->setEnabled(false);
+            ui->reticleBox->setEnabled(false);
+        }
+        else {
+            ui->startServerButton->setText("Start Tracker");
+            trackerManager.stopTracking();
+            app_state = IDLE;
+
+            ui->reticleBox->setEnabled(true);
+            delete xml;
+        }
     }
-    else {
-        ui->startServerButton->setText("Start Tracker");
-        trackerManager.stopTracking();
-        app_state = IDLE;
+}
 
-        ui->reticleBox->setEnabled(true);
-        delete xml;
-    }
+bool MainWindow::clientCheck() {
+    // If any clients are connected just start tracking
+    if (socketServer.clientCount() || websocketServer.clientCount() || app_state == TRACKING)
+        return true;
+
+    // If no clients are connected, prompt the user to continue tracking
+    QMessageBox msgBox;
+    msgBox.setWindowTitle("No Plugins Detected");
+    msgBox.setIcon(QMessageBox::Question);
+    msgBox.setText("iTrace plugins have not been connected to the core.");
+    msgBox.setInformativeText("Would you like to start tracking anyway?");
+    msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
+    msgBox.setDefaultButton(QMessageBox::Ok);
+    return (msgBox.exec() == QMessageBox::Ok) ? true : false;
 }
 
 void MainWindow::toggleReticle() {

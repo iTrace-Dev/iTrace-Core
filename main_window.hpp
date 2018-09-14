@@ -41,6 +41,7 @@ class MainWindow : public QMainWindow {
 
     private:
         void closeEvent(QCloseEvent *event);
+        bool clientCheck();
 
         Ui::MainWindow *ui;
         Reticle reticle;
