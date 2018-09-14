@@ -134,7 +134,7 @@ bool MainWindow::clientCheck() {
     msgBox.setInformativeText("Would you like to start tracking anyway?");
     msgBox.setStandardButtons(QMessageBox::Ok | QMessageBox::Cancel);
     msgBox.setDefaultButton(QMessageBox::Ok);
-    return (msgBox.exec() == QMessageBox::Ok) ? true : false;
+    return (msgBox.exec() == QMessageBox::Ok);
 }
 
 void MainWindow::toggleReticle() {
