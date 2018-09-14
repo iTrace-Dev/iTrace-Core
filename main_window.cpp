@@ -120,6 +120,7 @@ bool MainWindow::clientCheck() {
 
     // Remove any disconnected clients
     socketServer.clientCleanup();
+    websocketServer.clientCleanup();
 
     // If any clients are connected just start tracking
     if (socketServer.clientCount() || websocketServer.clientCount() || app_state == TRACKING)
