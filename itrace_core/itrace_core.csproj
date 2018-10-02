@@ -67,6 +67,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="MouseTracker.cs" />
     <Compile Include="TobiiTracker.cs" />
     <Compile Include="TrackerManager.cs" />
     <Compile Include="ITracker.cs" />

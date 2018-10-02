@@ -20,6 +20,8 @@ namespace iTrace_Core
 
         public void FindTrackers()
         {
+            EyeTrackers.Clear();
+            EyeTrackers.Add(new MouseTracker());
             FindTobiiDevices();
         }
 

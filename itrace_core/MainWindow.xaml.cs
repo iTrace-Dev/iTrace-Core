@@ -29,10 +29,7 @@ namespace iTrace_Core
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
-            foreach (String trackerName in TrackerManager.GetAttachedTrackers())
-            {
-                TrackerList.Items.Add(trackerName);
-            }
+            RefreshTrackerList();
         }
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
@@ -47,7 +44,20 @@ namespace iTrace_Core
 
         private void TrackerListChanged(object sender, SelectionChangedEventArgs e)
         {
-            System.Console.WriteLine(TrackerList.SelectedItem.ToString());
+            if (TrackerList.SelectedIndex >= 0)
+                System.Console.WriteLine(TrackerList.SelectedItem.ToString());
+        }
+
+        private void RefreshAttachedTrackers(object sender, RoutedEventArgs e)
+        {
+            RefreshTrackerList();
+        }
+
+        private void RefreshTrackerList()
+        {
+            TrackerList.SelectedIndex = -1;
+            TrackerManager.FindTrackers();
+            TrackerList.ItemsSource = TrackerManager.GetAttachedTrackers();
         }
     }
 }
