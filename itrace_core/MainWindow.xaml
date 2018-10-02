@@ -1,0 +1,34 @@
+﻿<Window x:Class="iTrace_Core.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:iTrace_Core"
+        mc:Ignorable="d"
+        Title="iTrace Core" Height="450" Width="800"
+        Loaded="ApplicationLoaded">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="749*" />
+            <ColumnDefinition Width="43*"/>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+            <MenuItem Header="_File">
+                <MenuItem x:Name="MenuSettings" Click="MenuSettingsClick" Header="_Settings"></MenuItem>
+                <Separator/>
+                <MenuItem x:Name="MenuExit" Click="MenuExitClick" Header="_Exit"></MenuItem>
+            </MenuItem>
+        </Menu>
+        <Canvas Grid.Row="1" Grid.ColumnSpan="2">
+            <Label Canvas.Left="12" Canvas.Top="36">Trackers:</Label>
+            <ComboBox x:Name="TrackerList" Grid.Row="1" Canvas.Left="67" Canvas.Top="40" Width="150" SelectionChanged="TrackerListChanged"/>
+        </Canvas>
+        <Button x:Name="TrackerRefreshButton" Content="Refresh" HorizontalAlignment="Left" Margin="225,38,0,-36" Grid.Row="2" VerticalAlignment="Top" Width="55" Height="23"/>
+    </Grid>
+</Window>
