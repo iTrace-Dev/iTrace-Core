@@ -10,7 +10,7 @@ namespace iTrace_Core
     {
         private readonly String TrackerName;
         private System.Timers.Timer MouseLocaionTick;
-        private const Double TIME_INTERVAL = 1000.0;
+        private const Double TIME_INTERVAL = 8.0; // 125 samples per second
 
         public MouseTracker()
         {
