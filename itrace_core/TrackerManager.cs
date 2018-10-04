@@ -9,13 +9,14 @@ namespace iTrace_Core
     class TrackerManager
     {
         private List<ITracker> EyeTrackers;
-        private String activeTracker;
-        public string ActiveTracker { get => activeTracker; set => activeTracker = value; }
+        private ITracker ActiveTracker;
+        private Boolean Tracking;
 
         public TrackerManager()
         {
             EyeTrackers = new List<ITracker>();
             FindTrackers();
+            Tracking = false;
         }
 
         public void FindTrackers()
@@ -34,6 +35,17 @@ namespace iTrace_Core
             }
         }
 
+        public void SetActiveTracker(String trackerName) {
+            foreach (ITracker tracker in EyeTrackers)
+            {
+                if (tracker.GetTrackerName().Equals(trackerName))
+                {
+                    ActiveTracker = tracker;
+                    break;
+                }
+            }
+        }
+
         public List<String> GetAttachedTrackers()
         {
             List<String> trackers = new List<string>();
@@ -43,6 +55,25 @@ namespace iTrace_Core
             }
 
             return trackers;
+        }
+
+        public Boolean Running()
+        {
+            return Tracking;
+        }
+
+        public Boolean StartTracker()
+        { 
+            Tracking = true;
+            ActiveTracker.StartTracker();
+            return Tracking;
+        }
+
+        public Boolean StopTracker()
+        {
+            Tracking = false;
+            ActiveTracker.StopTracker();
+            return Tracking;
         }
     }
 }

@@ -8,26 +8,31 @@ namespace iTrace_Core
 {
     class MouseTracker: ITracker
     {
-        private readonly String trackerName;
+        private readonly String TrackerName;
+        private System.Timers.Timer MouseLocaionTick;
+        private const Double TIME_INTERVAL = 1000.0;
 
         public MouseTracker()
         {
-            trackerName = "Mouse";
+            TrackerName = "Mouse";
+            MouseLocaionTick = new System.Timers.Timer(TIME_INTERVAL);
+            MouseLocaionTick.Elapsed += MousePosition;
+            MouseLocaionTick.AutoReset = true;
         }
 
         public String GetTrackerName()
         {
-            return trackerName;
+            return TrackerName;
         }
 
         public void StartTracker()
         {
-            //TODO
+            MouseLocaionTick.Start();
         }
 
         public void StopTracker()
         {
-            //TODO
+            MouseLocaionTick.Stop();
         }
 
         public void EnterCalibration()
@@ -38,6 +43,12 @@ namespace iTrace_Core
         public void LeaveCalibration()
         {
             //TODO
+        }
+
+        private void MousePosition(object sender, EventArgs e)
+        {
+            System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
+            Console.WriteLine(pt);
         }
     }
 }

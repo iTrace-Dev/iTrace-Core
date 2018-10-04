@@ -21,6 +21,7 @@ namespace iTrace_Core
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -45,7 +46,10 @@ namespace iTrace_Core
         private void TrackerListChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TrackerList.SelectedIndex >= 0)
+            {
                 System.Console.WriteLine(TrackerList.SelectedItem.ToString());
+                TrackerManager.SetActiveTracker(TrackerList.SelectedItem.ToString());
+            }
         }
 
         private void RefreshAttachedTrackers(object sender, RoutedEventArgs e)
@@ -58,6 +62,20 @@ namespace iTrace_Core
             TrackerList.SelectedIndex = -1;
             TrackerManager.FindTrackers();
             TrackerList.ItemsSource = TrackerManager.GetAttachedTrackers();
+        }
+
+        private void StartTracker(object sender, RoutedEventArgs e)
+        {
+            if (TrackerManager.Running())
+            {
+                ActivateTrackerButton.Content = "Start Tracking";
+                TrackerManager.StopTracker();
+            }
+            else
+            {
+                ActivateTrackerButton.Content = "Stop Tracking";
+                TrackerManager.StartTracker();
+            }
         }
     }
 }
