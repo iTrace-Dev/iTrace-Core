@@ -75,5 +75,11 @@ namespace iTrace_Core
             ActiveTracker.StopTracker();
             return Tracking;
         }
+
+        public void CalibrateActiveTracker()
+        {
+            if (ActiveTracker != null)
+                ActiveTracker.EnterCalibration();
+        }
     }
 }
