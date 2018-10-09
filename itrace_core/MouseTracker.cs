@@ -9,15 +9,15 @@ namespace iTrace_Core
     class MouseTracker: ITracker
     {
         private readonly String TrackerName;
-        private System.Timers.Timer MouseLocaionTick;
+        private System.Timers.Timer MouseLocationTick;
         private const Double TIME_INTERVAL = 8.0; // 125 samples per second
 
         public MouseTracker()
         {
             TrackerName = "Mouse";
-            MouseLocaionTick = new System.Timers.Timer(TIME_INTERVAL);
-            MouseLocaionTick.Elapsed += MousePosition;
-            MouseLocaionTick.AutoReset = true;
+            MouseLocationTick = new System.Timers.Timer(TIME_INTERVAL);
+            MouseLocationTick.Elapsed += MousePosition;
+            MouseLocationTick.AutoReset = true;
         }
 
         public String GetTrackerName()
@@ -27,12 +27,12 @@ namespace iTrace_Core
 
         public void StartTracker()
         {
-            MouseLocaionTick.Start();
+            MouseLocationTick.Start();
         }
 
         public void StopTracker()
         {
-            MouseLocaionTick.Stop();
+            MouseLocationTick.Stop();
         }
 
         public void EnterCalibration()
