@@ -26,6 +26,8 @@ namespace iTrace_Core
         {
             InitializeComponent();
             TrackerManager = new TrackerManager();
+            Console.WriteLine("Screen Dimensions: {0}x{1}", System.Windows.SystemParameters.PrimaryScreenWidth, 
+                System.Windows.SystemParameters.PrimaryScreenHeight);
         }
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)

@@ -43,10 +43,10 @@ namespace iTrace_Core
 
         private static void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
         {
-            Console.WriteLine("Left Eye: ({0},{1}) - Z: {2} - {3}", e.LeftEye.GazePoint.PositionOnDisplayArea.X, e.LeftEye.GazePoint.PositionOnDisplayArea.Y,
-                e.LeftEye.GazePoint.PositionInUserCoordinates.Z, e.LeftEye.GazePoint.Validity);
-            Console.WriteLine("Right Eye: ({0},{1}) - Z: {2} - {3}", e.RightEye.GazePoint.PositionOnDisplayArea.X, e.RightEye.GazePoint.PositionOnDisplayArea.Y,
-                e.RightEye.GazePoint.PositionInUserCoordinates.Z, e.RightEye.GazePoint.Validity);
+            Console.WriteLine("Left Eye: ({0},{1}) - Pupil: {2}({3}) - Z: {4} - {5}", e.LeftEye.GazePoint.PositionOnDisplayArea.X, e.LeftEye.GazePoint.PositionOnDisplayArea.Y,
+                e.LeftEye.Pupil.PupilDiameter, e.LeftEye.Pupil.Validity, e.LeftEye.GazePoint.PositionInUserCoordinates.Z, e.LeftEye.GazePoint.Validity);
+            Console.WriteLine("Right Eye: ({0},{1}) - Pupil: {2}({3}) - Z: {4} - {5}", e.RightEye.GazePoint.PositionOnDisplayArea.X, e.RightEye.GazePoint.PositionOnDisplayArea.Y,
+                e.RightEye.Pupil.PupilDiameter, e.LeftEye.Pupil.Validity, e.RightEye.GazePoint.PositionInUserCoordinates.Z, e.RightEye.GazePoint.Validity);
         }
     }
 }
