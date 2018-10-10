@@ -9,6 +9,7 @@ namespace iTrace_Core
     class TobiiTracker: ITracker
     {
         private readonly Tobii.Research.IEyeTracker TrackingDevice;
+        private Tobii.Research.ScreenBasedCalibration Calibration;
 
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
@@ -22,22 +23,30 @@ namespace iTrace_Core
 
         public void StartTracker()
         {
-            //TODO
+            TrackingDevice.GazeDataReceived += ReceiveRawGaze;
         }
 
         public void StopTracker()
         {
-            //TODO
+            TrackingDevice.GazeDataReceived -= ReceiveRawGaze;
         }
 
         public void EnterCalibration()
         {
-            //TODO
+            Calibration = new Tobii.Research.ScreenBasedCalibration(TrackingDevice);
         }
 
         public void LeaveCalibration()
         {
-            //TODO
+            Calibration.LeaveCalibrationMode();
+        }
+
+        private static void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
+        {
+            Console.WriteLine("Left Eye: ({0},{1}) - Z: {2} - {3}", e.LeftEye.GazePoint.PositionOnDisplayArea.X, e.LeftEye.GazePoint.PositionOnDisplayArea.Y,
+                e.LeftEye.GazePoint.PositionInUserCoordinates.Z, e.LeftEye.GazePoint.Validity);
+            Console.WriteLine("Right Eye: ({0},{1}) - Z: {2} - {3}", e.RightEye.GazePoint.PositionOnDisplayArea.X, e.RightEye.GazePoint.PositionOnDisplayArea.Y,
+                e.RightEye.GazePoint.PositionInUserCoordinates.Z, e.RightEye.GazePoint.Validity);
         }
     }
 }
