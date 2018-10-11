@@ -14,14 +14,23 @@ using System.Windows.Shapes;
 
 namespace iTrace_Core
 {
-    /// <summary>
-    /// Interaction logic for CalibrationWindow.xaml
-    /// </summary>
     public partial class CalibrationWindow : Window
     {
+        public event EventHandler<CalibrationPointReachedEventArgs> OnCalibrationPointReached;
+
         public CalibrationWindow()
         {
             InitializeComponent();
+        }
+    }
+
+    public class CalibrationPointReachedEventArgs : EventArgs
+    {
+        public Point CalibrationPoint { get; private set; }
+
+        public CalibrationPointReachedEventArgs(Point point)
+        {
+            CalibrationPoint = point;
         }
     }
 }
