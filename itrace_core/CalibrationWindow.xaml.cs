@@ -33,14 +33,14 @@ namespace iTrace_Core
             Path myPath = new Path();
             myPath.Fill = Brushes.Blue;
             myPath.Data = reticle;
-            myPath.Loaded += TargetLoaded;
+            myPath.Loaded += ReticleLoaded;
 
             Canvas containerCanvas = new Canvas();
             containerCanvas.Children.Add(myPath);
             Content = containerCanvas;
         }
 
-        private void TargetLoaded(object sender, RoutedEventArgs e)
+        private void ReticleLoaded(object sender, RoutedEventArgs e)
         {
             storyboard.Begin(this);
         }
