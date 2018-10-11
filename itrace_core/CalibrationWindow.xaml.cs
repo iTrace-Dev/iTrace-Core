@@ -13,7 +13,9 @@ namespace iTrace_Core
 
         private Storyboard storyboard;
         private EllipseGeometry reticle;
-        private static String reticleRegisteredName = "calibrationReticle";
+
+        private const String registeredReticleName = "calibrationReticle";
+        private const int movementAnimationDurationInSeconds = 5; 
 
         public CalibrationWindow()
         {
@@ -28,7 +30,7 @@ namespace iTrace_Core
             reticle.Center = new Point(100, 100);
             reticle.RadiusX = 10;
             reticle.RadiusY = 10;
-            this.RegisterName(reticleRegisteredName, reticle);
+            this.RegisterName(registeredReticleName, reticle);
 
             Path myPath = new Path();
             myPath.Fill = Brushes.Blue;
@@ -50,11 +52,11 @@ namespace iTrace_Core
             PointAnimation myDoubleAnimation = new PointAnimation();
             myDoubleAnimation.From = from;
             myDoubleAnimation.To = to;
-            myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(5));
+            myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(movementAnimationDurationInSeconds));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(myDoubleAnimation);
-            Storyboard.SetTargetName(myDoubleAnimation, reticleRegisteredName);
+            Storyboard.SetTargetName(myDoubleAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
             storyboard.Completed += new EventHandler(AnimationFinished);
         }
