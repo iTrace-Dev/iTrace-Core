@@ -54,12 +54,24 @@ namespace iTrace_Core
                 new Point(horizontalMargin + horizontalGap, verticalMargin + verticalGap),
                 new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin + verticalGap),
             };
-             
-            //Todo: shuffle points
+
+            ShufflePointArray(points);
 
             foreach (Point p in points)
             {
                 targets.Enqueue(p);
+            }
+        }
+
+        private void ShufflePointArray(Point[] points)
+        {
+            Random random = new Random();
+            for (int t = 0; t < points.Length; t++)
+            {
+                Point tmp = points[t];
+                int r = random.Next(t, points.Length);
+                points[t] = points[r];
+                points[r] = tmp;
             }
         }
 
