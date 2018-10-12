@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,19 +16,57 @@ namespace iTrace_Core
         private EllipseGeometry reticle;
 
         private const String registeredReticleName = "calibrationReticle";
-        private const int movementAnimationDurationInSeconds = 5; 
+        private const int movementAnimationDurationInMilliseconds = 1500;
+
+        private const double horizontalMargin = 50.0;
+        private const double verticalMargin = 200.0;
+
+        Queue<Point> targets;
 
         public CalibrationWindow()
         {
             InitializeComponent();
+        }
+
+
+        private void WindowLoaded(object sender, RoutedEventArgs e)
+        {
+            PopulateTargets();
+
             CreateReticle();
-            CreateMovementAnimationInStoryboard(new Point(100, 100), new Point(1920, 1080));
+
+            CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+        }
+
+        private void PopulateTargets()
+        {
+            targets = new Queue<Point>();
+
+            double horizontalGap = (this.ActualWidth - (2.0 * horizontalMargin)) / 2.0;
+            double verticalGap = (this.ActualHeight - (2.0 * verticalMargin)); 
+            
+            Point[] points = new Point[]
+            {
+                new Point(horizontalMargin, verticalMargin),
+                new Point(horizontalMargin + horizontalGap, verticalMargin),
+                new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin),
+                new Point(horizontalMargin, verticalMargin + verticalGap),
+                new Point(horizontalMargin + horizontalGap, verticalMargin + verticalGap),
+                new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin + verticalGap),
+            };
+             
+            //Todo: shuffle points
+
+            foreach (Point p in points)
+            {
+                targets.Enqueue(p);
+            }
         }
 
         private void CreateReticle()
         {
             reticle = new EllipseGeometry();
-            reticle.Center = new Point(100, 100);
+            reticle.Center = targets.Dequeue();
             reticle.RadiusX = 10;
             reticle.RadiusY = 10;
             this.RegisterName(registeredReticleName, reticle);
@@ -52,7 +91,7 @@ namespace iTrace_Core
             PointAnimation myDoubleAnimation = new PointAnimation();
             myDoubleAnimation.From = from;
             myDoubleAnimation.To = to;
-            myDoubleAnimation.Duration = new Duration(TimeSpan.FromSeconds(movementAnimationDurationInSeconds));
+            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(movementAnimationDurationInMilliseconds));
 
             storyboard = new Storyboard();
             storyboard.Children.Add(myDoubleAnimation);
@@ -67,9 +106,17 @@ namespace iTrace_Core
             {
                 OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(new Point()));
             }
-            this.Close();
-        }
 
+            if(!(targets.Count == 0))
+            {
+                CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+                storyboard.Begin(this);
+            }
+            else
+            {
+                this.Close();
+            }
+        }
     }
 
     public class CalibrationPointReachedEventArgs : EventArgs

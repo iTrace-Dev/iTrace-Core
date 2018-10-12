@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         WindowStyle="None"
-        Title="CalibrationWindow" Height="450" Width="800">
+        Title="CalibrationWindow" Loaded="WindowLoaded">
     <Grid>
         
     </Grid>
