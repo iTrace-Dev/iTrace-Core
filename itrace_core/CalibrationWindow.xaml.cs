@@ -21,13 +21,14 @@ namespace iTrace_Core
         private const double horizontalMargin = 50.0;
         private const double verticalMargin = 200.0;
 
+        private Point currentTarget;
+
         Queue<Point> targets;
 
         public CalibrationWindow()
         {
             InitializeComponent();
         }
-
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
@@ -100,6 +101,8 @@ namespace iTrace_Core
 
         private void CreateMovementAnimationInStoryboard(Point from, Point to)
         {
+            currentTarget = to;
+
             PointAnimation myDoubleAnimation = new PointAnimation();
             myDoubleAnimation.From = from;
             myDoubleAnimation.To = to;
@@ -116,7 +119,7 @@ namespace iTrace_Core
         {
             if (OnCalibrationPointReached != null)
             {
-                OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(new Point()));
+                OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
             }
 
             if(!(targets.Count == 0))
