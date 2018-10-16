@@ -40,7 +40,6 @@ namespace iTrace_Core
             {
                 if (tracker.GetTrackerName().Equals(trackerName))
                 {
-                    Console.WriteLine("FOUND AND SET ACTIVE TRACKER!");
                     ActiveTracker = tracker;
                     break;
                 }

@@ -8,15 +8,12 @@ namespace iTrace_Core
 {
     class MouseTracker: ITracker
     {
-        private readonly String TrackerName;
-        private System.Timers.Timer MouseLocationTick;
+        private readonly String TRACKER_NAME = "Mouse";
         private const Double TIME_INTERVAL = 8.0; // 125 samples per second
-
-        CalibrationWindow calibrationWindow;
+        private System.Timers.Timer MouseLocationTick;
 
         public MouseTracker()
         {
-            TrackerName = "Mouse";
             MouseLocationTick = new System.Timers.Timer(TIME_INTERVAL);
             MouseLocationTick.Elapsed += MousePosition;
             MouseLocationTick.AutoReset = true;
@@ -24,7 +21,7 @@ namespace iTrace_Core
 
         public String GetTrackerName()
         {
-            return TrackerName;
+            return TRACKER_NAME;
         }
 
         public void StartTracker()
@@ -37,17 +34,13 @@ namespace iTrace_Core
             MouseLocationTick.Stop();
         }
 
-        public void EnterCalibration()
-        {
-            //For testing
-            calibrationWindow = new CalibrationWindow();
-            calibrationWindow.Show();
-        }
-
-        public void LeaveCalibration()
-        {
-            //TODO
-        }
+        /* 
+         * While calibration is not necessary with the mouse the tracker
+         * interface this class implmenets requires these functions to be
+         * present. Here they are effectively noops.
+        */
+        public void EnterCalibration() {}
+        public void LeaveCalibration() {}
 
         private void MousePosition(object sender, EventArgs e)
         {
