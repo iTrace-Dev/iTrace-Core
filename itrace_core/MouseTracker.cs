@@ -12,6 +12,9 @@ namespace iTrace_Core
         private const Double TIME_INTERVAL = 8.0; // 125 samples per second
         private System.Timers.Timer MouseLocationTick;
 
+        // for testing
+        CalibrationWindow calibrationWindow;
+
         public MouseTracker()
         {
             MouseLocationTick = new System.Timers.Timer(TIME_INTERVAL);
@@ -39,7 +42,12 @@ namespace iTrace_Core
          * interface this class implmenets requires these functions to be
          * present. Here they are effectively noops.
         */
-        public void EnterCalibration() {}
+        public void EnterCalibration()
+        {
+            //For testing
+            calibrationWindow = new CalibrationWindow();
+            calibrationWindow.Show();
+        }
         public void LeaveCalibration() {}
 
         private void MousePosition(object sender, EventArgs e)
