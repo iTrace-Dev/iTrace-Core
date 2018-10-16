@@ -10,6 +10,7 @@ namespace iTrace_Core
     {
         private readonly Tobii.Research.IEyeTracker TrackingDevice;
         private Tobii.Research.ScreenBasedCalibration Calibration;
+        private CalibrationWindow calibrationWindow;
 
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
@@ -34,6 +35,33 @@ namespace iTrace_Core
         public void EnterCalibration()
         {
             Calibration = new Tobii.Research.ScreenBasedCalibration(TrackingDevice);
+
+            calibrationWindow = new CalibrationWindow();
+            calibrationWindow.OnCalibrationPointReached += CalibrationWindow_OnCalibrationPointReached;
+            calibrationWindow.OnCalibrationFinished += CalibrationWindow_OnCalibrationFinished;
+
+            Calibration.EnterCalibrationMode();
+
+            calibrationWindow.Show();
+        }
+
+        private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
+        {
+            Tobii.Research.CalibrationResult calibrationResult = Calibration.ComputeAndApply();
+            if(calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure)
+            {
+                Console.WriteLine("Calibration failed!");
+            }
+            Calibration.LeaveCalibrationMode();
+        }
+
+        private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)
+        {
+            Tobii.Research.NormalizedPoint2D point = new Tobii.Research.NormalizedPoint2D(
+                (float) (e.CalibrationPoint.X / calibrationWindow.ActualWidth),
+                (float) (e.CalibrationPoint.Y / calibrationWindow.ActualHeight)
+                );
+            Calibration.CollectData(point);
         }
 
         public void LeaveCalibration()
