@@ -12,6 +12,8 @@ namespace iTrace_Core
         private System.Timers.Timer MouseLocationTick;
         private const Double TIME_INTERVAL = 8.0; // 125 samples per second
 
+        CalibrationWindow calibrationWindow;
+
         public MouseTracker()
         {
             TrackerName = "Mouse";
@@ -37,7 +39,9 @@ namespace iTrace_Core
 
         public void EnterCalibration()
         {
-            //TODO
+            //For testing
+            calibrationWindow = new CalibrationWindow();
+            calibrationWindow.Show();
         }
 
         public void LeaveCalibration()
