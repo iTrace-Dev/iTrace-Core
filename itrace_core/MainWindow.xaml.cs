@@ -79,5 +79,10 @@ namespace iTrace_Core
                 TrackerManager.StartTracker();
             }
         }
+
+        private void CalibrateTracker(object sender, RoutedEventArgs e)
+        {
+            TrackerManager.CalibrateActiveTracker();
+        }
     }
 }
