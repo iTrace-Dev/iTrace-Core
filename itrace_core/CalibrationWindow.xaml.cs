@@ -11,6 +11,7 @@ namespace iTrace_Core
     public partial class CalibrationWindow : Window
     {
         public event EventHandler<CalibrationPointReachedEventArgs> OnCalibrationPointReached;
+        public event EventHandler<EventArgs> OnCalibrationFinished;
 
         private Storyboard storyboard;
         private EllipseGeometry reticle;
@@ -129,7 +130,11 @@ namespace iTrace_Core
             }
             else
             {
-                this.Close();
+                if(OnCalibrationFinished != null)
+                {
+                    OnCalibrationFinished(this, new EventArgs());
+                    this.Close();
+                }
             }
         }
     }
