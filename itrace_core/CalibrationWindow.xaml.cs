@@ -116,6 +116,21 @@ namespace iTrace_Core
             storyboard.Completed += new EventHandler(AnimationFinished);
         }
 
+        private void CreateShrinkAnimationInStoryboard(double from, double to)
+        {
+            DoubleAnimation doubleAnimation = new DoubleAnimation();
+            doubleAnimation.AutoReverse = true;
+            doubleAnimation.From = from;
+            doubleAnimation.To = to;
+            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(movementAnimationDurationInMilliseconds));
+
+            storyboard = new Storyboard();
+            storyboard.Children.Add(doubleAnimation);
+            Storyboard.SetTargetName(doubleAnimation, registeredReticleName);
+            //Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(EllipseGeometry.RadiusXProperty, EllipseGeometry.RadiusYProperty));
+            storyboard.Completed += new EventHandler(AnimationFinished);
+        }
+
         private void AnimationFinished(object sender, EventArgs e)
         {
             if (OnCalibrationPointReached != null)
