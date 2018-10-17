@@ -104,15 +104,15 @@ namespace iTrace_Core
         {
             currentTarget = to;
 
-            PointAnimation myDoubleAnimation = new PointAnimation();
-            myDoubleAnimation.From = from;
-            myDoubleAnimation.To = to;
-            myDoubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(movementAnimationDurationInMilliseconds));
+            PointAnimation pointAnimation = new PointAnimation();
+            pointAnimation.From = from;
+            pointAnimation.To = to;
+            pointAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(movementAnimationDurationInMilliseconds));
 
             storyboard = new Storyboard();
-            storyboard.Children.Add(myDoubleAnimation);
-            Storyboard.SetTargetName(myDoubleAnimation, registeredReticleName);
-            Storyboard.SetTargetProperty(myDoubleAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
+            storyboard.Children.Add(pointAnimation);
+            Storyboard.SetTargetName(pointAnimation, registeredReticleName);
+            Storyboard.SetTargetProperty(pointAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
             storyboard.Completed += new EventHandler(AnimationFinished);
         }
 
