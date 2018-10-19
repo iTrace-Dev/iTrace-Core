@@ -19,6 +19,7 @@ namespace iTrace_Core
 
         private const String registeredReticleName = "calibrationReticle";
         private const int movementAnimationDurationInMilliseconds = 1500;
+        private const int shrinkAnimationDurationInMilliseconds = 500;
 
         private const double horizontalMargin = 50.0;
         private const double verticalMargin = 200.0;
@@ -38,7 +39,8 @@ namespace iTrace_Core
 
             CreateReticle();
 
-            CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+            CreateResizeAnimationInStoryboard(10, 2);
+            //CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
         }
 
         private void PopulateTargets()
@@ -114,25 +116,37 @@ namespace iTrace_Core
             storyboard.Children.Add(pointAnimation);
             Storyboard.SetTargetName(pointAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(pointAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
-            storyboard.Completed += new EventHandler(AnimationFinished);
+            storyboard.Completed += new EventHandler(MovementAnimationFinished);
         }
 
-        private void CreateShrinkAnimationInStoryboard(double from, double to)
+        private void CreateResizeAnimationInStoryboard(double from, double to)
         {
-            DoubleAnimation doubleAnimation = new DoubleAnimation();
-            doubleAnimation.AutoReverse = true;
-            doubleAnimation.From = from;
-            doubleAnimation.To = to;
-            doubleAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(movementAnimationDurationInMilliseconds));
+            DoubleAnimation radiusXAnimation = new DoubleAnimation();
+            radiusXAnimation.AutoReverse = true;
+            radiusXAnimation.From = from;
+            radiusXAnimation.To = to;
+            radiusXAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(shrinkAnimationDurationInMilliseconds));
+
+            DoubleAnimation radiusYAnimation = new DoubleAnimation();
+            radiusYAnimation.AutoReverse = true;
+            radiusYAnimation.From = from;
+            radiusYAnimation.To = to;
+            radiusYAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(shrinkAnimationDurationInMilliseconds));
 
             storyboard = new Storyboard();
-            storyboard.Children.Add(doubleAnimation);
-            Storyboard.SetTargetName(doubleAnimation, registeredReticleName);
-            //Storyboard.SetTargetProperty(doubleAnimation, new PropertyPath(EllipseGeometry.RadiusXProperty, EllipseGeometry.RadiusYProperty));
-            storyboard.Completed += new EventHandler(AnimationFinished);
+
+            storyboard.Children.Add(radiusXAnimation);
+            Storyboard.SetTargetName(radiusXAnimation, registeredReticleName);
+            Storyboard.SetTargetProperty(radiusXAnimation, new PropertyPath(EllipseGeometry.RadiusXProperty));
+            
+            storyboard.Children.Add(radiusYAnimation);
+            Storyboard.SetTargetName(radiusYAnimation, registeredReticleName);
+            Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
+
+            storyboard.Completed += new EventHandler(ResizeAnimationFinished);
         }
 
-        private void AnimationFinished(object sender, EventArgs e)
+        private void MovementAnimationFinished(object sender, EventArgs e)
         {
             if (OnCalibrationPointReached != null)
             {
@@ -145,7 +159,8 @@ namespace iTrace_Core
 
             if(!(targets.Count == 0))
             {
-                CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+                CreateResizeAnimationInStoryboard(10, 1);
+                //CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
                 storyboard.Begin(this);
             }
             else
@@ -156,6 +171,12 @@ namespace iTrace_Core
                 }
                 this.Close();
             }
+        }
+
+        private void ResizeAnimationFinished(object sender, EventArgs e)
+        {
+            CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+            storyboard.Begin(this);
         }
     }
 
