@@ -124,41 +124,19 @@ namespace iTrace_Core
 
         private void MovementAnimationFinished(object sender, EventArgs e)
         {
-            if (OnCalibrationPointReached != null)
-            {
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true;
-                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
-                }).Start();
-            }
-
-            if (!(targets.Count == 0))
-            {
-                CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
-                storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
-                storyboard.Begin(this);
-            }
-            else
-            {
-                if (OnCalibrationFinished != null)
-                {
-                    OnCalibrationFinished(this, new EventArgs());
-                }
-                this.Close();
-            }
+            CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
+            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
+            storyboard.Begin(this);
         }
 
         private void CreateResizeAnimationInStoryboard(double from, double to)
         {
             DoubleAnimation radiusXAnimation = new DoubleAnimation();
-            radiusXAnimation.AutoReverse = true;
             radiusXAnimation.From = from;
             radiusXAnimation.To = to;
             radiusXAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(resizeAnimationDurationInMilliseconds));
 
             DoubleAnimation radiusYAnimation = new DoubleAnimation();
-            radiusYAnimation.AutoReverse = true;
             radiusYAnimation.From = from;
             radiusYAnimation.To = to;
             radiusYAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(resizeAnimationDurationInMilliseconds));
@@ -175,6 +153,33 @@ namespace iTrace_Core
         }
 
         private void ShrinkAnimationFinished(object sender, EventArgs e)
+        {
+            if (OnCalibrationPointReached != null)
+            {
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                }).Start();
+            }
+
+            if (!(targets.Count == 0))
+            {
+                CreateResizeAnimationInStoryboard(shrunkenReticleRadius, defaultReticleRadius);
+                storyboard.Completed += new EventHandler(GrowAnimationFinished);
+                storyboard.Begin(this);
+            }
+            else
+            {
+                if (OnCalibrationFinished != null)
+                {
+                    OnCalibrationFinished(this, new EventArgs());
+                }
+                this.Close();
+            }
+        }
+
+        private void GrowAnimationFinished(object sender, EventArgs e)
         {
             CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
             storyboard.Completed += new EventHandler(MovementAnimationFinished);
