@@ -40,7 +40,7 @@ namespace iTrace_Core
             CreateReticle();
 
             CreateResizeAnimationInStoryboard(10, 2);
-            //CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+            storyboard.Completed += new EventHandler(ResizeAnimationFinished);
         }
 
         private void PopulateTargets()
@@ -116,7 +116,6 @@ namespace iTrace_Core
             storyboard.Children.Add(pointAnimation);
             Storyboard.SetTargetName(pointAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(pointAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
-            storyboard.Completed += new EventHandler(MovementAnimationFinished);
         }
 
         private void CreateResizeAnimationInStoryboard(double from, double to)
@@ -142,8 +141,6 @@ namespace iTrace_Core
             storyboard.Children.Add(radiusYAnimation);
             Storyboard.SetTargetName(radiusYAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
-
-            storyboard.Completed += new EventHandler(ResizeAnimationFinished);
         }
 
         private void MovementAnimationFinished(object sender, EventArgs e)
@@ -160,7 +157,7 @@ namespace iTrace_Core
             if(!(targets.Count == 0))
             {
                 CreateResizeAnimationInStoryboard(10, 1);
-                //CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+                storyboard.Completed += new EventHandler(ResizeAnimationFinished);
                 storyboard.Begin(this);
             }
             else
@@ -176,6 +173,7 @@ namespace iTrace_Core
         private void ResizeAnimationFinished(object sender, EventArgs e)
         {
             CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+            storyboard.Completed += new EventHandler(MovementAnimationFinished);
             storyboard.Begin(this);
         }
     }
