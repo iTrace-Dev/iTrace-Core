@@ -153,8 +153,8 @@ namespace iTrace_Core
                 if(OnCalibrationFinished != null)
                 {
                     OnCalibrationFinished(this, new EventArgs());
-                    this.Close();
                 }
+                this.Close();
             }
         }
     }
