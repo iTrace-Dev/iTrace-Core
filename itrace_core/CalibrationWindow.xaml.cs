@@ -18,8 +18,12 @@ namespace iTrace_Core
         private EllipseGeometry reticle;
 
         private const String registeredReticleName = "calibrationReticle";
+        
         private const int movementAnimationDurationInMilliseconds = 1500;
-        private const int shrinkAnimationDurationInMilliseconds = 500;
+        private const int resizeAnimationDurationInMilliseconds = 500;
+
+        private const int defaultReticleRadius = 10;
+        private const int shrunkenReticleRadius = 1;
 
         private const double horizontalMargin = 50.0;
         private const double verticalMargin = 200.0;
@@ -39,8 +43,8 @@ namespace iTrace_Core
 
             CreateReticle();
 
-            CreateResizeAnimationInStoryboard(10, 2);
-            storyboard.Completed += new EventHandler(ResizeAnimationFinished);
+            CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
+            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
         }
 
         private void PopulateTargets()
@@ -84,8 +88,8 @@ namespace iTrace_Core
         {
             reticle = new EllipseGeometry();
             reticle.Center = targets.Dequeue();
-            reticle.RadiusX = 10;
-            reticle.RadiusY = 10;
+            reticle.RadiusX = defaultReticleRadius;
+            reticle.RadiusY = defaultReticleRadius;
             this.RegisterName(registeredReticleName, reticle);
 
             Path myPath = new Path();
@@ -118,19 +122,46 @@ namespace iTrace_Core
             Storyboard.SetTargetProperty(pointAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
         }
 
+        private void MovementAnimationFinished(object sender, EventArgs e)
+        {
+            if (OnCalibrationPointReached != null)
+            {
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                }).Start();
+            }
+
+            if (!(targets.Count == 0))
+            {
+                CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
+                storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
+                storyboard.Begin(this);
+            }
+            else
+            {
+                if (OnCalibrationFinished != null)
+                {
+                    OnCalibrationFinished(this, new EventArgs());
+                }
+                this.Close();
+            }
+        }
+
         private void CreateResizeAnimationInStoryboard(double from, double to)
         {
             DoubleAnimation radiusXAnimation = new DoubleAnimation();
             radiusXAnimation.AutoReverse = true;
             radiusXAnimation.From = from;
             radiusXAnimation.To = to;
-            radiusXAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(shrinkAnimationDurationInMilliseconds));
+            radiusXAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(resizeAnimationDurationInMilliseconds));
 
             DoubleAnimation radiusYAnimation = new DoubleAnimation();
             radiusYAnimation.AutoReverse = true;
             radiusYAnimation.From = from;
             radiusYAnimation.To = to;
-            radiusYAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(shrinkAnimationDurationInMilliseconds));
+            radiusYAnimation.Duration = new Duration(TimeSpan.FromMilliseconds(resizeAnimationDurationInMilliseconds));
 
             storyboard = new Storyboard();
 
@@ -143,34 +174,7 @@ namespace iTrace_Core
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
         }
 
-        private void MovementAnimationFinished(object sender, EventArgs e)
-        {
-            if (OnCalibrationPointReached != null)
-            {
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true;
-                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
-                }).Start();
-            }
-
-            if(!(targets.Count == 0))
-            {
-                CreateResizeAnimationInStoryboard(10, 1);
-                storyboard.Completed += new EventHandler(ResizeAnimationFinished);
-                storyboard.Begin(this);
-            }
-            else
-            {
-                if(OnCalibrationFinished != null)
-                {
-                    OnCalibrationFinished(this, new EventArgs());
-                }
-                this.Close();
-            }
-        }
-
-        private void ResizeAnimationFinished(object sender, EventArgs e)
+        private void ShrinkAnimationFinished(object sender, EventArgs e)
         {
             CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
             storyboard.Completed += new EventHandler(MovementAnimationFinished);
