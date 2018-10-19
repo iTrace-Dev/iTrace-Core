@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Threading;
 
 namespace iTrace_Core
 {
@@ -24,7 +25,7 @@ namespace iTrace_Core
 
         private Point currentTarget;
 
-        Queue<Point> targets;
+        private Queue<Point> targets;
 
         public CalibrationWindow()
         {
@@ -135,7 +136,11 @@ namespace iTrace_Core
         {
             if (OnCalibrationPointReached != null)
             {
-                OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                new Thread(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                }).Start();
             }
 
             if(!(targets.Count == 0))
