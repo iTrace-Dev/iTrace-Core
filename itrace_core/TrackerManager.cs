@@ -15,7 +15,6 @@ namespace iTrace_Core
         public TrackerManager()
         {
             EyeTrackers = new List<ITracker>();
-            FindTrackers();
             Tracking = false;
         }
 
@@ -24,6 +23,7 @@ namespace iTrace_Core
             EyeTrackers.Clear();
             EyeTrackers.Add(new MouseTracker());
             FindTobiiDevices();
+            FindGazePointDevice();
         }
 
         private void FindTobiiDevices()
@@ -32,6 +32,15 @@ namespace iTrace_Core
             foreach (Tobii.Research.IEyeTracker eyeTracker in eyeTrackers)
             {
                 EyeTrackers.Add(new TobiiTracker(eyeTracker));
+            }
+        }
+
+        private void FindGazePointDevice()
+        {
+            GazePointTracker gp = new GazePointTracker();
+            if (gp.TrackerFound())
+            {
+                EyeTrackers.Add(gp);
             }
         }
 
