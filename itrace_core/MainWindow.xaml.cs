@@ -10,6 +10,7 @@ namespace iTrace_Core
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
+		Recorder rec;
 
         public MainWindow()
         {
@@ -59,12 +60,15 @@ namespace iTrace_Core
         {
             if (TrackerManager.Running())
             {
-                ActivateTrackerButton.Content = "Start Tracking";
+				ActivateTrackerButton.Content = "Start Tracking";
                 TrackerManager.StopTracker();
+				rec.Dispose();
             }
             else
             {
-                ActivateTrackerButton.Content = "Stop Tracking";
+				//Name of .avi hardcoded for now 
+				rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+				ActivateTrackerButton.Content = "Stop Tracking";
                 TrackerManager.StartTracker();
             }
         }

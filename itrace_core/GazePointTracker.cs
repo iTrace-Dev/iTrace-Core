@@ -52,7 +52,7 @@ namespace iTrace_Core
 
         public void StartTracker()
         {
-            Console.WriteLine("START GP TRACKING");
+			Console.WriteLine("START GP TRACKING");
             Writer.Write("<SET ID=\"ENABLE_SEND_DATA\" STATE=\"1\" />\r\n");
             Writer.Flush();
         }
