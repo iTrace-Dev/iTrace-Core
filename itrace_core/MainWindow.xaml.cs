@@ -62,12 +62,18 @@ namespace iTrace_Core
             {
 				ActivateTrackerButton.Content = "Start Tracking";
                 TrackerManager.StopTracker();
-				rec.Dispose();
+                if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
+                {
+                    rec.Dispose();
+                }
             }
             else
             {
-				//Name of .avi hardcoded for now 
-				rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+				//Name of .avi hardcoded for now
+                if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
+                {
+                    rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                }
 				ActivateTrackerButton.Content = "Stop Tracking";
                 TrackerManager.StartTracker();
             }
