@@ -25,6 +25,9 @@ namespace iTrace_Core
                 Reader = new System.IO.StreamReader(Client.GetStream());
                 Writer = new System.IO.StreamWriter(Client.GetStream());
 
+                Writer.Write("<GET ID=\"PRODUCT_ID\" />\r\n"); Writer.Flush();
+                TrackerName = Reader.ReadLine();
+
                 TrackerInit();
             }
             catch (Exception e)
@@ -90,8 +93,6 @@ namespace iTrace_Core
             Writer.Write("<SET ID=\"ENABLE_SEND_EYE_LEFT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_EYE_RIGHT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_CURSOR\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<GET ID=\"PRODUCT_ID\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-
         }
 
         private void ListenForData()
