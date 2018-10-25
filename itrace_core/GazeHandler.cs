@@ -12,12 +12,25 @@ namespace iTrace_Core
             new Lazy<GazeHandler>(() => new GazeHandler());
 
         private System.Collections.Concurrent.BlockingCollection<GazeData> GazeQueue;
-            
+
         public static GazeHandler Instance { get { return Singleton.Value ; } }
 
         private GazeHandler()
         {
             GazeQueue = new System.Collections.Concurrent.BlockingCollection<GazeData>(new System.Collections.Concurrent.ConcurrentQueue<GazeData>());
+        }
+
+        public void enqueueGaze(GazeData gd)
+        {
+            GazeQueue.Add(gd);            
+        }
+
+        private void dequeueGaze()
+        {
+            while (!GazeQueue.IsCompleted)
+            {
+                GazeData gd = GazeQueue.Take();
+            }
         }
     }
 }
