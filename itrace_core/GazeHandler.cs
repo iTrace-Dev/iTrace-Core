@@ -20,12 +20,12 @@ namespace iTrace_Core
             GazeQueue = new System.Collections.Concurrent.BlockingCollection<GazeData>(new System.Collections.Concurrent.ConcurrentQueue<GazeData>());
         }
 
-        public void enqueueGaze(GazeData gd)
+        public void EnqueueGaze(GazeData gd)
         {
             GazeQueue.Add(gd);            
         }
 
-        private void dequeueGaze()
+        private void DequeueGaze()
         {
             while (!GazeQueue.IsCompleted)
             {
