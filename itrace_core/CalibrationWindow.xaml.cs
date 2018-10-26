@@ -1,26 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System.Threading;
 
 namespace iTrace_Core
 {
     public partial class CalibrationWindow : Window
     {
-        private struct AnimationState
+        enum AnimationStates
         {
-            enum Types {
-                Movement,
-                Resize,
-                PointReachedCallback,
-                FinishedCallback
-            }
-
-            Types Type;
+            Appearing,
+            Movement,
+            Resize,
+            PointReachedCallback,
+            FinishedCallback
         }
 
         public event EventHandler<CalibrationPointReachedEventArgs> OnCalibrationPointReached;
@@ -30,7 +27,7 @@ namespace iTrace_Core
         private EllipseGeometry reticle;
 
         private const String registeredReticleName = "calibrationReticle";
-        
+
         private const int movementAnimationDurationInMilliseconds = 2000;
         private const int resizeAnimationDurationInMilliseconds = 700;
 
@@ -44,7 +41,7 @@ namespace iTrace_Core
         private Point currentTarget;
 
         private Queue<Point> targets;
-        private Queue<AnimationState> animationStateQueue;
+        private Queue<AnimationStates> animationStateQueue;
 
         public CalibrationWindow()
         {
@@ -66,8 +63,8 @@ namespace iTrace_Core
             targets = new Queue<Point>();
 
             double horizontalGap = (this.ActualWidth - (2.0 * horizontalMargin)) / 2.0;
-            double verticalGap = (this.ActualHeight - (2.0 * verticalMargin)); 
-            
+            double verticalGap = (this.ActualHeight - (2.0 * verticalMargin));
+
             Point[] points = new Point[]
             {
                 new Point(horizontalMargin, verticalMargin),
@@ -160,7 +157,7 @@ namespace iTrace_Core
             storyboard.Children.Add(radiusXAnimation);
             Storyboard.SetTargetName(radiusXAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(radiusXAnimation, new PropertyPath(EllipseGeometry.RadiusXProperty));
-            
+
             storyboard.Children.Add(radiusYAnimation);
             Storyboard.SetTargetName(radiusYAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
