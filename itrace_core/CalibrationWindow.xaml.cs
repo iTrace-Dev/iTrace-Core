@@ -11,6 +11,18 @@ namespace iTrace_Core
 {
     public partial class CalibrationWindow : Window
     {
+        private struct AnimationState
+        {
+            enum Types {
+                Movement,
+                Resize,
+                PointReachedCallback,
+                FinishedCallback
+            }
+
+            Types Type;
+        }
+
         public event EventHandler<CalibrationPointReachedEventArgs> OnCalibrationPointReached;
         public event EventHandler<EventArgs> OnCalibrationFinished;
 
@@ -32,6 +44,7 @@ namespace iTrace_Core
         private Point currentTarget;
 
         private Queue<Point> targets;
+        private Queue<AnimationState> animationStateQueue;
 
         public CalibrationWindow()
         {
