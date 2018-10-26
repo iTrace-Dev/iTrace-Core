@@ -19,11 +19,12 @@ namespace iTrace_Core
 
         private const String registeredReticleName = "calibrationReticle";
         
-        private const int movementAnimationDurationInMilliseconds = 1500;
-        private const int resizeAnimationDurationInMilliseconds = 500;
+        private const int movementAnimationDurationInMilliseconds = 2000;
+        private const int resizeAnimationDurationInMilliseconds = 700;
 
         private const int defaultReticleRadius = 10;
         private const int shrunkenReticleRadius = 1;
+        private const int beginningGrownReticleSize = 20;
 
         private const double horizontalMargin = 50.0;
         private const double verticalMargin = 200.0;
@@ -43,8 +44,8 @@ namespace iTrace_Core
 
             CreateReticle();
 
-            CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
-            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
+            CreateResizeAnimationInStoryboard(defaultReticleRadius, beginningGrownReticleSize);
+            storyboard.Completed += new EventHandler(StartingAnimationFinished);
         }
 
         private void PopulateTargets()
@@ -183,6 +184,13 @@ namespace iTrace_Core
         {
             CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
             storyboard.Completed += new EventHandler(MovementAnimationFinished);
+            storyboard.Begin(this);
+        }
+
+        private void StartingAnimationFinished(object sender, EventArgs e)
+        {
+            CreateResizeAnimationInStoryboard(reticle.RadiusX, shrunkenReticleRadius);
+            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
             storyboard.Begin(this);
         }
     }
