@@ -13,8 +13,8 @@ namespace iTrace_Core
     {
         enum AnimationStates
         {
-            Appearing,
-            Movement,
+            Appear,
+            Move,
             Resize,
             PointReachedCallback,
             FinishedCallback
@@ -50,7 +50,7 @@ namespace iTrace_Core
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            PopulateTargets();
+            GenerateTargets();
 
             CreateReticle();
 
@@ -58,7 +58,7 @@ namespace iTrace_Core
             storyboard.Completed += new EventHandler(StartingAnimationFinished);
         }
 
-        private void PopulateTargets()
+        private void GenerateTargets()
         {
             targets = new Queue<Point>();
 
