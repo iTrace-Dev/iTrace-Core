@@ -15,7 +15,8 @@ namespace iTrace_Core
         {
             Appear,
             Move,
-            Resize,
+            Shrink,
+            Grow,
             PointReachedCallback,
             FinishedCallback
         }
@@ -41,7 +42,7 @@ namespace iTrace_Core
         private Point currentTarget;
 
         private Queue<Point> targets;
-        private Queue<AnimationStates> animationStateQueue;
+        private Queue<AnimationStates> windowStateQueue;
 
         public CalibrationWindow()
         {
@@ -51,11 +52,99 @@ namespace iTrace_Core
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             GenerateTargets();
+            GenerateStates();
 
             CreateReticle();
+        }
 
-            CreateResizeAnimationInStoryboard(defaultReticleRadius, beginningGrownReticleSize);
-            storyboard.Completed += new EventHandler(StartingAnimationFinished);
+        private void ReticleLoaded(object sender, RoutedEventArgs e)
+        {
+            RunAnimation();
+        }
+
+        private void RunAnimation()
+        {
+            if (windowStateQueue.Count < 1)
+                return;
+
+            AnimationStates currentAnimationState = windowStateQueue.Dequeue();
+
+            switch(currentAnimationState)
+            {
+                case AnimationStates.Appear:
+                    CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), beginningGrownReticleSize);
+                    storyboard.Completed += new EventHandler(ContinueAnimationCallback);
+                    storyboard.Begin(this);
+                    break;
+
+                case AnimationStates.FinishedCallback:
+                    if (OnCalibrationFinished != null)
+                    {
+                        OnCalibrationFinished(this, new EventArgs());
+                    }
+                    this.Close();
+                    break;
+
+                case AnimationStates.Grow:
+                    CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), defaultReticleRadius);
+                    storyboard.Completed += new EventHandler(ContinueAnimationCallback);
+                    storyboard.Begin(this);
+                    break;
+
+                case AnimationStates.Move:
+                    CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+                    storyboard.Completed += new EventHandler(ContinueAnimationCallback);
+                    storyboard.Begin(this);
+                    break;
+
+                case AnimationStates.PointReachedCallback:
+                    if (OnCalibrationPointReached != null)
+                    {
+                        new Thread(() =>
+                        {
+                            Thread.CurrentThread.IsBackground = true;
+                            OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                        }).Start();
+                    }
+                    RunAnimation();
+                    break;
+
+                case AnimationStates.Shrink:
+                    CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), shrunkenReticleRadius);
+                    storyboard.Completed += new EventHandler(ContinueAnimationCallback);
+                    storyboard.Begin(this);
+                    break;
+            }
+        }
+
+        private void ContinueAnimationCallback(object sender, EventArgs e)
+        {
+            RunAnimation();
+        }
+
+        private double GetCurrentReticleRadius()
+        {
+            return reticle.RadiusX;
+        }
+
+        private void GenerateStates()
+        {
+            windowStateQueue = new Queue<AnimationStates>();
+
+            windowStateQueue.Enqueue(AnimationStates.Appear);
+            windowStateQueue.Enqueue(AnimationStates.Shrink);
+            windowStateQueue.Enqueue(AnimationStates.PointReachedCallback);
+            windowStateQueue.Enqueue(AnimationStates.Grow);
+
+            for (int i = 1; i < targets.Count; ++i)
+            {
+                windowStateQueue.Enqueue(AnimationStates.Move);
+                windowStateQueue.Enqueue(AnimationStates.Shrink);
+                windowStateQueue.Enqueue(AnimationStates.PointReachedCallback);
+                windowStateQueue.Enqueue(AnimationStates.Grow);
+            }
+
+            windowStateQueue.Enqueue(AnimationStates.FinishedCallback);
         }
 
         private void GenerateTargets()
@@ -113,11 +202,6 @@ namespace iTrace_Core
             Content = containerCanvas;
         }
 
-        private void ReticleLoaded(object sender, RoutedEventArgs e)
-        {
-            storyboard.Begin(this);
-        }
-
         private void CreateMovementAnimationInStoryboard(Point from, Point to)
         {
             currentTarget = to;
@@ -131,13 +215,6 @@ namespace iTrace_Core
             storyboard.Children.Add(pointAnimation);
             Storyboard.SetTargetName(pointAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(pointAnimation, new PropertyPath(EllipseGeometry.CenterProperty));
-        }
-
-        private void MovementAnimationFinished(object sender, EventArgs e)
-        {
-            CreateResizeAnimationInStoryboard(defaultReticleRadius, shrunkenReticleRadius);
-            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
-            storyboard.Begin(this);
         }
 
         private void CreateResizeAnimationInStoryboard(double from, double to)
@@ -161,47 +238,6 @@ namespace iTrace_Core
             storyboard.Children.Add(radiusYAnimation);
             Storyboard.SetTargetName(radiusYAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
-        }
-
-        private void ShrinkAnimationFinished(object sender, EventArgs e)
-        {
-            if (OnCalibrationPointReached != null)
-            {
-                new Thread(() =>
-                {
-                    Thread.CurrentThread.IsBackground = true;
-                    OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
-                }).Start();
-            }
-
-            if (!(targets.Count == 0))
-            {
-                CreateResizeAnimationInStoryboard(shrunkenReticleRadius, defaultReticleRadius);
-                storyboard.Completed += new EventHandler(GrowAnimationFinished);
-                storyboard.Begin(this);
-            }
-            else
-            {
-                if (OnCalibrationFinished != null)
-                {
-                    OnCalibrationFinished(this, new EventArgs());
-                }
-                this.Close();
-            }
-        }
-
-        private void GrowAnimationFinished(object sender, EventArgs e)
-        {
-            CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
-            storyboard.Completed += new EventHandler(MovementAnimationFinished);
-            storyboard.Begin(this);
-        }
-
-        private void StartingAnimationFinished(object sender, EventArgs e)
-        {
-            CreateResizeAnimationInStoryboard(reticle.RadiusX, shrunkenReticleRadius);
-            storyboard.Completed += new EventHandler(ShrinkAnimationFinished);
-            storyboard.Begin(this);
         }
     }
 
