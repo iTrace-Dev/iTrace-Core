@@ -8,27 +8,41 @@ namespace iTrace_Core
 {
     public class GazeData
     {
-        GazeData()
+        String foobar;
+        public GazeData()
         {
-            //TODO
+            foobar = "";
         }
 
         // TOBII PRO DATA
-        GazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze)
+        public GazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze)
         {
             //TODO
+            foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
+            tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
+            tobiiRawGaze.LeftEye.GazePoint.Validity;
         }
 
         // MOUSE TRACKER DATA
-        GazeData(int mousePosX, int mousePosY)
+        public GazeData(int mousePosX, int mousePosY)
         {
-            //TODO
+            foobar = "Mouse: " + mousePosX + " " + mousePosY;
         }
 
         // GAZEPOINT TRACKER DATA
-        GazeData(String gazePointRawGaze)
+        public GazeData(String gazePointRawGaze)
         {
-            //TODO
+            foobar = gazePointRawGaze;
+        }
+
+        public bool IsEmpty()
+        {
+            return foobar == "";
+        }
+
+        public String Output()
+        {
+            return foobar;
         }
     }
 }

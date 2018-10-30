@@ -74,6 +74,7 @@ namespace iTrace_Core
         public Boolean StartTracker()
         { 
             Tracking = true;
+            GazeHandler.Instance.StartHandler();
             ActiveTracker.StartTracker();
             return Tracking;
         }
@@ -81,6 +82,7 @@ namespace iTrace_Core
         public Boolean StopTracker()
         {
             Tracking = false;
+            GazeHandler.Instance.EnqueueGaze(new GazeData());
             ActiveTracker.StopTracker();
             return Tracking;
         }

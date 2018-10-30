@@ -15,22 +15,31 @@ namespace iTrace_Core
 
         public static GazeHandler Instance { get { return Singleton.Value ; } }
 
-        private GazeHandler()
+        public void StartHandler()
         {
             GazeQueue = new System.Collections.Concurrent.BlockingCollection<GazeData>(new System.Collections.Concurrent.ConcurrentQueue<GazeData>());
+            new System.Threading.Thread(() =>
+            {
+                DequeueGaze();
+            }).Start();
         }
 
         public void EnqueueGaze(GazeData gd)
         {
-            GazeQueue.Add(gd);            
+            Console.WriteLine("ENQUEUE!");
+            GazeQueue.Add(gd);        
         }
 
         private void DequeueGaze()
         {
-            while (!GazeQueue.IsCompleted)
+            GazeData gd = GazeQueue.Take();
+            while (!gd.IsEmpty())
             {
-                GazeData gd = GazeQueue.Take();
+                Console.WriteLine("DEQUEUE!");
+                Console.WriteLine(gd.Output());
+                gd = GazeQueue.Take();
             }
+            Console.WriteLine("DONE!");
         }
     }
 }
