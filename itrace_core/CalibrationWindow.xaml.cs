@@ -41,6 +41,7 @@ namespace iTrace_Core
 
         private Point currentTarget;
 
+        Point[] points;
         private Queue<Point> targets;
         private Queue<AnimationStates> windowStateQueue;
 
@@ -69,7 +70,7 @@ namespace iTrace_Core
 
             AnimationStates currentAnimationState = windowStateQueue.Dequeue();
 
-            switch(currentAnimationState)
+            switch (currentAnimationState)
             {
                 case AnimationStates.Appear:
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), beginningGrownReticleSize);
@@ -153,7 +154,7 @@ namespace iTrace_Core
             double horizontalGap = (this.ActualWidth - (2.0 * horizontalMargin)) / 2.0;
             double verticalGap = (this.ActualHeight - (2.0 * verticalMargin));
 
-            Point[] points = new Point[]
+            points = new Point[]
             {
                 new Point(horizontalMargin, verticalMargin),
                 new Point(horizontalMargin + horizontalGap, verticalMargin),
@@ -237,6 +238,23 @@ namespace iTrace_Core
             storyboard.Children.Add(radiusYAnimation);
             Storyboard.SetTargetName(radiusYAnimation, registeredReticleName);
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
+        }
+
+        public void ShowResults(Point[] computedPoints)
+        {
+            EllipseGeometry[] targetPoints = new EllipseGeometry[points.Length];
+
+            for(int i = 0; i < points.Length; ++i)
+            {
+                targetPoints[i].RadiusX = 20;
+                targetPoints[i].RadiusY = 20;
+                targetPoints[i].Center = points[i];
+                
+            }
+
+
+
+            Thread.Sleep(3000);
         }
     }
 

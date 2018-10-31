@@ -48,11 +48,14 @@ namespace iTrace_Core
         private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
         {
             Tobii.Research.CalibrationResult calibrationResult = Calibration.ComputeAndApply();
+
             if(calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure)
             {
                 Console.WriteLine("Calibration failed!");
             }
             Calibration.LeaveCalibrationMode();
+
+            calibrationWindow.Close();
         }
 
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)
