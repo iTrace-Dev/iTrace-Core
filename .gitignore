@@ -1,1 +1,4 @@
-*.pro.user
+*.user
+deps/*
+*~
+.DS_Store

@@ -1,33 +1,15 @@
-#include "reticle.h"
-#include "ui_reticle.h"
-#include <sstream>
-#include <string>
+#include "reticle.hpp"
+#include <QDebug>
 
-using namespace std;
-
-Reticle* Reticle::reticle = 0;
-
-void Reticle::createReticle(QWidget *parent){
-    if(!reticle){
-        reticle = new Reticle(parent);
-    }
-}
-
-Reticle* Reticle::getReticle(){
-    return reticle;
-}
-
-Reticle::Reticle(QWidget *parent) :
-    QWidget(parent),
-    ui(new Ui::Reticle)
-{
+Reticle::Reticle(QWidget *parent) : QWidget(parent), ui(new Ui::Reticle) {
     ui->setupUi(this);
     setAttribute(Qt::WA_TranslucentBackground);
     setAttribute(Qt::WA_QuitOnClose, false);
     this->setWindowFlags(Qt::FramelessWindowHint|Qt::WindowStaysOnTopHint);
-    socket = new QTcpSocket(this);
-    connect(socket, SIGNAL(readyRead()), this, SLOT(moveReticle()));
-    socket->connectToHost("localhost",8080,QIODevice::ReadOnly);
+
+    //Setup for efficent running average
+    totalX = 0;
+    totalY = 0;
 }
 
 Reticle::~Reticle()
@@ -46,20 +28,41 @@ void Reticle::paintEvent(QPaintEvent* /*event*/){
     painter.drawEllipse(5,5,geometry().width()-10,geometry().height()-10);
 }
 
-void Reticle::moveReticle(){
-    QDataStream in(socket);
-    in.setVersion(QDataStream::Qt_5_8);
-    char* data = new char[100];
-    in.readRawData(data,100);
-    std::stringstream ss;
-    ss << data;
-    int newx;
-    int newy;
-    int i=0;
-    while(data[i] != ',') i++;
-    string xstring = ss.str().substr(0,i);
-    newx = stoi(xstring);
-    string ystring = ss.str().substr(i+1);
-    newy = stoi(ystring);
-    if(newx > 0 && newy > 0) this->move(newx-(geometry().width()/2),newy-(geometry().height()/2));
+void Reticle::moveReticle(int x, int y){
+
+    // No reason to do anything if it can't be seen...
+    if (!(this->isVisible()))
+        return;
+
+    // Invalid scrren coordinates...
+    if (x < 0 || y < 0)
+        return;
+
+    //Sum up all the x and y we have seen
+    totalX += x;
+    totalY += y;
+
+    //Add them to the list of values we have seen
+    xPoints.push_front(x);
+    yPoints.push_front(y);
+
+    /*
+     * If we have enough points (MAX_NUM_POINTS) for desired smoothness
+     * then we take an average of the points and move the reticle.
+     *
+     * To save re-totaling the points, we then just remove the oldest value from the
+     * total and the lists (back) so the next time the function is called we only
+     * evaluate the last MAX_NUM_POINTS.
+     */
+    if (xPoints.size() == MAX_NUM_POINTS) {
+        double avgX = totalX/MAX_NUM_POINTS;
+        double avgY = totalY/MAX_NUM_POINTS;
+        this->move(avgX-(geometry().width()/2), avgY-(geometry().height()/2));
+
+        //Remove oldest points from totals and lists
+        totalX -= xPoints.back();
+        totalY -= yPoints.back();
+        xPoints.pop_back();
+        yPoints.pop_back();
+    }
 }
