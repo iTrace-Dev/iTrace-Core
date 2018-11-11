@@ -41,11 +41,10 @@ namespace iTrace_Core
 
         private readonly TimeSpan closeCountDownTimeSpan = new TimeSpan(0, 0, 5);
 
-        private Point currentTarget;
+        private Point[] targets;
+        private int currentTargetIndex;
 
-        Point[] points;
-        private Queue<Point> targets;
-        private Queue<AnimationStates> windowStateQueue;
+        private AnimationStates currentAnimationState;
 
         System.Windows.Threading.DispatcherTimer closeWindowTimer;
 
@@ -57,9 +56,10 @@ namespace iTrace_Core
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
             GenerateTargets();
-            GenerateStates();
 
             CreateReticle();
+
+            currentAnimationState = AnimationStates.Appear;
 
             closeWindowTimer = new System.Windows.Threading.DispatcherTimer();
             closeWindowTimer.Interval = closeCountDownTimeSpan;
@@ -73,14 +73,11 @@ namespace iTrace_Core
 
         private void RunCalibration()
         {
-            if (windowStateQueue.Count < 1)
-                return;
-
-            AnimationStates currentAnimationState = windowStateQueue.Dequeue();
-
             switch (currentAnimationState)
             {
                 case AnimationStates.Appear:
+                    currentAnimationState = AnimationStates.Shrink;
+
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), beginningGrownReticleSize);
                     storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
                     storyboard.Begin(this);
@@ -94,30 +91,43 @@ namespace iTrace_Core
                     break;
 
                 case AnimationStates.Grow:
+                    currentAnimationState = AnimationStates.Move;
+
+                    if (currentTargetIndex + 1 == targets.Length)
+                    {
+                        currentAnimationState = AnimationStates.FinishedCalibrationCallback;
+                    }
+
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), defaultReticleRadius);
                     storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
                     storyboard.Begin(this);
                     break;
 
                 case AnimationStates.Move:
-                    CreateMovementAnimationInStoryboard(reticle.Center, targets.Dequeue());
+                    currentAnimationState = AnimationStates.Shrink;
+                    ++currentTargetIndex;
+
+                    CreateMovementAnimationInStoryboard(reticle.Center, targets[currentTargetIndex]);
                     storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
                     storyboard.Begin(this);
                     break;
 
                 case AnimationStates.CalibrationPointReachedCallback:
+                    currentAnimationState = AnimationStates.Grow;
                     if (OnCalibrationPointReached != null)
                     {
                         new Thread(() =>
                         {
                             Thread.CurrentThread.IsBackground = true;
-                            OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(currentTarget));
+                            OnCalibrationPointReached(this, new CalibrationPointReachedEventArgs(targets[currentTargetIndex]));
                         }).Start();
                     }
                     RunCalibration();
                     break;
 
                 case AnimationStates.Shrink:
+                    currentAnimationState = AnimationStates.CalibrationPointReachedCallback;
+
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), shrunkenReticleRadius);
                     storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
                     storyboard.Begin(this);
@@ -135,34 +145,12 @@ namespace iTrace_Core
             return reticle.RadiusX;
         }
 
-        private void GenerateStates()
-        {
-            windowStateQueue = new Queue<AnimationStates>();
-
-            windowStateQueue.Enqueue(AnimationStates.Appear);
-            windowStateQueue.Enqueue(AnimationStates.Shrink);
-            windowStateQueue.Enqueue(AnimationStates.CalibrationPointReachedCallback);
-            windowStateQueue.Enqueue(AnimationStates.Grow);
-
-            for (int i = 1; i < targets.Count; ++i)
-            {
-                windowStateQueue.Enqueue(AnimationStates.Move);
-                windowStateQueue.Enqueue(AnimationStates.Shrink);
-                windowStateQueue.Enqueue(AnimationStates.CalibrationPointReachedCallback);
-                windowStateQueue.Enqueue(AnimationStates.Grow);
-            }
-
-            windowStateQueue.Enqueue(AnimationStates.FinishedCalibrationCallback);
-        }
-
         private void GenerateTargets()
         {
-            targets = new Queue<Point>();
-
             double horizontalGap = (this.ActualWidth - (2.0 * horizontalMargin)) / 2.0;
             double verticalGap = (this.ActualHeight - (2.0 * verticalMargin));
 
-            points = new Point[]
+            targets = new Point[]
             {
                 new Point(horizontalMargin, verticalMargin),
                 new Point(horizontalMargin + horizontalGap, verticalMargin),
@@ -172,12 +160,7 @@ namespace iTrace_Core
                 new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin + verticalGap),
             };
 
-            ShufflePointArray(points);
-
-            foreach (Point p in points)
-            {
-                targets.Enqueue(p);
-            }
+            ShufflePointArray(targets);
         }
 
         private void ShufflePointArray(Point[] points)
@@ -195,7 +178,7 @@ namespace iTrace_Core
         private void CreateReticle()
         {
             reticle = new EllipseGeometry();
-            reticle.Center = targets.Dequeue();
+            reticle.Center = targets[0];
             reticle.RadiusX = defaultReticleRadius;
             reticle.RadiusY = defaultReticleRadius;
             this.RegisterName(registeredReticleName, reticle);
@@ -212,8 +195,6 @@ namespace iTrace_Core
 
         private void CreateMovementAnimationInStoryboard(Point from, Point to)
         {
-            currentTarget = to;
-
             PointAnimation pointAnimation = new PointAnimation();
             pointAnimation.From = from;
             pointAnimation.To = to;
@@ -253,15 +234,15 @@ namespace iTrace_Core
             Canvas containerCanvas = new Canvas();
 
 
-            EllipseGeometry[] targetEllipses = new EllipseGeometry[points.Length];
-            Path[] targetPaths = new Path[points.Length];
+            EllipseGeometry[] targetEllipses = new EllipseGeometry[targets.Length];
+            Path[] targetPaths = new Path[targets.Length];
 
-            for(int i = 0; i < points.Length; ++i)
+            for(int i = 0; i < targets.Length; ++i)
             {
                 targetEllipses[i] = new EllipseGeometry();
                 targetEllipses[i].RadiusX = 20;
                 targetEllipses[i].RadiusY = 20;
-                targetEllipses[i].Center = points[i];
+                targetEllipses[i].Center = targets[i];
 
                 targetPaths[i] = new Path();
                 targetPaths[i].StrokeThickness = 2;
@@ -303,7 +284,7 @@ namespace iTrace_Core
                 containerCanvas.Children.Add(rightEyePaths[i]);
             }
 
-            Content = containerCanvas;
+            this.Content = containerCanvas;
 
             closeWindowTimer.Start();
         }
