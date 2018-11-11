@@ -6,6 +6,7 @@ using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace iTrace_Core
 {
@@ -46,7 +47,7 @@ namespace iTrace_Core
 
         private AnimationStates currentAnimationState;
 
-        System.Windows.Threading.DispatcherTimer closeWindowTimer;
+        private DispatcherTimer closeWindowTimer;
 
         public CalibrationWindow()
         {
@@ -61,7 +62,7 @@ namespace iTrace_Core
 
             currentAnimationState = AnimationStates.Appear;
 
-            closeWindowTimer = new System.Windows.Threading.DispatcherTimer();
+            closeWindowTimer = new DispatcherTimer();
             closeWindowTimer.Interval = closeCountDownTimeSpan;
             closeWindowTimer.Tick += CloseWindowTimer_Tick;
         }
