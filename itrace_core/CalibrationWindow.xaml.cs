@@ -39,6 +39,8 @@ namespace iTrace_Core
         private const double horizontalMargin = 50.0;
         private const double verticalMargin = 200.0;
 
+        private readonly TimeSpan closeCountDownTimeSpan = new TimeSpan(0, 0, 5);
+
         private Point currentTarget;
 
         Point[] points;
@@ -60,7 +62,7 @@ namespace iTrace_Core
             CreateReticle();
 
             closeWindowTimer = new System.Windows.Threading.DispatcherTimer();
-            closeWindowTimer.Interval = new TimeSpan(0, 0, 5);
+            closeWindowTimer.Interval = closeCountDownTimeSpan;
             closeWindowTimer.Tick += CloseWindowTimer_Tick;
         }
 
@@ -265,7 +267,9 @@ namespace iTrace_Core
                 targetPoints[i].Center = points[i];
 
                 targetPointPaths[i] = new Path();
-                targetPointPaths[i].Fill = Brushes.Blue;
+                targetPointPaths[i].StrokeThickness = 2;
+                targetPointPaths[i].Stroke = Brushes.Blue;
+                targetPointPaths[i].Fill = Brushes.Transparent;
                 targetPointPaths[i].Data = targetPoints[i];
                 containerCanvas.Children.Add(targetPointPaths[i]);
             }
