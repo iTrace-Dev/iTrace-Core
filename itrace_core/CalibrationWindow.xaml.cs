@@ -36,7 +36,7 @@ namespace iTrace_Core
         private const int shrunkenReticleRadius = 1;
         private const int beginningGrownReticleSize = 20;
 
-        private const double horizontalMargin = 50.0;
+        private const double horizontalMargin = 200.0;
         private const double verticalMargin = 200.0;
 
         private readonly TimeSpan closeCountDownTimeSpan = new TimeSpan(0, 0, 5);
@@ -64,11 +64,6 @@ namespace iTrace_Core
             closeWindowTimer = new System.Windows.Threading.DispatcherTimer();
             closeWindowTimer.Interval = closeCountDownTimeSpan;
             closeWindowTimer.Tick += CloseWindowTimer_Tick;
-        }
-
-        private void CloseWindowTimer_Tick(object sender, EventArgs e)
-        {
-            this.Close();
         }
 
         private void ReticleLoaded(object sender, RoutedEventArgs e)
@@ -311,6 +306,11 @@ namespace iTrace_Core
             Content = containerCanvas;
 
             closeWindowTimer.Start();
+        }
+
+        private void CloseWindowTimer_Tick(object sender, EventArgs e)
+        {
+            this.Close();
         }
     }
 
