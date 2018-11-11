@@ -66,7 +66,7 @@ namespace iTrace_Core
         {
             System.Drawing.Point pt = System.Windows.Forms.Cursor.Position;
             //Console.WriteLine(pt);
-            GazeHandler.Instance.EnqueueGaze(new GazeData(pt.X, pt.Y));
+            GazeHandler.Instance.EnqueueGaze(new MouseTrackerGazeData(pt.X, pt.Y));
         }
     }
 }

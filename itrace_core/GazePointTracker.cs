@@ -103,7 +103,7 @@ namespace iTrace_Core
             {
                 gazeData = Reader.ReadLine();
                 //Console.WriteLine(gazeData);
-                GazeHandler.Instance.EnqueueGaze(new GazeData(gazeData));
+                GazeHandler.Instance.EnqueueGaze(new GazepointGazeData(gazeData));
             }
         }
     }

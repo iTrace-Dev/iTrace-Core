@@ -6,34 +6,9 @@ using System.Threading.Tasks;
 
 namespace iTrace_Core
 {
-    public class GazeData
+    public abstract class GazeData
     {
-        String foobar;
-        public GazeData()
-        {
-            foobar = "";
-        }
-
-        // TOBII PRO DATA
-        public GazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze)
-        {
-            //TODO
-            foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
-            tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
-            tobiiRawGaze.LeftEye.GazePoint.Validity;
-        }
-
-        // MOUSE TRACKER DATA
-        public GazeData(int mousePosX, int mousePosY)
-        {
-            foobar = "Mouse: " + mousePosX + " " + mousePosY;
-        }
-
-        // GAZEPOINT TRACKER DATA
-        public GazeData(String gazePointRawGaze)
-        {
-            foobar = gazePointRawGaze;
-        }
+        protected String foobar;
 
         public bool IsEmpty()
         {
@@ -43,6 +18,41 @@ namespace iTrace_Core
         public String Output()
         {
             return foobar;
+        }
+    }
+
+    public class TobiiGazeData : GazeData
+    {
+        public TobiiGazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze)
+        {
+            //TODO
+            foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
+            tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
+            tobiiRawGaze.LeftEye.GazePoint.Validity;
+        }
+    }
+
+    public class MouseTrackerGazeData : GazeData
+    {
+        public MouseTrackerGazeData(int mousePosX, int mousePosY)
+        {
+            foobar = "Mouse: " + mousePosX + " " + mousePosY;
+        }
+    }
+
+    public class GazepointGazeData : GazeData
+    {
+        public GazepointGazeData(String gazePointRawGaze)
+        {
+            foobar = gazePointRawGaze;
+        }
+    }
+
+    public class EmptyGazeData : GazeData
+    {
+        public EmptyGazeData()
+        {
+            foobar = "";
         }
     }
 }

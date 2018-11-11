@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Windows;
 using System.Windows.Controls;
@@ -178,7 +177,7 @@ namespace iTrace_Core
 
             Canvas containerCanvas = new Canvas();
             containerCanvas.Children.Add(myPath);
-            Content = containerCanvas;
+            this.Content = containerCanvas;
         }
 
         private void RunStoryboard()
