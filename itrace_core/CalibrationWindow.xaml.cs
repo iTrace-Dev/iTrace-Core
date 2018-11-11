@@ -253,25 +253,59 @@ namespace iTrace_Core
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
         }
 
-        public void ShowResultsAndClose() //Point[] leftEyePoints, Point[] rightEyePoints
+        public void ShowResultsAndClose(Point[] leftEyePoints, Point[] rightEyePoints)
         {
-            EllipseGeometry[] targetPoints = new EllipseGeometry[points.Length];
-            Path[] targetPointPaths = new Path[points.Length];
             Canvas containerCanvas = new Canvas();
+
+
+            EllipseGeometry[] targetEllipses = new EllipseGeometry[points.Length];
+            Path[] targetPaths = new Path[points.Length];
 
             for(int i = 0; i < points.Length; ++i)
             {
-                targetPoints[i] = new EllipseGeometry();
-                targetPoints[i].RadiusX = 20;
-                targetPoints[i].RadiusY = 20;
-                targetPoints[i].Center = points[i];
+                targetEllipses[i] = new EllipseGeometry();
+                targetEllipses[i].RadiusX = 20;
+                targetEllipses[i].RadiusY = 20;
+                targetEllipses[i].Center = points[i];
 
-                targetPointPaths[i] = new Path();
-                targetPointPaths[i].StrokeThickness = 2;
-                targetPointPaths[i].Stroke = Brushes.Blue;
-                targetPointPaths[i].Fill = Brushes.Transparent;
-                targetPointPaths[i].Data = targetPoints[i];
-                containerCanvas.Children.Add(targetPointPaths[i]);
+                targetPaths[i] = new Path();
+                targetPaths[i].StrokeThickness = 2;
+                targetPaths[i].Stroke = Brushes.Blue;
+                targetPaths[i].Fill = Brushes.Transparent;
+                targetPaths[i].Data = targetEllipses[i];
+                containerCanvas.Children.Add(targetPaths[i]);
+            }
+
+            EllipseGeometry[] leftEyeEllipses = new EllipseGeometry[leftEyePoints.Length];
+            Path[] leftEyePaths = new Path[leftEyePoints.Length];
+
+            for (int i = 0; i < leftEyePoints.Length; ++i)
+            {
+                leftEyeEllipses[i] = new EllipseGeometry();
+                leftEyeEllipses[i].RadiusX = 3;
+                leftEyeEllipses[i].RadiusY = 3;
+                leftEyeEllipses[i].Center = leftEyePoints[i];
+
+                leftEyePaths[i] = new Path();
+                leftEyePaths[i].Fill = Brushes.Red;
+                leftEyePaths[i].Data = leftEyeEllipses[i];
+                containerCanvas.Children.Add(leftEyePaths[i]);
+            }
+
+            EllipseGeometry[] rightEyeEllipses = new EllipseGeometry[rightEyePoints.Length];
+            Path[] rightEyePaths = new Path[rightEyePoints.Length];
+
+            for (int i = 0; i < rightEyePoints.Length; ++i)
+            {
+                rightEyeEllipses[i] = new EllipseGeometry();
+                rightEyeEllipses[i].RadiusX = 3;
+                rightEyeEllipses[i].RadiusY = 3;
+                rightEyeEllipses[i].Center = rightEyePoints[i];
+
+                rightEyePaths[i] = new Path();
+                rightEyePaths[i].Fill = Brushes.Blue;
+                rightEyePaths[i].Data = rightEyeEllipses[i];
+                containerCanvas.Children.Add(rightEyePaths[i]);
             }
 
             Content = containerCanvas;
