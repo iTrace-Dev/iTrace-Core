@@ -45,6 +45,8 @@ namespace iTrace_Core
         private Queue<Point> targets;
         private Queue<AnimationStates> windowStateQueue;
 
+        System.Windows.Threading.DispatcherTimer closeWindowTimer;
+
         public CalibrationWindow()
         {
             InitializeComponent();
@@ -56,6 +58,15 @@ namespace iTrace_Core
             GenerateStates();
 
             CreateReticle();
+
+            closeWindowTimer = new System.Windows.Threading.DispatcherTimer();
+            closeWindowTimer.Interval = new TimeSpan(0, 0, 5);
+            closeWindowTimer.Tick += CloseWindowTimer_Tick;
+        }
+
+        private void CloseWindowTimer_Tick(object sender, EventArgs e)
+        {
+            this.Close();
         }
 
         private void ReticleLoaded(object sender, RoutedEventArgs e)
@@ -240,21 +251,28 @@ namespace iTrace_Core
             Storyboard.SetTargetProperty(radiusYAnimation, new PropertyPath(EllipseGeometry.RadiusYProperty));
         }
 
-        public void ShowResults(Point[] computedPoints)
+        public void ShowResultsAndClose() //Point[] leftEyePoints, Point[] rightEyePoints
         {
             EllipseGeometry[] targetPoints = new EllipseGeometry[points.Length];
+            Path[] targetPointPaths = new Path[points.Length];
+            Canvas containerCanvas = new Canvas();
 
             for(int i = 0; i < points.Length; ++i)
             {
+                targetPoints[i] = new EllipseGeometry();
                 targetPoints[i].RadiusX = 20;
                 targetPoints[i].RadiusY = 20;
                 targetPoints[i].Center = points[i];
-                
+
+                targetPointPaths[i] = new Path();
+                targetPointPaths[i].Fill = Brushes.Blue;
+                targetPointPaths[i].Data = targetPoints[i];
+                containerCanvas.Children.Add(targetPointPaths[i]);
             }
 
+            Content = containerCanvas;
 
-
-            Thread.Sleep(3000);
+            closeWindowTimer.Start();
         }
     }
 

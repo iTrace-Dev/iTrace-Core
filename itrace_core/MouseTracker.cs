@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
 
 namespace iTrace_Core
 {
@@ -40,14 +41,23 @@ namespace iTrace_Core
         /* 
          * While calibration is not necessary with the mouse the tracker
          * interface this class implmenets requires these functions to be
-         * present. Here they are effectively noops.
+         * present. Here they will be effectively noops but are currently
+         * used for testing. 
         */
         public void EnterCalibration()
         {
-            //For testing
             calibrationWindow = new CalibrationWindow();
+            calibrationWindow.OnCalibrationFinished += CalibrationWindow_OnCalibrationFinished;
             calibrationWindow.Show();
         }
+
+        private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
+        {
+
+            calibrationWindow.ShowResultsAndClose();
+            
+        }
+
         public void LeaveCalibration() {}
 
         private void MousePosition(object sender, EventArgs e)
