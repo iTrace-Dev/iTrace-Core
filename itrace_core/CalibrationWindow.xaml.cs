@@ -79,8 +79,7 @@ namespace iTrace_Core
                     currentAnimationState = AnimationStates.Shrink;
 
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), beginningGrownReticleSize);
-                    storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
-                    storyboard.Begin(this);
+                    RunStoryboard();
                     break;
 
                 case AnimationStates.FinishedCalibrationCallback:
@@ -99,8 +98,7 @@ namespace iTrace_Core
                     }
 
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), defaultReticleRadius);
-                    storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
-                    storyboard.Begin(this);
+                    RunStoryboard();
                     break;
 
                 case AnimationStates.Move:
@@ -108,12 +106,12 @@ namespace iTrace_Core
                     ++currentTargetIndex;
 
                     CreateMovementAnimationInStoryboard(reticle.Center, targets[currentTargetIndex]);
-                    storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
-                    storyboard.Begin(this);
+                    RunStoryboard();
                     break;
 
                 case AnimationStates.CalibrationPointReachedCallback:
                     currentAnimationState = AnimationStates.Grow;
+
                     if (OnCalibrationPointReached != null)
                     {
                         new Thread(() =>
@@ -129,20 +127,9 @@ namespace iTrace_Core
                     currentAnimationState = AnimationStates.CalibrationPointReachedCallback;
 
                     CreateResizeAnimationInStoryboard(GetCurrentReticleRadius(), shrunkenReticleRadius);
-                    storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
-                    storyboard.Begin(this);
+                    RunStoryboard();
                     break;
             }
-        }
-
-        private void ContinueCalibrationCallback(object sender, EventArgs e)
-        {
-            RunCalibration();
-        }
-
-        private double GetCurrentReticleRadius()
-        {
-            return reticle.RadiusX;
         }
 
         private void GenerateTargets()
@@ -191,6 +178,22 @@ namespace iTrace_Core
             Canvas containerCanvas = new Canvas();
             containerCanvas.Children.Add(myPath);
             Content = containerCanvas;
+        }
+
+        private void RunStoryboard()
+        {
+            storyboard.Completed += new EventHandler(ContinueCalibrationCallback);
+            storyboard.Begin(this);
+        }
+
+        private void ContinueCalibrationCallback(object sender, EventArgs e)
+        {
+            RunCalibration();
+        }
+
+        private double GetCurrentReticleRadius()
+        {
+            return reticle.RadiusX;
         }
 
         private void CreateMovementAnimationInStoryboard(Point from, Point to)
