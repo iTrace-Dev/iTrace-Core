@@ -7,8 +7,6 @@
         mc:Ignorable="d"
         WindowState="Maximized"
         WindowStyle="None"
-        Title="CalibrationWindow" Loaded="WindowLoaded">
-    <Grid>
-        
-    </Grid>
+        Title="CalibrationWindow" Loaded="WindowLoaded" KeyUp="Window_KeyUp">
+    <Grid/>
 </Window>

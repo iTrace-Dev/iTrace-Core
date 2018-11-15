@@ -11,7 +11,7 @@ namespace iTrace_Core
 {
     public partial class CalibrationWindow : Window
     {
-        enum AnimationStates
+        private enum AnimationStates
         {
             Appear,
             Move,
@@ -44,9 +44,9 @@ namespace iTrace_Core
         private Point[] targets;
         private int currentTargetIndex;
 
-        private AnimationStates currentAnimationState;
+        bool pressKeyToClose = false;
 
-        private DispatcherTimer closeWindowTimer;
+        private AnimationStates currentAnimationState;
 
         public CalibrationWindow()
         {
@@ -60,10 +60,6 @@ namespace iTrace_Core
             CreateReticle();
 
             currentAnimationState = AnimationStates.Appear;
-
-            closeWindowTimer = new DispatcherTimer();
-            closeWindowTimer.Interval = closeCountDownTimeSpan;
-            closeWindowTimer.Tick += CloseWindowTimer_Tick;
         }
 
         private void ReticleLoaded(object sender, RoutedEventArgs e)
@@ -289,12 +285,15 @@ namespace iTrace_Core
 
             this.Content = containerCanvas;
 
-            closeWindowTimer.Start();
+            pressKeyToClose = true;
         }
 
-        private void CloseWindowTimer_Tick(object sender, EventArgs e)
+        private void Window_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
         {
-            this.Close();
+            if (pressKeyToClose)
+            {
+                this.Close();
+            }
         }
     }
 
