@@ -84,6 +84,9 @@
     <Compile Include="GazeHandler.cs" />
     <Compile Include="GazePointTracker.cs" />
     <Compile Include="MouseTracker.cs" />
+    <Compile Include="Reticle.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="ScreenRecorder.cs" />
     <Compile Include="TobiiTracker.cs" />
     <Compile Include="TrackerManager.cs" />
