@@ -230,6 +230,8 @@ namespace iTrace_Core
 
         public void ShowResultsAndClose(Point[] leftEyePoints, Point[] rightEyePoints)
         {
+            Grid grid = new Grid();
+            
             Canvas containerCanvas = new Canvas();
 
 
@@ -283,7 +285,16 @@ namespace iTrace_Core
                 containerCanvas.Children.Add(rightEyePaths[i]);
             }
 
-            this.Content = containerCanvas;
+            Label finishedLabel = new Label();
+            finishedLabel.Content = "Press any key to continue...";
+            finishedLabel.FontSize = 25;
+            finishedLabel.HorizontalAlignment = HorizontalAlignment.Right;
+            finishedLabel.VerticalAlignment = VerticalAlignment.Bottom;
+            finishedLabel.Margin = new Thickness(0.0, 0.0, 10.0, 20.0);
+
+            grid.Children.Add(finishedLabel);
+            grid.Children.Add(containerCanvas);
+            this.Content = grid;
 
             pressKeyToClose = true;
         }
