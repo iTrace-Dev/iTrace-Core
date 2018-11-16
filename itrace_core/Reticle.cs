@@ -20,13 +20,13 @@ namespace iTrace_Core
         const int WS_EX_TRANSPARENT = 0x20;
 
         Pen crossPen = new Pen(Color.Red, 3);
-        private int MAX_NUM_POINTS = 15;
+        private int maximumNumberOfPoints = 15;
         private int totalX;
         private int totalY;
         private List<int> xPoints = new List<int>();
         private List<int> yPoints = new List<int>();
         private bool display;
-        private System.Windows.Forms.Timer timer;
+        private Timer timer;
         public static Point newPos;
 
         public Reticle()
@@ -37,7 +37,7 @@ namespace iTrace_Core
             display = false;
             newPos = new Point(0, 0);
             timer = new System.Windows.Forms.Timer() { Interval = 20, Enabled = true };
-            timer.Tick += new EventHandler(timerTick);
+            timer.Tick += new EventHandler(TimerTick);
 
             TopMost = true;
             ShowInTaskbar = false;
@@ -48,7 +48,7 @@ namespace iTrace_Core
             Width = 60;
             Height = 60;
 
-            Paint += new PaintEventHandler(reticleFormPaint);
+            Paint += new PaintEventHandler(ReticleFormPaint);
         }
 
         protected override void OnLoad(EventArgs e)
@@ -59,17 +59,17 @@ namespace iTrace_Core
         }
 
         //Use timer to update reticle posistion because Location cannot be directly set from within the worker thread
-        void timerTick(object sender, EventArgs e)
+        void TimerTick(object sender, EventArgs e)
         {
             Location = newPos;
         }
 
-        void reticleFormPaint(object sender, PaintEventArgs e)
+        void ReticleFormPaint(object sender, PaintEventArgs e)
         {
             e.Graphics.DrawEllipse(crossPen, (Width - 15) / 2, (Height - 15) / 2, 15, 15);
         }
 
-        public void toDraw(bool draw)
+        public void ToDraw(bool draw)
         {
             display = draw;
             if (display)
@@ -78,7 +78,7 @@ namespace iTrace_Core
                 Hide();
         }
 
-        public void updateReticle(int x, int y)
+        public void UpdateReticle(int x, int y)
         {
             //No reason to do anything if it can't be seen...
             if (!display)
@@ -105,10 +105,10 @@ namespace iTrace_Core
              * evaluate the last MAX_NUM_POINTS.
              */
 
-            if (xPoints.Count == MAX_NUM_POINTS)
+            if (xPoints.Count == maximumNumberOfPoints)
             {
-                double avgX = totalX / MAX_NUM_POINTS;
-                double avgY = totalY / MAX_NUM_POINTS;
+                double avgX = totalX / maximumNumberOfPoints;
+                double avgY = totalY / maximumNumberOfPoints;
 
                 newPos = new Point(Convert.ToInt32(avgX), Convert.ToInt32(avgY));
                 newPos.Offset(-(Width / 2), -(Height / 2));
