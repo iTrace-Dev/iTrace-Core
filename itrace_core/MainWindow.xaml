@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:iTrace_Core"
         mc:Ignorable="d"
         Title="iTrace Core" Height="450" Width="800"
-        Loaded="ApplicationLoaded">
+        Loaded="ApplicationLoaded"
+        Closed="ApplicationClosed">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="749*" />

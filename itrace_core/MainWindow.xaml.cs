@@ -27,6 +27,11 @@ namespace iTrace_Core
             RefreshTrackerList();
         }
 
+        private void ApplicationClosed(object sender, EventArgs e)
+        {
+            TrackerManager.StopTracker();
+        }
+
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine("SETTINGS!");
