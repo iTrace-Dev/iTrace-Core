@@ -80,14 +80,14 @@ namespace iTrace_Core
             }
         }
 
-        private void CalibrateTrackerClicked(object sender, RoutedEventArgs e)
+        private void CalibrateTracker(object sender, RoutedEventArgs e)
         {
             TrackerManager.CalibrateActiveTracker();
         }
 
-        private void ShowReticleClicked(object sender, RoutedEventArgs e)
+        private void ShowReticle(object sender, RoutedEventArgs e)
         {
-
+             
         }
     }
 }
