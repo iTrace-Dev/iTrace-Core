@@ -12,6 +12,7 @@ namespace iTrace_Core
     {
         TrackerManager TrackerManager;
 		Recorder rec;
+        ReticleController reticleController;
 
         public MainWindow()
         {
@@ -87,7 +88,19 @@ namespace iTrace_Core
 
         private void ShowReticle(object sender, RoutedEventArgs e)
         {
-             
+            if (reticleController == null)
+                reticleController = new ReticleController();
+
+            if(reticleController.IsShown())
+            {
+                reticleController.HideReticle();
+                ActivateReticleButton.Content = "Show Reticle";
+            }
+            else
+            {
+                reticleController.ShowReticle();
+                ActivateReticleButton.Content = "Hide Reticle";
+            }
         }
     }
 }
