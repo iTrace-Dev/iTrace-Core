@@ -3,12 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace iTrace_Core
 {
     public abstract class GazeData
     {
         protected String foobar;
+
+        public int X { get; protected set; }
+        public int Y { get; protected set; }
 
         public bool IsEmpty()
         {
@@ -29,6 +33,9 @@ namespace iTrace_Core
             foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
             tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
             tobiiRawGaze.LeftEye.GazePoint.Validity;
+
+            X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.X);
+            Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Y);
         }
     }
 
@@ -37,6 +44,9 @@ namespace iTrace_Core
         public MouseTrackerGazeData(int mousePosX, int mousePosY)
         {
             foobar = "Mouse: " + mousePosX + " " + mousePosY;
+
+            X = mousePosX;
+            Y = mousePosY;
         }
     }
 
@@ -45,6 +55,8 @@ namespace iTrace_Core
         public GazepointGazeData(String gazePointRawGaze)
         {
             foobar = gazePointRawGaze;
+
+            //TODO: initialize X and Y
         }
     }
 
