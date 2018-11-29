@@ -26,7 +26,6 @@ namespace iTrace_Core
         private List<int> xPoints = new List<int>();
         private List<int> yPoints = new List<int>();
         private bool display;
-        private Timer timer;
         public static Point newPos;
 
         public Reticle()
@@ -35,9 +34,7 @@ namespace iTrace_Core
             totalX = 0;
             totalY = 0;
             display = false;
-            newPos = new Point(0, 0);
-            timer = new System.Windows.Forms.Timer() { Interval = 20, Enabled = true };
-            timer.Tick += new EventHandler(TimerTick);
+            newPos = new Point(0, 0);            
 
             TopMost = true;
             ShowInTaskbar = false;
@@ -56,12 +53,6 @@ namespace iTrace_Core
             base.OnLoad(e);
             var existingStyle = GetWindowLong(this.Handle, GWL_EXSTYLE);
             SetWindowLong(this.Handle, GWL_EXSTYLE, existingStyle | WS_EX_LAYERED | WS_EX_TRANSPARENT);
-        }
-
-        //Use timer to update reticle posistion because Location cannot be directly set from within the worker thread
-        void TimerTick(object sender, EventArgs e)
-        {
-            Location = newPos;
         }
 
         void ReticleFormPaint(object sender, PaintEventArgs e)
@@ -118,6 +109,12 @@ namespace iTrace_Core
                 totalY -= yPoints.Last();
                 xPoints.RemoveAt(xPoints.Count - 1);
                 yPoints.RemoveAt(yPoints.Count - 1);
+
+                // Update the Reticle Location without Timer
+                this.Invoke((MethodInvoker)delegate
+                {
+                    Location = newPos;
+                });
             }
         }
     }
