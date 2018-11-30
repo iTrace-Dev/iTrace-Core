@@ -23,3 +23,4 @@
 ### Pull Requests
 * NO CODE IS TO BE MERGED INTO MASTER OR DEVELOP WITHOUT A PULL REQUEST FOR CODE REVIEW.
 * Ensure that you periodically update branches with code changes from your branch base (master/develop/etc) to ensure that regressions and merge conflicts are resolved before pull requests are submitted.
+* If you are having difficulties with a merge conflict or are uncomfortable making a pull request, please reach out to another member of the development group via an issue comment or Discord.
