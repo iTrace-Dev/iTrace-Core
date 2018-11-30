@@ -11,3 +11,6 @@ Presently iTrace core only supports [Tobii Pro](https://www.tobiipro.com/) and 4
 4) Calibrate (if using a non-mouse tracker)
 5) Connect one or more plugins
 6) Start Tracking
+
+### Code Contributors
+Please read the CONTRIB.md for guidelines on iTrace-Core development
