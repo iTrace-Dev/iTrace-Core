@@ -16,7 +16,7 @@ namespace iTrace_Core
         {
             X = 0;
             Y = 0;
-            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
         public bool IsEmpty()
@@ -31,7 +31,7 @@ namespace iTrace_Core
 
         public String Serialize()
         {
-            return "b'gaze," + Timestamp.ToString() + "," + X.ToString() + Y.ToString() + "\n";
+            return "gaze," + Timestamp.ToString() + "," + X.ToString() + "," + Y.ToString() + "\n";
         }
     }
 
