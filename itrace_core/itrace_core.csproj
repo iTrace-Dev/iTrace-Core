@@ -89,6 +89,7 @@
     </Compile>
     <Compile Include="ReticleController.cs" />
     <Compile Include="ScreenRecorder.cs" />
+    <Compile Include="SocketServer.cs" />
     <Compile Include="TobiiTracker.cs" />
     <Compile Include="TrackerManager.cs" />
     <Compile Include="ITracker.cs" />
