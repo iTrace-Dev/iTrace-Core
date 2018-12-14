@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
-using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Net;
 using System.Net.Sockets;
-
+using System.Configuration;
 
 namespace iTrace_Core
 {
@@ -17,12 +16,16 @@ namespace iTrace_Core
         BlockingCollection<TcpClient> clientAcceptQueue;
         Thread connectionsListener;
 
+        const string localhostAddress = "127.0.0.1";
+        int port;
+
         public SocketServer()
         {
             clients = new List<TcpClient>();
             clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8008);
+            port = 8008;    //To do: get port number from application config file
+            server = new TcpListener(IPAddress.Parse(localhostAddress), port);
             server.Start();
 
             connectionsListener = new Thread(new ThreadStart(() => {
