@@ -14,7 +14,7 @@ namespace iTrace_Core
         public ReticleController()
         {
             reticle = new Reticle();
-            GazeHandler.Instance.OnGazeDataRecieved += RecieveGazeData;
+            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
             shown = false;
         }
 
@@ -35,9 +35,9 @@ namespace iTrace_Core
             return shown;
         }
 
-        private void RecieveGazeData(object sender, GazeDataRecievedEventArgs e)
+        private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            reticle.UpdateReticle(e.RecievedGazeData.X, e.RecievedGazeData.Y);
+            reticle.UpdateReticle(e.ReceivedGazeData.X, e.ReceivedGazeData.Y);
         }
     }
 }

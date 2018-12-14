@@ -10,12 +10,17 @@ namespace iTrace_Core
     {
         public void Start()
         {
-            GazeHandler.Instance.OnGazeDataRecieved += RecieveGazeData;            
+            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;            
         }
 
-        private void RecieveGazeData(object sender, GazeDataRecievedEventArgs e)
+        private void SendToClients(string message)
         {
-            throw new NotImplementedException();
+
+        }
+
+        private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
+        {
+            SendToClients(e.ReceivedGazeData.Serialize());
         }
     }
 }

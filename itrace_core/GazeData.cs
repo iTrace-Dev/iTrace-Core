@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace iTrace_Core
@@ -14,6 +10,15 @@ namespace iTrace_Core
         public int X { get; protected set; }
         public int Y { get; protected set; }
 
+        public long Timestamp { get; protected set; }
+
+        public GazeData()
+        {
+            X = 0;
+            Y = 0;
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+        }
+
         public bool IsEmpty()
         {
             return foobar == "";
@@ -23,11 +28,16 @@ namespace iTrace_Core
         {
             return foobar;
         }
+
+        public String Serialize()
+        {
+            return "b'gaze," + Timestamp.ToString() + "," + X.ToString() + Y.ToString() + "\n";
+        }
     }
 
     public class TobiiGazeData : GazeData
     {
-        public TobiiGazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze)
+        public TobiiGazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze) : base()
         {
             //TODO
             foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
@@ -36,12 +46,14 @@ namespace iTrace_Core
 
             X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.X);
             Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Y);
+
+            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
     }
 
     public class MouseTrackerGazeData : GazeData
     {
-        public MouseTrackerGazeData(int mousePosX, int mousePosY)
+        public MouseTrackerGazeData(int mousePosX, int mousePosY) : base()
         {
             foobar = "Mouse: " + mousePosX + " " + mousePosY;
 
@@ -52,7 +64,7 @@ namespace iTrace_Core
 
     public class GazepointGazeData : GazeData
     {
-        public GazepointGazeData(String gazePointRawGaze)
+        public GazepointGazeData(String gazePointRawGaze) : base()
         {
             foobar = gazePointRawGaze;
 
@@ -62,7 +74,7 @@ namespace iTrace_Core
 
     public class EmptyGazeData : GazeData
     {
-        public EmptyGazeData()
+        public EmptyGazeData() : base()
         {
             foobar = "";
         }

@@ -8,7 +8,7 @@ namespace iTrace_Core
 {
     public sealed class GazeHandler
     {
-        public event EventHandler<GazeDataRecievedEventArgs> OnGazeDataRecieved;
+        public event EventHandler<GazeDataReceivedEventArgs> OnGazeDataReceived;
 
         private static readonly Lazy<GazeHandler> Singleton =
             new Lazy<GazeHandler>(() => new GazeHandler());
@@ -37,9 +37,9 @@ namespace iTrace_Core
             GazeData gd = GazeQueue.Take();
             while (!gd.IsEmpty())
             {
-                if (OnGazeDataRecieved != null)
+                if (OnGazeDataReceived != null)
                 {
-                    OnGazeDataRecieved(this, new GazeDataRecievedEventArgs(gd));
+                    OnGazeDataReceived(this, new GazeDataReceivedEventArgs(gd));
                 }
 
                 Console.WriteLine("DEQUEUE!");
@@ -50,13 +50,13 @@ namespace iTrace_Core
         }
     }
 
-    public class GazeDataRecievedEventArgs : EventArgs
+    public class GazeDataReceivedEventArgs : EventArgs
     {
-        public GazeData RecievedGazeData { get; private set; }
+        public GazeData ReceivedGazeData { get; private set; }
 
-        public GazeDataRecievedEventArgs(GazeData gazeData)
+        public GazeDataReceivedEventArgs(GazeData gazeData)
         {
-            RecievedGazeData = gazeData;
+            ReceivedGazeData = gazeData;
         }
     }
 }
