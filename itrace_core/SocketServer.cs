@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Concurrent;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 using System.Net;
 using System.Net.Sockets;
 
@@ -13,24 +14,48 @@ namespace iTrace_Core
     {
         TcpListener server;
         List<TcpClient> clients;
+        BlockingCollection<TcpClient> clientAcceptQueue;
+        Thread connectionsListener;
 
         public SocketServer()
         {
             clients = new List<TcpClient>();
+            clientAcceptQueue = new BlockingCollection<TcpClient>();
 
             server = new TcpListener(IPAddress.Parse("127.0.0.1"), 8008);
-        }
-
-        public void Start()
-        {
             server.Start();
 
-            TcpClient client = server.AcceptTcpClient();
-            clients.Add(client);
-
-            Console.WriteLine("Client connected!");
+            connectionsListener = new Thread(new ThreadStart(() => {
+                Thread.CurrentThread.IsBackground = true;
+                ListenForConnections();
+            }));
+            connectionsListener.Start();
 
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+        } 
+
+        private void ListenForConnections()
+        {
+            TcpClient client;
+
+            while(true)
+            {
+                client = server.AcceptTcpClient();
+                clientAcceptQueue.Add(client);
+
+                Console.WriteLine("Client connected!");
+            }
+        }
+
+        private void AcceptQueuedClients()
+        {
+            int clientQueueCount = clientAcceptQueue.Count;
+
+            for(int i = clientQueueCount; i != 0; --i)
+            {
+                TcpClient client = clientAcceptQueue.Take();
+                clients.Add(client);
+            }
         }
 
         private void SendToClients(string message)
@@ -52,6 +77,7 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
+            AcceptQueuedClients();
             SendToClients(e.ReceivedGazeData.Serialize());
         }
     }
