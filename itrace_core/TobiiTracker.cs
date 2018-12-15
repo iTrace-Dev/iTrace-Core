@@ -46,6 +46,7 @@ namespace iTrace_Core
         private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
         {
             Tobii.Research.CalibrationResult calibrationResult = Calibration.ComputeAndApply();
+            TobiiCalibrationResults tobiiCalibrationResults = new TobiiCalibrationResults(calibrationResult, calibrationWindow.ActualWidth, calibrationWindow.ActualHeight);
 
             if(calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure)
             {
@@ -54,28 +55,7 @@ namespace iTrace_Core
             
             Calibration.LeaveCalibrationMode();
 
-
-            List<Point> leftEyePoints = new List<Point>();
-            List<Point> rightEyePoints = new List<Point>();
-
-            for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
-            {
-                for(int j = 0; j < calibrationResult.CalibrationPoints[i].CalibrationSamples.Count; ++j)
-                {
-                    leftEyePoints.Add(new Point(
-                            calibrationResult.CalibrationPoints[i].CalibrationSamples[j].LeftEye.PositionOnDisplayArea.X * calibrationWindow.ActualWidth,
-                            calibrationResult.CalibrationPoints[i].CalibrationSamples[j].LeftEye.PositionOnDisplayArea.Y * calibrationWindow.Height
-                        ));
-
-                    rightEyePoints.Add(new Point(
-                            calibrationResult.CalibrationPoints[i].CalibrationSamples[j].RightEye.PositionOnDisplayArea.X * calibrationWindow.ActualWidth,
-                            calibrationResult.CalibrationPoints[i].CalibrationSamples[j].RightEye.PositionOnDisplayArea.Y * calibrationWindow.Height
-                        ));
-                }
-            }
-
-
-            calibrationWindow.ShowResultsAndClose(leftEyePoints.ToArray(), rightEyePoints.ToArray());
+            calibrationWindow.ShowResultsAndClose(tobiiCalibrationResults.GetLeftEyePoints().ToArray(), tobiiCalibrationResults.GetRightEyePoints().ToArray());
         }
 
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)
