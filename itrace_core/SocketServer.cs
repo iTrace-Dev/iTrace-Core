@@ -37,6 +37,18 @@ namespace iTrace_Core
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
         } 
 
+        public void SendSessionData()
+        {
+            string path = "";
+            string researcherName = "";
+            int participantID = 1;
+            long timeStamp = 1;
+
+
+            string data = "session," + path + @"\\" + researcherName + @"\\" + participantID + @"\\" + timeStamp + "\n";
+            SendToClients(data);
+        }
+
         private void ListenForConnections()
         {
             TcpClient client;
