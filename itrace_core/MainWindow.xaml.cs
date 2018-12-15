@@ -13,6 +13,7 @@ namespace iTrace_Core
         TrackerManager TrackerManager;
 		Recorder rec;
         ReticleController reticleController;
+        SocketServer socketServer;
 
         public MainWindow()
         {
@@ -20,6 +21,8 @@ namespace iTrace_Core
             TrackerManager = new TrackerManager();
             Console.WriteLine("Screen Dimensions: {0}x{1}", System.Windows.SystemParameters.PrimaryScreenWidth, 
                 System.Windows.SystemParameters.PrimaryScreenHeight);
+
+            socketServer = new SocketServer();
         }
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
