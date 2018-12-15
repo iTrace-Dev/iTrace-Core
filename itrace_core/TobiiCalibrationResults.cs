@@ -56,6 +56,11 @@ namespace iTrace_Core
             return rightEyePoints;
         }
 
+        public bool IsFailure()
+        {
+            return calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure;
+        }
+
         void SaveResultsToXML()
         {
 
