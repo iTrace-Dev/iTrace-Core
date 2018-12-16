@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Windows;
 using System.Threading.Tasks;
+using System.IO;
+using System.Xml;
 
 namespace iTrace_Core
 {
@@ -61,46 +63,48 @@ namespace iTrace_Core
             return calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure;
         }
 
-        private String createPointSample(float leftX, float leftY, bool leftValidity, float rightX, float rightY, bool rightValidity)
-        {
-            String leftValidityString = leftValidity ? "1" : "-1";
-            String rightValidityString = rightValidity ? "1" : "-1";
-
-            return "<sample left_x=\"" + leftX.ToString() + "\" left_y=\"" + leftY.ToString() + "\" left_validity=\"" + leftValidityString + "\" right_x=\"" +
-                rightX.ToString() + "\" right_y=\"" + rightY.ToString() + "\" right_validity=\"" + rightValidityString + "\"/>";
-        }
-
         void SaveResultsToXML()
         {
-            StringBuilder calibrationResultsXML = new StringBuilder("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
-
-            calibrationResultsXML.AppendLine("<calibration status=\"1\">"); // Status should be changed?
-
-            for(int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
+            using (var stringWriter = new StringWriter())   //To do: output to a file and not a string
+            using (XmlTextWriter writer = new XmlTextWriter(stringWriter))
             {
-                string pointX = calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.X.ToString();
-                string pointY = calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.Y.ToString();
-                calibrationResultsXML.AppendLine("<point x=\"" + pointX + "\" y=\"" + pointY + "\">");
+                writer.Formatting = Formatting.Indented;
 
-                for(int j = 0; j < calibrationResult.CalibrationPoints[i].CalibrationSamples.Count; ++j)
+                writer.WriteStartDocument();
+
+                writer.WriteStartElement("calibration");
+                writer.WriteAttributeString("status", "1"); //Should be changed?
+
+                for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
                 {
-                    Tobii.Research.CalibrationSample sample = calibrationResult.CalibrationPoints[i].CalibrationSamples[j];
-                    calibrationResultsXML.AppendLine(createPointSample(
-                        sample.LeftEye.PositionOnDisplayArea.X,
-                        sample.LeftEye.PositionOnDisplayArea.Y,
-                        sample.LeftEye.Validity != Tobii.Research.CalibrationEyeValidity.InvalidAndNotUsed,
-                        sample.RightEye.PositionOnDisplayArea.X,
-                        sample.RightEye.PositionOnDisplayArea.Y,
-                        sample.RightEye.Validity != Tobii.Research.CalibrationEyeValidity.InvalidAndNotUsed
-                        ));
+                    writer.WriteStartElement("point");
+                    writer.WriteAttributeString("x", calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.X.ToString());
+                    writer.WriteAttributeString("y", calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.Y.ToString());
+                    
+                    for (int j = 0; j < calibrationResult.CalibrationPoints[i].CalibrationSamples.Count; ++j)
+                    {
+                        Tobii.Research.CalibrationSample calibrationSample = calibrationResult.CalibrationPoints[i].CalibrationSamples[j];
+                        string leftValidity = calibrationSample.LeftEye.Validity == Tobii.Research.CalibrationEyeValidity.InvalidAndNotUsed ? "-1" : "1";
+                        string rightValidity = calibrationSample.RightEye.Validity == Tobii.Research.CalibrationEyeValidity.InvalidAndNotUsed ? "-1" : "1";
+
+                        writer.WriteStartElement("sample");
+
+                        writer.WriteAttributeString("left_x", calibrationSample.LeftEye.PositionOnDisplayArea.X.ToString());
+                        writer.WriteAttributeString("left_y", calibrationSample.LeftEye.PositionOnDisplayArea.Y.ToString());
+                        writer.WriteAttributeString("left_validity", leftValidity);
+
+                        writer.WriteAttributeString("right_x", calibrationSample.RightEye.PositionOnDisplayArea.X.ToString());
+                        writer.WriteAttributeString("right_y", calibrationSample.RightEye.PositionOnDisplayArea.Y.ToString());
+                        writer.WriteAttributeString("right_validity", rightValidity);
+
+                        writer.WriteEndElement();
+                    }
+
+                    writer.WriteEndElement();
                 }
+
+                writer.WriteEndElement();
             }
-
-            calibrationResultsXML.AppendLine("</calibration>");
-
-            string result = calibrationResultsXML.ToString();
-
-            //To do: output result to a file
         }
     }
 }
