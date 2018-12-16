@@ -30,7 +30,7 @@ namespace iTrace_Core
                 
         private SessionManager() { }
 
-        static SessionManager GetInstance()
+        public static SessionManager GetInstance()
         {
             if (instance == null)
                 instance = new SessionManager();
@@ -38,7 +38,7 @@ namespace iTrace_Core
             return instance;
         }
 
-        void SetupSession(string study, string researcher, string participant, string dataRoot)
+        public void SetupSession(string study, string researcher, string participant, string dataRoot)
         {
             StudyName = study;
             ResearcherName = researcher;
@@ -48,7 +48,7 @@ namespace iTrace_Core
             CurrentStudyDir = DataRootDir + "\\" + StudyName + "\\" + ParticipantID;
         }
 
-        void StartSession() 
+        public void StartSession() 
         {
             CurrentSessionID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
             CurrentSessionDir = CurrentStudyDir + "\\" + CurrentSessionID;
@@ -57,7 +57,7 @@ namespace iTrace_Core
             //
         }
 
-        void GenerateCalibrationID()
+        public void GenerateCalibrationID()
         {
             CurrentCalibrationID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
 

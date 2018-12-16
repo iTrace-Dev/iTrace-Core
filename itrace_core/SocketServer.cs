@@ -24,7 +24,7 @@ namespace iTrace_Core
             clients = new List<TcpClient>();
             clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            port = 8008;    //To do: get port number from application config file
+            port = ConfigurationRegistry.Instance.SocketPort;
             server = new TcpListener(IPAddress.Parse(localhostAddress), port);
             server.Start();
 
@@ -37,15 +37,9 @@ namespace iTrace_Core
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
         } 
 
-        public void SendSessionData()
+        public void SendSessionData(SessionManager s)
         {
-            string path = "";
-            string researcherName = "";
-            int participantID = 1;
-            long timeStamp = 1;
-
-
-            string data = "session," + path + @"\\" + researcherName + @"\\" + participantID + @"\\" + timeStamp + "\n";
+            string data = "session," + s.DataRootDir + @"\\" + s.ResearcherName + @"\\" + s.ParticipantID + @"\\" + s.CurrentSessionID + "\n";
             SendToClients(data);
         }
 
