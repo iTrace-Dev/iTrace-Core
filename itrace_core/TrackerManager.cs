@@ -82,8 +82,13 @@ namespace iTrace_Core
         public Boolean StopTracker()
         {
             Tracking = false;
-            GazeHandler.Instance.EnqueueGaze(new EmptyGazeData());
-            ActiveTracker.StopTracker();
+
+            if (ActiveTracker != null)
+            {
+                GazeHandler.Instance.EnqueueGaze(new EmptyGazeData());
+                ActiveTracker.StopTracker();
+            }
+
             return Tracking;
         }
 
