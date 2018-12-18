@@ -51,7 +51,9 @@ namespace iTrace_Core
             {
                 Console.WriteLine("Calibration failed!");
             }
-            
+
+            calibrationResults.SaveResultsToXML();
+
             Calibration.LeaveCalibrationMode();
 
             calibrationWindow.ShowResultsAndClose(calibrationResults.GetLeftEyePoints().ToArray(), calibrationResults.GetRightEyePoints().ToArray());

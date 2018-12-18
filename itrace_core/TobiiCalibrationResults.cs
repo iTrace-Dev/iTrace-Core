@@ -59,10 +59,9 @@ namespace iTrace_Core
             return calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure;
         }
 
-        void SaveResultsToXML()
+        public void SaveResultsToXML()
         {
-            using (var stringWriter = new StringWriter())   //To do: output to a file and not a string
-            using (XmlTextWriter writer = new XmlTextWriter(stringWriter))
+            using (XmlTextWriter writer = new XmlTextWriter("calibration_results.xml", System.Text.Encoding.UTF8))   //To do: change output directory and filename
             {
                 writer.Formatting = Formatting.Indented;
 
@@ -100,6 +99,8 @@ namespace iTrace_Core
                 }
 
                 writer.WriteEndElement();
+
+                writer.Flush();
             }
         }
     }
