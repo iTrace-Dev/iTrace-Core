@@ -63,12 +63,13 @@ namespace iTrace_Core
         {
             using (XmlTextWriter writer = new XmlTextWriter("calibration_results.xml", System.Text.Encoding.UTF8))   //To do: change output directory and filename
             {
+                string status = calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure ? "-1" : "1";
+
                 writer.Formatting = Formatting.Indented;
 
                 writer.WriteStartDocument();
-
                 writer.WriteStartElement("calibration");
-                writer.WriteAttributeString("status", "1"); //Should be changed?
+                writer.WriteAttributeString("status", status);
 
                 for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
                 {
