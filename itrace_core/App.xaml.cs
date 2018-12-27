@@ -13,5 +13,10 @@ namespace iTrace_Core
     /// </summary>
     public partial class App : Application
     {
+        App()
+        {
+            //Manually change Localization culture as follows:
+            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ru-RU");
+        }
     }
 }
