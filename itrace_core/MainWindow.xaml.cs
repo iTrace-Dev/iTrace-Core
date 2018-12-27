@@ -87,6 +87,7 @@ namespace iTrace_Core
                     rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
                 }
 				ActivateTrackerButton.Content = "Stop Tracking";
+
                 TrackerManager.StartTracker();
             }
         }

@@ -61,11 +61,11 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to iTrace Core.
+        ///   Looks up a localized string similar to Calibrate.
         /// </summary>
-        public static string Title {
+        public static string Calibrate {
             get {
-                return ResourceManager.GetString("Title", resourceCulture);
+                return ResourceManager.GetString("Calibrate", resourceCulture);
             }
         }
     }
