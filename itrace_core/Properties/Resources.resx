@@ -120,4 +120,7 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
+  <data name="Trackers" xml:space="preserve">
+    <value>Trackers:</value>
+  </data>
 </root>

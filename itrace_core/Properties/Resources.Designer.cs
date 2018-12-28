@@ -68,5 +68,14 @@ namespace iTrace_Core.Properties {
                 return ResourceManager.GetString("Calibrate", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Trackers:.
+        /// </summary>
+        public static string Trackers {
+            get {
+                return ResourceManager.GetString("Trackers", resourceCulture);
+            }
+        }
     }
 }
