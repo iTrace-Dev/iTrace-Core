@@ -16,6 +16,7 @@ namespace iTrace_Core
         Thread connectionsListener;
 
         const string localhostAddress = "127.0.0.1";
+        const int defaultPort = 8008;
         int port;
 
         public SocketServer()
@@ -23,7 +24,7 @@ namespace iTrace_Core
             clients = new List<TcpClient>();
             clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            port = ConfigurationRegistry.Instance.SocketPort;
+            port = ConfigurationRegistry.Instance.AssignFromConfiguration("socket_port", defaultPort);
             server = new TcpListener(IPAddress.Parse(localhostAddress), port);
             server.Start();
 
