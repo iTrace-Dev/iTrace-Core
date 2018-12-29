@@ -120,8 +120,14 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
+  <data name="HideReticle" xml:space="preserve">
+    <value>Hide Reticle</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
+  </data>
+  <data name="ShowReticle" xml:space="preserve">
+    <value>Show Reticle</value>
   </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Start Tracking</value>

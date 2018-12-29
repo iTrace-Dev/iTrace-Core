@@ -70,11 +70,29 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Hide Reticle.
+        /// </summary>
+        public static string HideReticle {
+            get {
+                return ResourceManager.GetString("HideReticle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
             get {
                 return ResourceManager.GetString("Refresh", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Show Reticle.
+        /// </summary>
+        public static string ShowReticle {
+            get {
+                return ResourceManager.GetString("ShowReticle", resourceCulture);
             }
         }
         

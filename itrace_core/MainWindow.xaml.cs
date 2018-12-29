@@ -105,12 +105,12 @@ namespace iTrace_Core
             if(reticleController.IsShown())
             {
                 reticleController.HideReticle();
-                ActivateReticleButton.Content = "Show Reticle";
+                ActivateReticleButton.Content = Properties.Resources.ShowReticle;
             }
             else
             {
                 reticleController.ShowReticle();
-                ActivateReticleButton.Content = "Hide Reticle";
+                ActivateReticleButton.Content = Properties.Resources.HideReticle;
             }
         }
     }

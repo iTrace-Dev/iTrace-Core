@@ -120,8 +120,14 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Калибровать</value>
   </data>
+  <data name="HideReticle" xml:space="preserve">
+    <value>Спрятать Прицел</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Обновить</value>
+  </data>
+  <data name="ShowReticle" xml:space="preserve">
+    <value>Показать Прицел</value>
   </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Начать Отслеживание</value>

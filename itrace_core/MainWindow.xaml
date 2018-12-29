@@ -27,13 +27,13 @@
                 <MenuItem x:Name="MenuExit" Click="MenuExitClick" Header="_Exit"></MenuItem>
             </MenuItem>
         </Menu>
-        <Canvas Grid.Row="1" Grid.ColumnSpan="2"> 
+        <Canvas Grid.Row="1" Grid.ColumnSpan="2">
             <Label Canvas.Left="12" Canvas.Top="36" Content="{x:Static p:Resources.Trackers}"></Label>
             <ComboBox x:Name="TrackerList" Grid.Row="1" Canvas.Left="67" Canvas.Top="40" Width="150" SelectionChanged="TrackerListChanged"/>
-            <Button x:Name="TrackerRefreshButton" Content="{x:Static p:Resources.Refresh}" HorizontalAlignment="Left" Margin="225,38,0,-36" Grid.Row="2" VerticalAlignment="Top" Width="55" Height="23" Click="RefreshAttachedTrackers"/>
+            <Button x:Name="TrackerRefreshButton" Content="{x:Static p:Resources.Refresh}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="56" Height="23" Click="RefreshAttachedTrackers" Canvas.Left="225" Canvas.Top="38"/>
             <Button x:Name="ActivateTrackerButton" Content="{x:Static p:Resources.StartTracking}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="StartTracker" Canvas.Left="322" Canvas.Top="38"/>
             <Button x:Name="ActivateCalibrationButton" Content="{x:Static p:Resources.Calibrate}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="CalibrateTracker" Canvas.Left="430" Canvas.Top="38"/>
-            <Button x:Name="ActivateReticleButton" Content="Show Reticle" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="538" Canvas.Top="38"/>
+            <Button x:Name="ActivateReticleButton" Content="{x:Static p:Resources.ShowReticle}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="538" Canvas.Top="38"/>
         </Canvas>
         <CheckBox x:Name="CheckScreenCap" Content="Enable Screen Recording" HorizontalAlignment="Left" Margin="327,72,0,-68" Grid.Row="2" VerticalAlignment="Top" Width="204"/>
     </Grid>
