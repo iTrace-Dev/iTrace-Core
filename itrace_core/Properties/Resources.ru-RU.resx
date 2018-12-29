@@ -120,6 +120,9 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Калибровать</value>
   </data>
+  <data name="EnableScreenRecording" xml:space="preserve">
+    <value>Включить Запись Экрана</value>
+  </data>
   <data name="HideReticle" xml:space="preserve">
     <value>Спрятать Прицел</value>
   </data>

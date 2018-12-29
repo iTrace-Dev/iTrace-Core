@@ -120,6 +120,9 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
+  <data name="EnableScreenRecording" xml:space="preserve">
+    <value>Enable Screen Recording</value>
+  </data>
   <data name="HideReticle" xml:space="preserve">
     <value>Hide Reticle</value>
   </data>

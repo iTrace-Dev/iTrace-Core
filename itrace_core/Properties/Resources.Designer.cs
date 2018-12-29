@@ -70,6 +70,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Enable Screen Recording.
+        /// </summary>
+        public static string EnableScreenRecording {
+            get {
+                return ResourceManager.GetString("EnableScreenRecording", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Hide Reticle.
         /// </summary>
         public static string HideReticle {
