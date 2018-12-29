@@ -70,7 +70,7 @@ namespace iTrace_Core
         {
             if (TrackerManager.Running())
             {
-				ActivateTrackerButton.Content = "Start Tracking";
+				ActivateTrackerButton.Content = Properties.Resources.StartTracking;
                 TrackerManager.StopTracker();
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
@@ -86,7 +86,7 @@ namespace iTrace_Core
                 {
                     rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
                 }
-				ActivateTrackerButton.Content = "Stop Tracking";
+				ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
                 TrackerManager.StartTracker();
             }

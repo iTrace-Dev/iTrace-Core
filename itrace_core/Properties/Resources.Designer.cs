@@ -79,6 +79,24 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Tracking.
+        /// </summary>
+        public static string StartTracking {
+            get {
+                return ResourceManager.GetString("StartTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop Tracking.
+        /// </summary>
+        public static string StopTracking {
+            get {
+                return ResourceManager.GetString("StopTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Trackers:.
         /// </summary>
         public static string Trackers {

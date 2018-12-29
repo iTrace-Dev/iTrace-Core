@@ -123,6 +123,12 @@
   <data name="Refresh" xml:space="preserve">
     <value>Обновить</value>
   </data>
+  <data name="StartTracking" xml:space="preserve">
+    <value>Начать Отслеживание</value>
+  </data>
+  <data name="StopTracking" xml:space="preserve">
+    <value>Прекратить Отслеживания</value>
+  </data>
   <data name="Trackers" xml:space="preserve">
     <value>Трекеры:</value>
   </data>
