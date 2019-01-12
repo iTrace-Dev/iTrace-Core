@@ -9,7 +9,7 @@ namespace iTrace_Core
 {
     class WebSocketServer
     {
-        TcpListener server;
+        WebSocket ws;
 
         const string localhostAddress = "127.0.0.1";
         const int defaultPort = 7007;
@@ -19,9 +19,25 @@ namespace iTrace_Core
         {
             port = ConfigurationRegistry.Instance.AssignFromConfiguration("websocket_port", defaultPort);
 
-            WebSocket ws = new WebSocket(localhostAddress, port);
-            ws.SendMessage("good day!");
+            ws = new WebSocket(localhostAddress, port);
 
+            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+        }
+        
+        void SendToClients(string message)
+        {
+            ws.SendMessage(message);    //Todo: multiple clients
+        }
+
+        public void SendSessionData(SessionManager s)
+        {
+            string data = "session," + s.DataRootDir + @"\\" + s.ResearcherName + @"\\" + s.ParticipantID + @"\\" + s.CurrentSessionID + "\n";
+            SendToClients(data);
+        }
+
+        private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
+        {
+            SendToClients(e.ReceivedGazeData.Serialize());
         }
     }
 }
