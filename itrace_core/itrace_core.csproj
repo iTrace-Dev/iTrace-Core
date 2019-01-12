@@ -121,6 +121,8 @@
     <Compile Include="ReticleController.cs" />
     <Compile Include="ScreenRecorder.cs" />
     <Compile Include="SessionManager.cs" />
+    <Compile Include="WebSocket.cs" />
+    <Compile Include="WebSocketServer.cs" />
     <Compile Include="SocketServer.cs" />
     <Compile Include="TobiiCalibrationResults.cs" />
     <Compile Include="TobiiTracker.cs" />
