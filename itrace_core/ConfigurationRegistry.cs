@@ -23,6 +23,7 @@ namespace iTrace_Core
             }
         }
 
+        //Returns value from key if it exists. Otherwise, returns the default value provided. 
         public string AssignFromConfiguration(string key, string defaultValue)
         {
             if (configurations.ContainsKey(key))
