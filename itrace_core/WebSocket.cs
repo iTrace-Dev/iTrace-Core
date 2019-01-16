@@ -4,6 +4,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.IO;
 
 namespace iTrace_Core
 {
@@ -87,7 +88,8 @@ namespace iTrace_Core
         {
             if (!Connected)
             {
-                throw new WebSocketUnconnectedException();
+                return;
+                //throw new WebSocketUnconnectedException();
             }
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
@@ -112,7 +114,14 @@ namespace iTrace_Core
                 frame[6 + i] = Convert.ToByte(messageBytes[i] ^ mask[i % 4]);
             }
 
-            stream.Write(frame, 0, frame.Length);
+            try
+            {
+                stream.Write(frame, 0, frame.Length);
+            }
+            catch(IOException e)
+            {
+                Connected = false;
+            }
         }
     }
 
