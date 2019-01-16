@@ -9,22 +9,47 @@ namespace iTrace_Core
 {
     class WebSocket
     {
-        TcpListener server;
+        //TcpListener server;
         TcpClient client;
         NetworkStream stream;
-        
+
         byte[] mask = new byte[4] { 16, 68, 42, 10 };
 
-        public WebSocket(string address, int port)
+        public bool Connected { get; private set; }
+
+        public WebSocket()
         {
-            server = new TcpListener(IPAddress.Parse(address), port);
+        }
+
+        public void WaitForConnection(string address, int port)
+        {
+            TcpListener server = new TcpListener(IPAddress.Parse(address), port);
             server.Start();
 
             client = server.AcceptTcpClient();
-
             stream = client.GetStream();
 
-            while (client.Available < 3) { }
+            server.Stop();
+        }
+
+        //Returns true if succeeded, false if failed.
+        public bool PerformHandshake(long timeout)
+        {
+            long timeoutCountDown = 0;
+
+            //Wait for a response
+            while (client.Available < 3)
+            {
+                const int updateLength = 100;
+
+                Thread.Sleep(updateLength);
+                timeoutCountDown += updateLength;
+
+                if(timeoutCountDown > timeout)
+                {
+                    return false;
+                }
+            }
 
             byte[] request = new byte[client.Available];
             stream.Read(request, 0, request.Length);
@@ -47,15 +72,24 @@ namespace iTrace_Core
                     + eol);
 
                 stream.Write(response, 0, response.Length);
+
+
+                Connected = true;
+                return true;
             }
             else
             {
-
+                return false;
             }
         }
 
         public void SendMessage(string message)
         {
+            if (!Connected)
+            {
+                throw new WebSocketUnconnectedException();
+            }
+
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
             byte[] frame = new byte[6 + messageBytes.Length];
 
@@ -77,8 +111,26 @@ namespace iTrace_Core
             {
                 frame[6 + i] = Convert.ToByte(messageBytes[i] ^ mask[i % 4]);
             }
-            
+
             stream.Write(frame, 0, frame.Length);
+        }
+    }
+
+    public class WebSocketUnconnectedException : Exception
+    {
+        public WebSocketUnconnectedException()
+        {
+
+        }
+
+        public WebSocketUnconnectedException(string message)
+            : base(message)
+        {
+        }
+
+        public WebSocketUnconnectedException(string message, Exception inner)
+            : base(message, inner)
+        {
         }
     }
 }

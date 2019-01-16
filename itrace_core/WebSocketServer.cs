@@ -4,11 +4,15 @@ using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Collections.Generic;
 
 namespace iTrace_Core
 {
     class WebSocketServer
     {
+        /*
+        List<WebSocket> clients;
+        */
         WebSocket ws;
 
         const string localhostAddress = "127.0.0.1";
@@ -17,16 +21,27 @@ namespace iTrace_Core
 
         public WebSocketServer()
         {
+            //clients = new List<WebSocket>();
+            ws = new WebSocket();
+
             port = ConfigurationRegistry.Instance.AssignFromConfiguration("websocket_port", defaultPort);
 
-            ws = new WebSocket(localhostAddress, port);
-
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+
+            new Thread(() =>
+            {
+                Thread.CurrentThread.IsBackground = true;
+                ws.WaitForConnection(localhostAddress, port);
+                ws.PerformHandshake(10000);
+            }).Start();
         }
         
         void SendToClients(string message)
         {
-            ws.SendMessage(message);    //Todo: multiple clients
+            if (ws.Connected)
+            {
+                ws.SendMessage(message);    //Todo: multiple clients
+            }
         }
 
         public void SendSessionData(SessionManager s)
