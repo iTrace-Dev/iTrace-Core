@@ -39,5 +39,17 @@ namespace iTrace_Core
 
             return defaultValue;
         }
+        
+        public void WriteConfiguration(string key, string value)
+        {
+            configurations[key] = value;
+
+            Configuration config = ConfigurationManager.OpenExeConfiguration(System.Reflection.Assembly.GetExecutingAssembly().Location);
+
+            config.AppSettings.Settings.Remove(key);
+            config.AppSettings.Settings.Add(key, value);
+
+            config.Save(ConfigurationSaveMode.Modified);
+        }
     }
 }
