@@ -14,6 +14,7 @@ namespace iTrace_Core
 		Recorder rec;
         ReticleController reticleController;
         SocketServer socketServer;
+        WebSocketServer webSocketServer;
 
         public MainWindow()
         {
@@ -23,6 +24,7 @@ namespace iTrace_Core
                 System.Windows.SystemParameters.PrimaryScreenHeight);
 
             socketServer = new SocketServer();
+            webSocketServer = new WebSocketServer();
         }
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
