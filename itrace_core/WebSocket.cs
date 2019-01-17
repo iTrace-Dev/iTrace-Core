@@ -10,17 +10,14 @@ namespace iTrace_Core
 {
     class WebSocket
     {
-        //TcpListener server;
         TcpClient client;
         NetworkStream stream;
 
         byte[] mask = new byte[4] { 16, 68, 42, 10 };
 
         public bool Connected { get; private set; }
-
-        public WebSocket()
-        {
-        }
+        
+        public WebSocket() { }
 
         public void WaitForConnection(string address, int port)
         {
@@ -82,7 +79,7 @@ namespace iTrace_Core
             {
                 return false;
             }
-        }
+        }   
 
         public void SendMessage(string message)
         {
