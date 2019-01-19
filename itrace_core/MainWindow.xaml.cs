@@ -82,6 +82,7 @@ namespace iTrace_Core
             else
             {
                 socketServer.SendSessionData(SessionManager.GetInstance());
+                webSocketServer.SendSessionData(SessionManager.GetInstance());
 
 				//Name of .avi hardcoded for now
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
