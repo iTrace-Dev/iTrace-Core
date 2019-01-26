@@ -15,6 +15,7 @@ namespace iTrace_Core
         ReticleController reticleController;
         SocketServer socketServer;
         WebSocketServer webSocketServer;
+        XMLGazeDataWriter xmlGazeDataWriter;
 
         public MainWindow()
         {
@@ -25,6 +26,7 @@ namespace iTrace_Core
 
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
+            xmlGazeDataWriter = new XMLGazeDataWriter();
         }
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
@@ -78,9 +80,11 @@ namespace iTrace_Core
                 {
                     rec.Dispose();
                 }
+                xmlGazeDataWriter.StopWriting();
             }
             else
             {
+                xmlGazeDataWriter.StartWriting(ConfigurationRegistry.Instance.AssignFromConfiguration("xml_output_filename", "out.xml"));
                 socketServer.SendSessionData(SessionManager.GetInstance());
                 webSocketServer.SendSessionData(SessionManager.GetInstance());
 
