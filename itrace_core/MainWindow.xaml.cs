@@ -47,6 +47,13 @@ namespace iTrace_Core
         private void MenuExitClick(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine("EXIT!");
+
+            if(xmlGazeDataWriter.Writing)
+            {
+                xmlGazeDataWriter.StopWriting();
+            }
+
+            Close();
         }
 
         private void TrackerListChanged(object sender, SelectionChangedEventArgs e)
