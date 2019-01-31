@@ -102,8 +102,10 @@ namespace iTrace_Core
             while (!gazeData.Contains("<ACK ID=\"ENABLE_SEND_DATA\" STATE=\"0\" />"))
             {
                 gazeData = Reader.ReadLine();
-                //Console.WriteLine(gazeData);
-                GazeHandler.Instance.EnqueueGaze(new GazepointGazeData(gazeData));
+                if (!gazeData.Contains("<ACK ID=\"ENABLE_SEND_DATA\" STATE=\"1\" />"))
+                {
+                    GazeHandler.Instance.EnqueueGaze(new GazepointGazeData(gazeData));
+                }
             }
         }
     }
