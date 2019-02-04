@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Windows;
 using System.Xml;
+using System.Threading;
 
 namespace iTrace_Core
 {
@@ -13,6 +14,8 @@ namespace iTrace_Core
     {
         public bool Writing { get; private set; }
         XmlTextWriter xmlTextWriter;
+        Mutex mutex = new Mutex();  // Prevents gaze data from being written to file when xml file has been closed. 
+        
 
         public XMLGazeDataWriter()
         {
@@ -92,6 +95,8 @@ namespace iTrace_Core
 
         public void StopWriting()
         {
+            mutex.WaitOne();
+
             xmlTextWriter.WriteEndElement();
             xmlTextWriter.WriteEndDocument();
 
@@ -99,14 +104,20 @@ namespace iTrace_Core
             xmlTextWriter.Dispose();
 
             Writing = false;
+
+            mutex.ReleaseMutex();
         }
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if(Writing)
+            mutex.WaitOne();
+
+            if (Writing)
             {
                 WriteGaze(e.ReceivedGazeData);
             }
+
+            mutex.ReleaseMutex();
         }
     }
 }
