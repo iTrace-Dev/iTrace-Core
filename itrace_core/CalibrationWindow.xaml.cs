@@ -36,8 +36,8 @@ namespace iTrace_Core
         private const int shrunkenReticleRadius = 1;
         private const int beginningGrownReticleSize = 20;
 
-        private const double horizontalMargin = 200.0;
-        private const double verticalMargin = 200.0;
+        private const double horizontalMargin = 150.0;
+        private const double verticalMargin = 150.0;
 
         private readonly TimeSpan closeCountDownTimeSpan = new TimeSpan(0, 0, 5);
 
@@ -131,16 +131,21 @@ namespace iTrace_Core
         private void GenerateTargets()
         {
             double horizontalGap = (this.ActualWidth - (2.0 * horizontalMargin)) / 2.0;
-            double verticalGap = (this.ActualHeight - (2.0 * verticalMargin));
+            double verticalGap = (this.ActualHeight - (2.0 * verticalMargin)) / 2.0;
 
             targets = new Point[]
             {
                 new Point(horizontalMargin, verticalMargin),
                 new Point(horizontalMargin + horizontalGap, verticalMargin),
                 new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin),
+
                 new Point(horizontalMargin, verticalMargin + verticalGap),
                 new Point(horizontalMargin + horizontalGap, verticalMargin + verticalGap),
                 new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin + verticalGap),
+
+                new Point(horizontalMargin, verticalMargin + verticalGap + verticalGap),
+                new Point(horizontalMargin + horizontalGap, verticalMargin + verticalGap + verticalGap),
+                new Point(horizontalMargin + horizontalGap + horizontalGap, verticalMargin + verticalGap + verticalGap)
             };
 
             ShufflePointArray(targets);
