@@ -129,6 +129,9 @@
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>
+  <data name="SessionSetup" xml:space="preserve">
+    <value>Session Setup</value>
+  </data>
   <data name="ShowReticle" xml:space="preserve">
     <value>Show Reticle</value>
   </data>

@@ -97,6 +97,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Session Setup.
+        /// </summary>
+        public static string SessionSetup {
+            get {
+                return ResourceManager.GetString("SessionSetup", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Reticle.
         /// </summary>
         public static string ShowReticle {
