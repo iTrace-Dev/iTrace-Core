@@ -19,14 +19,16 @@ namespace iTrace_Core
         {
             try
             {
-                TrackerName = "GP3";
+                TrackerName = "GP3HD";
                 Client = new System.Net.Sockets.TcpClient();
                 Client.Connect(GAZEPOINT_ADDRESS, ServerPort);
                 Reader = new System.IO.StreamReader(Client.GetStream());
                 Writer = new System.IO.StreamWriter(Client.GetStream());
 
                 Writer.Write("<GET ID=\"PRODUCT_ID\" />\r\n"); Writer.Flush();
-                TrackerName = Reader.ReadLine();
+                System.Xml.XmlDocument gazePointData = new System.Xml.XmlDocument();
+                gazePointData.LoadXml(Reader.ReadLine());
+                TrackerName = gazePointData.DocumentElement.GetAttribute("VALUE");
 
                 TrackerInit();
             }
