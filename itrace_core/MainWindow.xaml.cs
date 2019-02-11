@@ -36,7 +36,10 @@ namespace iTrace_Core
 
         private void ApplicationClosed(object sender, EventArgs e)
         {
-            TrackerManager.StopTracker();
+            if (TrackerManager.Running())
+            {
+                TrackerManager.StopTracker();
+            }
         }
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
