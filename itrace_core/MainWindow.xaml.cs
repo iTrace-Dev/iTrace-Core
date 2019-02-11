@@ -16,6 +16,7 @@ namespace iTrace_Core
         SocketServer socketServer;
         WebSocketServer webSocketServer;
         XMLGazeDataWriter xmlGazeDataWriter;
+        SessionSetupWindow sessionInformation;
 
         public MainWindow()
         {
@@ -129,6 +130,13 @@ namespace iTrace_Core
                 reticleController.ShowReticle();
                 ActivateReticleButton.Content = Properties.Resources.HideReticle;
             }
+        }
+
+        private void SessionSetupButton_Click(object sender, RoutedEventArgs e)
+        {
+            // TODO: Need to pass data back and now allow unlimited session setup windows to be shown at once
+            sessionInformation = new SessionSetupWindow();
+            sessionInformation.Show();
         }
     }
 }
