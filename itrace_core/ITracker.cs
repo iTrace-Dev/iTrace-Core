@@ -13,5 +13,6 @@ namespace iTrace_Core
         void StartTracker();
         void StopTracker();
         String GetTrackerName();
+        void ShowEyeStatusWindow();
     }
 }

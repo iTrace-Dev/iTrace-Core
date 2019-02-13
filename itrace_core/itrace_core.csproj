@@ -85,11 +85,18 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="EyeStatusWindow.xaml.cs">
+      <DependentUpon>EyeStatusWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="SessionSetupWindow.xaml.cs">
       <DependentUpon>SessionSetupWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="XMLGazeDataWriter.cs" />
     <Page Include="CalibrationWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="EyeStatusWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -67,5 +67,7 @@ namespace iTrace_Core
             //Console.WriteLine(pt);
             GazeHandler.Instance.EnqueueGaze(new MouseTrackerGazeData(pt.X, pt.Y));
         }
+
+        public void ShowEyeStatusWindow() { }
     }
 }

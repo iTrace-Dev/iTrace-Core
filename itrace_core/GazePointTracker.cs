@@ -80,6 +80,17 @@ namespace iTrace_Core
         {
         }
 
+        public void ShowEyeStatusWindow()
+        {
+            //Todo: Make correct API call
+            
+            // Is it the following?
+            /*
+             * Writer.Write("<SET ID="TRACKER_DISPLAY" STATE ="1"/>");
+             * Writer.Flush();
+             */
+        }
+
         private void TrackerInit()
         {
             Console.WriteLine("INIT GAZEPOINT");

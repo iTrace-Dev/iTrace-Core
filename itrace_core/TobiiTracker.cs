@@ -83,5 +83,11 @@ namespace iTrace_Core
             */
             GazeHandler.Instance.EnqueueGaze(new TobiiGazeData(e));
         }
+
+        public void ShowEyeStatusWindow()
+        {
+            EyeStatusWindow eyeStatusWindow = new EyeStatusWindow();
+            eyeStatusWindow.Show();
+        }
     }
 }
