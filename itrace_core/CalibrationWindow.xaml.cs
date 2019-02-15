@@ -39,8 +39,6 @@ namespace iTrace_Core
         private const double horizontalMargin = 150.0;
         private const double verticalMargin = 150.0;
 
-        private readonly TimeSpan closeCountDownTimeSpan = new TimeSpan(0, 0, 5);
-
         private Point[] targets;
         private int currentTargetIndex;
 
