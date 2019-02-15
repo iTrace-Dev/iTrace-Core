@@ -1,11 +1,6 @@
-﻿using System;
-using System.Net;
-using System.Net.Sockets;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Collections.Concurrent;
+using System.Threading;
 
 namespace iTrace_Core
 {
@@ -36,7 +31,7 @@ namespace iTrace_Core
 
         void AcceptIncomingWebsocketConnections()
         {
-            while(true)
+            while (true)
             {
                 WebSocket ws = new WebSocket();
                 ws.WaitForConnection(localhostAddress, port);
@@ -48,14 +43,14 @@ namespace iTrace_Core
                 }).Start();
             }
         }
-        
+
         void SendToClients(string message)
         {
             //Todo: Remove disconnected clients
 
             //Accept queued clients
             WebSocket acceptedClient;
-            while(clientAcceptQueue.TryTake(out acceptedClient))
+            while (clientAcceptQueue.TryTake(out acceptedClient))
             {
                 clients.Add(acceptedClient);
             }

@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace iTrace_Core
+﻿namespace iTrace_Core
 {
     class ReticleController
     {
         private Reticle reticle;
         private bool shown;
-        
+
         public ReticleController()
         {
             reticle = new Reticle();

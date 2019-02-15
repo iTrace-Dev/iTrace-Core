@@ -1,12 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
-using System.IO;
+using System.Threading;
 using System.Windows;
 using System.Xml;
-using System.Threading;
 
 namespace iTrace_Core
 {
@@ -15,7 +11,7 @@ namespace iTrace_Core
         public bool Writing { get; private set; }
         XmlTextWriter xmlTextWriter;
         Mutex mutex = new Mutex();  // Prevents gaze data from being written to file when xml file has been closed. 
-        
+
 
         public XMLGazeDataWriter()
         {
@@ -73,7 +69,7 @@ namespace iTrace_Core
 
             xmlTextWriter.WriteAttributeString("x", gazeData.X.ToString());
             xmlTextWriter.WriteAttributeString("y", gazeData.Y.ToString());
-            
+
             xmlTextWriter.WriteAttributeString("left_x", gazeData.X.ToString());
             xmlTextWriter.WriteAttributeString("left_y", gazeData.Y.ToString());
 

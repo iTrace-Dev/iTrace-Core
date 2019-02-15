@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace iTrace_Core
 {
@@ -44,7 +41,8 @@ namespace iTrace_Core
             }
         }
 
-        public void SetActiveTracker(String trackerName) {
+        public void SetActiveTracker(String trackerName)
+        {
             foreach (ITracker tracker in EyeTrackers)
             {
                 if (tracker.GetTrackerName().Equals(trackerName))
@@ -72,7 +70,7 @@ namespace iTrace_Core
         }
 
         public Boolean StartTracker()
-        { 
+        {
             Tracking = true;
             GazeHandler.Instance.StartHandler();
             ActiveTracker.StartTracker();
