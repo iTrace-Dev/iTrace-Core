@@ -106,6 +106,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Show Eye Status.
+        /// </summary>
+        public static string ShowEyeStatus {
+            get {
+                return ResourceManager.GetString("ShowEyeStatus", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Show Reticle.
         /// </summary>
         public static string ShowReticle {
