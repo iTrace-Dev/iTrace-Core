@@ -309,6 +309,14 @@ namespace iTrace_Core
                 this.Close();
             }
         }
+
+        private void Window_MouseUp(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (pressKeyToClose)
+            {
+                this.Close();
+            }
+        }
     }
 
     public class CalibrationPointReachedEventArgs : EventArgs
