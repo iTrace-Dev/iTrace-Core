@@ -1,27 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using System.Numerics;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
+using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 
 namespace iTrace_Core
 {
-    /// <summary>
-    /// Interaction logic for EyeStatusWindow.xaml
-    /// </summary>
     public partial class EyeStatusWindow : Window
     {
+        string registeredLeftEyeName = "leftEyeCircle";
+        string registeredRightEyeName = "rightEyeCircle";
+
+        EllipseGeometry leftEyeCircle;
+        EllipseGeometry rightEyeCircle;
+
         public EyeStatusWindow()
         {
             InitializeComponent();
+        }
+
+        public void UpdateEyePosition(Vector3 leftEyePosition, Vector3 rightEyePosition)
+        {
+
         }
     }
 }
