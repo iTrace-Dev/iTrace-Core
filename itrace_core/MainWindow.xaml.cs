@@ -138,5 +138,10 @@ namespace iTrace_Core
             sessionInformation = new SessionSetupWindow();
             sessionInformation.Show();
         }
+
+        private void ShowEyeStatusWindow(object sender, RoutedEventArgs e)
+        {
+            TrackerManager.ShowEyeStatusWindow();
+        }
     }
 }

@@ -97,5 +97,11 @@ namespace iTrace_Core
             if (ActiveTracker != null)
                 ActiveTracker.EnterCalibration();
         }
+
+        public void ShowEyeStatusWindow()
+        {
+            if (ActiveTracker != null)
+                ActiveTracker.ShowEyeStatusWindow();
+        }
     }
 }
