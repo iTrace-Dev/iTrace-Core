@@ -9,8 +9,8 @@ namespace iTrace_Core
 {
     public partial class EyeStatusWindow : Window
     {
-        string registeredLeftEyeName = "leftEyeCircle";
-        string registeredRightEyeName = "rightEyeCircle";
+        const string registeredLeftEyeName = "leftEyeCircle";
+        const string registeredRightEyeName = "rightEyeCircle";
 
         EllipseGeometry leftEyeCircle;
         EllipseGeometry rightEyeCircle;
@@ -18,6 +18,26 @@ namespace iTrace_Core
         public EyeStatusWindow()
         {
             InitializeComponent();
+
+            leftEyeCircle = new EllipseGeometry(new Point(400,300), 20, 20);
+            rightEyeCircle = new EllipseGeometry(new Point(500, 300), 20, 20);
+
+            this.RegisterName(registeredLeftEyeName, leftEyeCircle);
+            this.RegisterName(registeredRightEyeName, rightEyeCircle);
+
+            Path leftEyePath = new Path();
+            leftEyePath.Fill = Brushes.White;
+            leftEyePath.Data = leftEyeCircle;
+
+            Path rightEyePath = new Path();
+            rightEyePath.Fill = Brushes.White;
+            rightEyePath.Data = rightEyeCircle;
+
+            Canvas containerCanvas = new Canvas();
+            containerCanvas.Background = Brushes.Black;
+            containerCanvas.Children.Add(leftEyePath);
+            containerCanvas.Children.Add(rightEyePath);
+            this.Content = containerCanvas;
         }
 
         public void UpdateEyePosition(Vector3 leftEyePosition, Vector3 rightEyePosition)
