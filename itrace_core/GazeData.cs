@@ -45,8 +45,36 @@ namespace iTrace_Core
             tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
             tobiiRawGaze.LeftEye.GazePoint.Validity;
 
-            X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.X);
-            Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Y);
+            bool isLeftEyeValid = tobiiRawGaze.LeftEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
+            bool isRightEyeValid = tobiiRawGaze.RightEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
+
+            if (isLeftEyeValid && isRightEyeValid)
+            {
+                float avgX = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X) / 2.0f;
+                float avgY = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y) / 2.0f;
+
+                X = Convert.ToInt32(avgX * Screen.PrimaryScreen.Bounds.Width);
+                Y = Convert.ToInt32(avgY * Screen.PrimaryScreen.Bounds.Height);
+            }
+            else if(isLeftEyeValid)
+            {
+                X = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
+                Y = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
+            }
+            else if(isRightEyeValid)
+            {
+                X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
+                Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
+            }
+            else
+            {
+                //Both eyes invalid.
+                //NaN can't be marked with an integer, should probably move to using a float
+
+                //Todo: probably store validity in GazeData
+                X = 0;
+                Y = 0;
+            }
 
             Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
         }
