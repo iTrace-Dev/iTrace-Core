@@ -19,7 +19,6 @@ namespace iTrace_Core
         {
             try
             {
-                TrackerName = "GP3HD";
                 Client = new System.Net.Sockets.TcpClient();
                 Client.Connect(GAZEPOINT_ADDRESS, ServerPort);
                 Reader = new System.IO.StreamReader(Client.GetStream());
@@ -71,41 +70,50 @@ namespace iTrace_Core
         public void EnterCalibration()
         {
             Console.WriteLine("ENTER CALIBRATION");
-            Writer.Write("<SET ID=\"CALIBRATE_SHOW\" STATE=\"1\" />\r\n");
-            Writer.Write("<SET ID=\"CALIBRATE_START\" STATE=\"1\" />\r\n");
-            Writer.Flush();
+            Writer.Write("<SET ID=\"CALIBRATE_SHOW\" STATE=\"1\" />\r\n");Writer.Flush();Reader.ReadLine();
+            Writer.Write("<SET ID=\"CALIBRATE_START\" STATE=\"1\" />\r\n"); Writer.Flush();Reader.ReadLine();
+
+            String calibrationData = "";
+            while (!calibrationData.Contains("ID=\"CALIB_RESULT\""))
+            {
+                calibrationData = Reader.ReadLine();
+            }
+
+            // Get complete calibration data
+            Console.WriteLine(calibrationData);
         }
 
-        public void LeaveCalibration()
-        {
-        }
+        public void LeaveCalibration() {}
 
         public void ShowEyeStatusWindow()
         {
-            //Todo: Make correct API call
-            
-            // Is it the following?
-            /*
-             * Writer.Write("<SET ID="TRACKER_DISPLAY" STATE ="1"/>");
-             * Writer.Flush();
-             */
+            Writer.Write("<SET ID=\"TRACKER_DISPLAY\" STATE=\"1\" />\r\n");
+            Writer.Flush();
+            Console.WriteLine(Reader.ReadLine());
         }
 
         private void TrackerInit()
         {
             Console.WriteLine("INIT GAZEPOINT");
+            
+            // Set gazepoint to default to the primary screen
+            Writer.Write("<SET ID=\"SCREEN_SIZE\" X=\"0\" Y=\"0\" WIDTH=\"{0}\" HEIGHT=\"{1}\" />\r\n", System.Windows.SystemParameters.PrimaryScreenWidth, System.Windows.SystemParameters.PrimaryScreenHeight); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
+
+            // Enable timing and counting for messages (recorded and data and debuging)
             Writer.Write("<SET ID=\"ENABLE_SEND_COUNTER\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_TIME\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_TIME_TICK\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<SET ID=\"ENABLE_SEND_POG_FIX\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
+
+            // Enable tracking Left and Right gazes
             Writer.Write("<SET ID=\"ENABLE_SEND_POG_LEFT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_POG_RIGHT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
+
+            // Enable tracking the best X Y gaze based on an average of Left and Right eyes
             Writer.Write("<SET ID=\"ENABLE_SEND_POG_BEST\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
+
+            // Enable pupil data for each eye
             Writer.Write("<SET ID=\"ENABLE_SEND_PUPIL_LEFT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_PUPIL_RIGHT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<SET ID=\"ENABLE_SEND_EYE_LEFT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<SET ID=\"ENABLE_SEND_EYE_RIGHT\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<SET ID=\"ENABLE_SEND_CURSOR\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
         }
 
         private void ListenForData()
@@ -115,7 +123,7 @@ namespace iTrace_Core
             while (!gazeData.Contains("<ACK ID=\"ENABLE_SEND_DATA\" STATE=\"0\" />"))
             {
                 gazeData = Reader.ReadLine();
-                if (!gazeData.Contains("<ACK ID=\"ENABLE_SEND_DATA\" STATE=\"1\" />"))
+                if (gazeData.Contains("<REC"))
                 {
                     GazeHandler.Instance.EnqueueGaze(new GazepointGazeData(gazeData));
                 }

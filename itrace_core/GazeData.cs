@@ -96,18 +96,18 @@ namespace iTrace_Core
         public GazepointGazeData(String gazePointRawGaze) : base()
         {
             foobar = gazePointRawGaze;
-            
+
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(gazePointRawGaze);
 
             XmlNode recNode = xmlDoc.FirstChild;
-            if(recNode.Attributes["BPOGX"] == null)
+            if (recNode.Attributes["BPOGX"] == null)
             {
                 X = 0;
                 Y = 0;
                 return;
             }
-            
+
             X = Convert.ToInt32(float.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
             Y = Convert.ToInt32(float.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
         }

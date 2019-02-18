@@ -66,6 +66,16 @@ namespace iTrace_Core
             {
                 System.Console.WriteLine(TrackerList.SelectedItem.ToString());
                 TrackerManager.SetActiveTracker(TrackerList.SelectedItem.ToString());
+                if (TrackerList.SelectedItem.ToString() == "Mouse")
+                {
+                    ActivateCalibrationButton.IsEnabled = false;
+                    ShowEyeStatusButton.IsEnabled = false;
+                }
+                else
+                {
+                    ActivateCalibrationButton.IsEnabled = true;
+                    ShowEyeStatusButton.IsEnabled = true;
+                }
             }
         }
 
@@ -76,9 +86,15 @@ namespace iTrace_Core
 
         private void RefreshTrackerList()
         {
-            TrackerList.SelectedIndex = -1;
             TrackerManager.FindTrackers();
             TrackerList.ItemsSource = TrackerManager.GetAttachedTrackers();
+
+            /* Default back to mouse tracker
+                Nearly all setups should have a pointing device installed meaning this prevents having
+                to perform additional UI checks to make sure the user can't start a tracking session
+                without a tracker.
+            */
+            TrackerList.SelectedIndex = 0;
         }
 
         private void StartTracker(object sender, RoutedEventArgs e)
@@ -92,6 +108,8 @@ namespace iTrace_Core
                     rec.Dispose();
                 }
                 xmlGazeDataWriter.StopWriting();
+                ActivateCalibrationButton.IsEnabled = true;
+                ShowEyeStatusButton.IsEnabled = true;
             }
             else
             {
@@ -107,6 +125,8 @@ namespace iTrace_Core
 				ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
                 TrackerManager.StartTracker();
+                ActivateCalibrationButton.IsEnabled = false;
+                ShowEyeStatusButton.IsEnabled = false;
             }
         }
 
@@ -134,7 +154,7 @@ namespace iTrace_Core
 
         private void SessionSetupButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Need to pass data back and now allow unlimited session setup windows to be shown at once
+            // TODO: Need to pass data back and not allow unlimited session setup windows to be shown at once
             sessionInformation = new SessionSetupWindow();
             sessionInformation.Show();
         }
