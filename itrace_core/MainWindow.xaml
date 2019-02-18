@@ -36,7 +36,7 @@
             <Button x:Name="ActivateCalibrationButton" Content="{x:Static p:Resources.Calibrate}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="CalibrateTracker" Canvas.Left="67" Canvas.Top="83"/>
             <Button x:Name="ActivateReticleButton" Content="{x:Static p:Resources.ShowReticle}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="333" Canvas.Top="83" RenderTransformOrigin="-0.042,1.488"/>
             <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Left" Margin="174,239,0,-230" Grid.Row="2" VerticalAlignment="Top" Width="204"/>
-            <Button x:Name="ShowEyeStatus" Content="{x:Static p:Resources.ShowEyeStatus}" HorizontalAlignment="Left" Height="23" Margin="334,125,0,-131" Grid.Row="2" VerticalAlignment="Top" Width="101" Click="ShowEyeStatusWindow"/>
+            <Button x:Name="ShowEyeStatusButton" Content="{x:Static p:Resources.ShowEyeStatus}" HorizontalAlignment="Left" Height="23" Margin="334,125,0,-131" Grid.Row="2" VerticalAlignment="Top" Width="101" Click="ShowEyeStatusWindow"/>
         </Canvas>
     </Grid>
 </Window>
