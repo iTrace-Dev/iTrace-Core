@@ -46,7 +46,13 @@ namespace iTrace_Core
 
         void SendToClients(string message)
         {
-            //Todo: Remove disconnected clients
+            for (int i = clients.Count - 1; i >= 0; --i)
+            {
+                if (!clients[i].Connected)
+                {
+                    clients.RemoveAt(i);
+                }
+            }
 
             //Accept queued clients
             WebSocket acceptedClient;
