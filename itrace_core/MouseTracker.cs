@@ -64,9 +64,9 @@ namespace iTrace_Core
         }
 
         //Should also be no-op, but currently implemented for testing. 
-        EyeStatusWindow s = new EyeStatusWindow();
         public void ShowEyeStatusWindow()
         {
+            EyeStatusWindow s = new EyeStatusWindow();
             s.Show();
         }
     }
