@@ -1,13 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Threading;
 
 namespace iTrace_Core
 {
-    class MouseTracker: ITracker
+    class MouseTracker : ITracker
     {
         private readonly String TRACKER_NAME = "Mouse";
         private const Double TIME_INTERVAL = 8.0; // 125 samples per second
@@ -54,12 +49,12 @@ namespace iTrace_Core
         private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
         {
             System.Windows.Point[] leftEye = new System.Windows.Point[0];
-            System.Windows.Point[] rightEye = new System.Windows.Point[0];
+            System.Windows.Point[] rightEye = new System.Windows.Point[0]; 
 
             calibrationWindow.ShowResultsAndClose(leftEye, rightEye);
         }
 
-        public void LeaveCalibration() {}
+        public void LeaveCalibration() { }
 
         private void MousePosition(object sender, EventArgs e)
         {
@@ -68,6 +63,11 @@ namespace iTrace_Core
             GazeHandler.Instance.EnqueueGaze(new MouseTrackerGazeData(pt.X, pt.Y));
         }
 
-        public void ShowEyeStatusWindow() { }
+        //Should also be no-op, but currently implemented for testing. 
+        EyeStatusWindow s = new EyeStatusWindow();
+        public void ShowEyeStatusWindow()
+        {
+            s.Show();
+        }
     }
 }
