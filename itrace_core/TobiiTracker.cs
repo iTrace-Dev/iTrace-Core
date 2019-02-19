@@ -78,7 +78,7 @@ namespace iTrace_Core
             Calibration.LeaveCalibrationMode();
         }
 
-        private static void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
+        private void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
         {
             /*
             Console.WriteLine("Left Eye: ({0},{1}) - Pupil: {2}({3}) - Z: {4} - {5}", e.LeftEye.GazePoint.PositionOnDisplayArea.X, e.LeftEye.GazePoint.PositionOnDisplayArea.Y,
@@ -87,6 +87,11 @@ namespace iTrace_Core
                 e.RightEye.Pupil.PupilDiameter, e.LeftEye.Pupil.Validity, e.RightEye.GazePoint.PositionInUserCoordinates.Z, e.RightEye.GazePoint.Validity);
             */
             GazeHandler.Instance.EnqueueGaze(new TobiiGazeData(e));
+
+            if(isEyeStatusOpen)
+            {
+                //Send necessary data to eye status window
+            }
         }
 
         public void ShowEyeStatusWindow()
