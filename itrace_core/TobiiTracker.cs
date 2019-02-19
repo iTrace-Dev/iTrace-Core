@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Windows;
 
 namespace iTrace_Core
@@ -10,9 +11,13 @@ namespace iTrace_Core
         private Tobii.Research.ScreenBasedCalibration Calibration;
         private CalibrationWindow calibrationWindow;
 
+        private EyeStatusWindow eyeStatusWindow;
+        private bool isEyeStatusOpen;
+
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
             TrackingDevice = foundDevice;
+            isEyeStatusOpen = false;
         }
 
         public String GetTrackerName()
@@ -86,8 +91,19 @@ namespace iTrace_Core
 
         public void ShowEyeStatusWindow()
         {
-            EyeStatusWindow eyeStatusWindow = new EyeStatusWindow();
-            eyeStatusWindow.Show();
+            if (!isEyeStatusOpen)
+            {
+                eyeStatusWindow = new EyeStatusWindow();
+
+                isEyeStatusOpen = true;
+
+                eyeStatusWindow.Closing += (object sender, CancelEventArgs e) =>
+                {
+                    isEyeStatusOpen = false;
+                };
+
+                eyeStatusWindow.Show();
+            }
         }
     }
 }
