@@ -9,7 +9,7 @@ namespace iTrace_Core
     class GazePointTracker : ITracker
     {
         private readonly String GAZEPOINT_ADDRESS = "127.0.0.1";
-        private readonly int ServerPort = 4242;
+        private readonly int GAZEPOINT_PORT = 4242;
         private System.Net.Sockets.TcpClient Client;
         private System.IO.StreamReader Reader;
         private System.IO.StreamWriter Writer;
@@ -20,7 +20,7 @@ namespace iTrace_Core
             try
             {
                 Client = new System.Net.Sockets.TcpClient();
-                Client.Connect(GAZEPOINT_ADDRESS, ServerPort);
+                Client.Connect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT);
                 Reader = new System.IO.StreamReader(Client.GetStream());
                 Writer = new System.IO.StreamWriter(Client.GetStream());
 
@@ -31,8 +31,14 @@ namespace iTrace_Core
 
                 TrackerInit();
             }
+            catch (System.Net.Sockets.SocketException e)
+            {
+                Console.WriteLine("Gaze Point not connected!");
+                Client = null;
+            }
             catch (Exception e)
             {
+                Console.WriteLine("Gaze Point Connection Failed!");
                 Console.WriteLine(e.ToString());
                 Client = null;
             }
