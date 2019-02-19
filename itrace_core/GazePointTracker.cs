@@ -107,7 +107,6 @@ namespace iTrace_Core
 
             // Enable timing and counting for messages (recorded and data and debuging)
             Writer.Write("<SET ID=\"ENABLE_SEND_COUNTER\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
-            Writer.Write("<SET ID=\"ENABLE_SEND_TIME\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_TIME_TICK\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
 
             // Enable tracking Left and Right gazes
