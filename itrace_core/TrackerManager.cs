@@ -83,7 +83,8 @@ namespace iTrace_Core
 
             if (ActiveTracker != null)
             {
-                GazeHandler.Instance.EnqueueGaze(new EmptyGazeData());
+                GazeData empty = null;
+                GazeHandler.Instance.EnqueueGaze(empty);
                 ActiveTracker.StopTracker();
             }
 

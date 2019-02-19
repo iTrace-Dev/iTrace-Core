@@ -35,7 +35,7 @@ namespace iTrace_Core
         private void DequeueGaze()
         {
             GazeData gd = GazeQueue.Take();
-            while (!gd.IsEmpty())
+            while (gd != null)
             {
                 if (OnGazeDataReceived != null)
                 {
