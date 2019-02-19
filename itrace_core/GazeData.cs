@@ -6,33 +6,63 @@ namespace iTrace_Core
 {
     public abstract class GazeData
     {
-        protected String foobar;
-
+        // Data sent to plugins
         public int X { get; protected set; }
         public int Y { get; protected set; }
 
-        public long Timestamp { get; protected set; }
+        // Data recorded for the right eye
+        public double RightX { get; protected set; }
+        public double RightY { get; protected set; }
+        public double RightPupil { get; protected set; }
+        public int RightValidation { get; protected set; }
+
+        // Data recorded for the left eye
+        public double LeftX { get; protected set; }
+        public double LeftY { get; protected set; }
+        public double LeftPupil { get; protected set; }
+        public int LeftValidation { get; protected set; }
+
+        // Used to synchronize data sent between tracker and plugin
+        public long EventTime { get; protected set; }
+
+        // Collected from the hardware tracker
+        public long TrackerTime { get; protected set; }
+
+        // General time for post processing
+        public long SystemTime { get; protected set; }
 
         public GazeData()
         {
             X = 0;
             Y = 0;
-            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-        }
 
-        public bool IsEmpty()
-        {
-            return foobar == "";
+            RightX = 0;
+            RightY = 0;
+            RightPupil = 0;
+            RightValidation = 0;
+
+            LeftX = 0;
+            LeftY = 0;
+            LeftPupil = 0;
+            LeftValidation = 0;
+
+            //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
+            EventTime = DateTime.UtcNow.Ticks;
+
+            //Should be decent enough resolution for post processing calculations
+            SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            TrackerTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
         public String Output()
         {
-            return foobar;
+            return "GAZE: (" + X + ", " + Y + ")";
         }
 
         public String Serialize()
         {
-            return "gaze," + Timestamp.ToString() + "," + X.ToString() + "," + Y.ToString() + "\n";
+            return "gaze," + EventTime.ToString() + "," + X.ToString() + "," + Y.ToString() + "\n";
         }
     }
 
@@ -40,18 +70,24 @@ namespace iTrace_Core
     {
         public TobiiGazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze) : base()
         {
-            //TODO
-            foobar = "Left: " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + " " + tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + " " +
-            tobiiRawGaze.LeftEye.Pupil.PupilDiameter + " " + tobiiRawGaze.LeftEye.Pupil.Validity + " " + tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z + " " +
-            tobiiRawGaze.LeftEye.GazePoint.Validity;
+            /* Useful Data (same applies to right eye):
+             *   tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X
+             *   tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y
+             *   tobiiRawGaze.LeftEye.Pupil.PupilDiameter
+             *   tobiiRawGaze.LeftEye.Pupil.Validity
+             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.X // Useful for eye status window
+             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y // Useful for eye status window
+             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z // Useful for eye status window
+             *   tobiiRawGaze.LeftEye.GazePoint.Validity;
+            */
 
             bool isLeftEyeValid = tobiiRawGaze.LeftEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
             bool isRightEyeValid = tobiiRawGaze.RightEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
 
             if (isLeftEyeValid && isRightEyeValid)
             {
-                float avgX = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X) / 2.0f;
-                float avgY = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y) / 2.0f;
+                double avgX = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X) / 2.0D;
+                double avgY = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y) / 2.0D;
 
                 X = Convert.ToInt32(avgX * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(avgY * Screen.PrimaryScreen.Bounds.Height);
@@ -76,7 +112,22 @@ namespace iTrace_Core
                 Y = 0;
             }
 
-            Timestamp = DateTimeOffset.UtcNow.ToUnixTimeSeconds();
+            RightX = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
+            RightY = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height;
+            RightPupil = tobiiRawGaze.RightEye.Pupil.PupilDiameter;
+            RightValidation = Convert.ToInt32(isRightEyeValid);
+
+            LeftX = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
+            LeftY = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height;
+            LeftPupil = tobiiRawGaze.LeftEye.Pupil.PupilDiameter;
+            LeftValidation = Convert.ToInt32(isLeftEyeValid);
+
+            //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
+            EventTime = DateTime.UtcNow.Ticks;
+
+            TrackerTime = tobiiRawGaze.DeviceTimeStamp;
+
+            SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 
@@ -84,8 +135,6 @@ namespace iTrace_Core
     {
         public MouseTrackerGazeData(int mousePosX, int mousePosY) : base()
         {
-            foobar = "Mouse: " + mousePosX + " " + mousePosY;
-
             X = mousePosX;
             Y = mousePosY;
         }
@@ -95,12 +144,11 @@ namespace iTrace_Core
     {
         public GazepointGazeData(String gazePointRawGaze) : base()
         {
-            foobar = gazePointRawGaze;
-
             XmlDocument xmlDoc = new XmlDocument();
             xmlDoc.LoadXml(gazePointRawGaze);
 
             XmlNode recNode = xmlDoc.FirstChild;
+
             if (recNode.Attributes["BPOGX"] == null)
             {
                 X = 0;
@@ -108,16 +156,25 @@ namespace iTrace_Core
                 return;
             }
 
-            X = Convert.ToInt32(float.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
-            Y = Convert.ToInt32(float.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
-        }
-    }
+            X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
+            Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
 
-    public class EmptyGazeData : GazeData
-    {
-        public EmptyGazeData() : base()
-        {
-            foobar = "";
+            RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            RightPupil = Double.Parse(recNode.Attributes["RPD"].Value);
+            RightValidation = Int32.Parse(recNode.Attributes["RPOGV"].Value);
+
+            LeftX = Double.Parse(recNode.Attributes["LPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            LeftPupil = Double.Parse(recNode.Attributes["LPD"].Value);
+            LeftValidation = Int32.Parse(recNode.Attributes["LPOGV"].Value);
+
+            //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
+            EventTime = DateTime.UtcNow.Ticks;
+
+            TrackerTime = Convert.ToInt64(recNode.Attributes["TIME_TICK"].Value);
+
+            SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 }
