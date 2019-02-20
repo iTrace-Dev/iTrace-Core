@@ -12,18 +12,12 @@ namespace iTrace_Core
         public string DataRootDir { get; private set; }
         
         // Timestamp generated at the start of each tracking session
-        public string CurrentSessionID { get; private set; }
-
-        // Calculated Paths
-        public string CurrentStudyDir { get; private set; }
-        public string CurrentSessionDir { get; private set; }
-        
+        public string CurrentSessionID { get; private set; }        
         public string CurrentCalibrationID { get; private set; }
         
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
 
-                
         private SessionManager() { }
 
         public static SessionManager GetInstance()
@@ -40,25 +34,16 @@ namespace iTrace_Core
             ResearcherName = researcher;
             ParticipantID = participant;
             DataRootDir = dataRoot;
-                
-            CurrentStudyDir = DataRootDir + "\\" + StudyName + "\\" + ParticipantID;
         }
 
         public void StartSession() 
         {
             CurrentSessionID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            CurrentSessionDir = CurrentStudyDir + "\\" + CurrentSessionID;
-
-            // Create path?
-            //
         }
 
         public void GenerateCalibrationID()
         {
             CurrentCalibrationID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
-
-            // Create the path?
-            //
         }
     }
 }

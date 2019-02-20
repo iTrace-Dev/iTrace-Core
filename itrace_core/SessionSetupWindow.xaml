@@ -9,19 +9,20 @@
     <Grid>
         <Canvas HorizontalAlignment="Left" Height="450"  Width="450" Margin="0,0,0,0" VerticalAlignment="Top">
             <Label Content="Study Name" Canvas.Left="23" Canvas.Top="58" Width="103"/>
-            <TextBox x:Name="SessionSetupStudyName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="62" Width="172"/>
+            <TextBox x:Name="StudyName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="62" Width="172"/>
 
             <Label Content="Researcher Name" Canvas.Left="23" Canvas.Top="111"/>
-            <TextBox x:Name="SessionSetupResearcherName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="115" Width="172"/>
+            <TextBox x:Name="ResearcherName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="115" Width="172"/>
 
             <Label Content="Participant ID" Canvas.Left="23" Canvas.Top="168" Width="103"/>
-            <TextBox x:Name="SessionSetupParticipantID" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="172" Width="172"/>
+            <TextBox x:Name="ParticipantID" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="172" Width="172"/>
 
             <Label Content="Data Directory" Canvas.Left="23" Canvas.Top="228" Height="27" Width="103"/>
-            <TextBox x:Name="SessionSetupDataOutputDir" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="232" Width="172"/>
-            <Button x:Name="SessionSetupDirectoryBrowseButton" Content="Browse" Canvas.Left="313" Canvas.Top="234" Width="75"/>
+            <TextBox x:Name="DataOutputDir" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="232" Width="172"/>
+            <Button x:Name="DirectoryBrowseButton" Content="Browse" Canvas.Left="313" Canvas.Top="234" Width="75" Click="DirectoryBrowseButton_Click"/>
 
-            <Button x:Name="SessionSetupSaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="184" Canvas.Top="314"/>
+            <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="195" Canvas.Top="303" Click="SaveButton_Click"/>
+            <Button x:Name="ClearButton" Content="Clear" Canvas.Left="196" Canvas.Top="368" Width="75" Click="ClearButton_Click"/>
 
         </Canvas>
     </Grid>
