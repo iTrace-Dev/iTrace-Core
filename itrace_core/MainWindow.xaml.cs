@@ -35,11 +35,17 @@ namespace iTrace_Core
             RefreshTrackerList();
         }
 
+        // Cleanup for when core closes
         private void ApplicationClosed(object sender, EventArgs e)
         {
             if (TrackerManager.Running())
             {
                 TrackerManager.StopTracker();
+            }
+
+            if (sessionInformation.IsLoaded)
+            {
+                sessionInformation.Close();
             }
         }
 
@@ -154,8 +160,12 @@ namespace iTrace_Core
 
         private void SessionSetupButton_Click(object sender, RoutedEventArgs e)
         {
-            // TODO: Need to pass data back and not allow unlimited session setup windows to be shown at once
-            sessionInformation = new SessionSetupWindow();
+            // Short circuit evaluation
+            //  Before first use it will be null second time around it is unloaded
+            if (sessionInformation == null || !sessionInformation.IsLoaded)
+            {
+                sessionInformation = new SessionSetupWindow();
+            }
             sessionInformation.Show();
         }
 
