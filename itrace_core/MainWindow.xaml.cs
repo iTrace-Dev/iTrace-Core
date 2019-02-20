@@ -165,8 +165,16 @@ namespace iTrace_Core
             if (sessionInformation == null || !sessionInformation.IsLoaded)
             {
                 sessionInformation = new SessionSetupWindow();
+                sessionInformation.Show();
             }
-            sessionInformation.Show();
+            if (sessionInformation.WindowState == WindowState.Minimized)
+            {
+                sessionInformation.WindowState = WindowState.Normal;
+            }
+            if (sessionInformation.IsLoaded)
+            {
+                sessionInformation.Activate();
+            }
         }
 
         private void ShowEyeStatusWindow(object sender, RoutedEventArgs e)
