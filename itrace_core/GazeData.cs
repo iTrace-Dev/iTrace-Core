@@ -10,9 +10,6 @@ namespace iTrace_Core
         public int X { get; protected set; }
         public int Y { get; protected set; }
 
-        //Whether aforementioned X and Y are valid
-        public bool Valid { get; protected set; }
-
         // Data recorded for the right eye
         public double RightX { get; protected set; }
         public double RightY { get; protected set; }
@@ -67,6 +64,13 @@ namespace iTrace_Core
         {
             return "gaze," + EventTime.ToString() + "," + X.ToString() + "," + Y.ToString() + "\n";
         }
+
+        // Compute validity based on tracker data
+        //   If either of the points are valid, take them
+        public bool IsValid()
+        {
+            return Convert.ToBoolean(RightValidation) || Convert.ToBoolean(LeftValidation);
+        }
     }
 
     public class TobiiGazeData : GazeData
@@ -95,28 +99,22 @@ namespace iTrace_Core
                 X = Convert.ToInt32(avgX * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(avgY * Screen.PrimaryScreen.Bounds.Height);
 
-                Valid = true;
             }
             else if(isLeftEyeValid)
             {
                 X = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
-
-                Valid = true;
             }
             else if(isRightEyeValid)
             {
                 X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
-
-                Valid = true;
             }
             else
             {
                 //Both eyes invalid.
                 X = 0;
                 Y = 0;
-                Valid = false;
             }
 
             RightX = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
@@ -145,12 +143,24 @@ namespace iTrace_Core
             X = mousePosX;
             Y = mousePosY;
 
-            Valid = false;
+            // Same values as X and Y
+            RightX = mousePosX;
+            RightY = mousePosY;
+            LeftX = mousePosX;
+            LeftY = mousePosY;
+
+            // Points are always valid (they just might not be within a plugin compatible window)
+            RightValidation = 1;
+            LeftValidation = 1;
         }
     }
 
     public class GazepointGazeData : GazeData
     {
+        // Since we rely on the BPOG for client data, we might want to simply use
+        //  the validity of that point as determined by the GazePoint API
+        public int BestPOGValidation { get; protected set; }
+
         public GazepointGazeData(String gazePointRawGaze) : base()
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -162,15 +172,12 @@ namespace iTrace_Core
             {
                 X = 0;
                 Y = 0;
-
-                Valid = false;
                 return;
             }
 
             X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
             Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
-
-            Valid = true;
+            BestPOGValidation = Convert.ToInt32(recNode.Attributes["BPOGV"].Value);
 
             RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
             RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
@@ -188,6 +195,14 @@ namespace iTrace_Core
             TrackerTime = Convert.ToInt64(recNode.Attributes["TIME_TICK"].Value);
 
             SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+
+            Console.WriteLine("RV: {0}  LV: {1}  BV: {0}", RightValidation, LeftValidation, BestPOGValidation);
+        }
+
+        // Override the base class method
+        new public bool IsValid()
+        {
+            return Convert.ToBoolean(BestPOGValidation);
         }
     }
 }
