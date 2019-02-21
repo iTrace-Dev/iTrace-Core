@@ -1,15 +1,20 @@
-﻿namespace iTrace_Core
+﻿using System.Threading;
+
+namespace iTrace_Core
 {
     class ReticleController
     {
         private Reticle reticle;
         private bool shown;
+        private bool closed;
+        Mutex mutex = new Mutex();
 
         public ReticleController()
         {
             reticle = new Reticle();
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
             shown = false;
+            closed = false;
         }
 
         public void ShowReticle()
@@ -31,10 +36,27 @@
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.IsValid())
+            mutex.WaitOne();
+
+            if (e.ReceivedGazeData.IsValid() && !closed)
             {
                 reticle.UpdateReticle(e.ReceivedGazeData.X, e.ReceivedGazeData.Y);
             }
+
+            mutex.ReleaseMutex();
+        }
+
+        public void Close()
+        {
+            closed = true;
+            reticle.CompleteEvents();
+
+            mutex.WaitOne();
+
+            reticle.CompleteEvents();
+            reticle.Close();
+
+            mutex.ReleaseMutex();
         }
     }
 }

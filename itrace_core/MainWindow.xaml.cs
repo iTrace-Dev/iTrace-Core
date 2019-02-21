@@ -47,6 +47,9 @@ namespace iTrace_Core
             {
                 sessionInformation.Close();
             }
+
+            if (reticleController != null)
+                reticleController.Close();
         }
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)

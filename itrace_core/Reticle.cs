@@ -1,9 +1,9 @@
-﻿using System.Linq;
+﻿using System;
 using System.Collections.Generic;
 using System.Drawing;
-using System.Windows.Forms;
-using System;
+using System.Linq;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace iTrace_Core
 {
@@ -34,7 +34,7 @@ namespace iTrace_Core
             totalX = 0;
             totalY = 0;
             display = false;
-            newPos = new Point(0, 0);            
+            newPos = new Point(0, 0);
 
             TopMost = true;
             ShowInTaskbar = false;
@@ -116,6 +116,11 @@ namespace iTrace_Core
                     Location = newPos;
                 });
             }
+        }
+
+        public void CompleteEvents()
+        {
+            Application.DoEvents();
         }
     }
 }
