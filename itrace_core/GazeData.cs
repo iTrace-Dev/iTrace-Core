@@ -157,10 +157,6 @@ namespace iTrace_Core
 
     public class GazepointGazeData : GazeData
     {
-        // Since we rely on the BPOG for client data, we might want to simply use
-        //  the validity of that point as determined by the GazePoint API
-        public int BestPOGValidation { get; protected set; }
-
         public GazepointGazeData(String gazePointRawGaze) : base()
         {
             XmlDocument xmlDoc = new XmlDocument();
@@ -177,7 +173,6 @@ namespace iTrace_Core
 
             X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
             Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
-            BestPOGValidation = Convert.ToInt32(recNode.Attributes["BPOGV"].Value);
 
             RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
             RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
@@ -195,14 +190,6 @@ namespace iTrace_Core
             TrackerTime = Convert.ToInt64(recNode.Attributes["TIME_TICK"].Value);
 
             SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
-
-            Console.WriteLine("RV: {0}  LV: {1}  BV: {0}", RightValidation, LeftValidation, BestPOGValidation);
-        }
-
-        // Override the base class method
-        new public bool IsValid()
-        {
-            return Convert.ToBoolean(BestPOGValidation);
         }
     }
 }
