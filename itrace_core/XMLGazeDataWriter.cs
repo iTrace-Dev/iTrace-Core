@@ -12,7 +12,6 @@ namespace iTrace_Core
         XmlTextWriter xmlTextWriter;
         Mutex mutex = new Mutex();  // Prevents gaze data from being written to file when xml file has been closed. 
 
-
         public XMLGazeDataWriter()
         {
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
@@ -63,28 +62,26 @@ namespace iTrace_Core
 
         private void WriteGaze(GazeData gazeData)
         {
-            //TODO: GazeData needs to be expanded to contain information for all the attributes
-
             xmlTextWriter.WriteStartElement("response");
 
             xmlTextWriter.WriteAttributeString("x", gazeData.X.ToString());
             xmlTextWriter.WriteAttributeString("y", gazeData.Y.ToString());
 
-            xmlTextWriter.WriteAttributeString("left_x", gazeData.X.ToString());
-            xmlTextWriter.WriteAttributeString("left_y", gazeData.Y.ToString());
+            xmlTextWriter.WriteAttributeString("left_x", gazeData.LeftX.ToString());
+            xmlTextWriter.WriteAttributeString("left_y", gazeData.LeftY.ToString());
 
-            xmlTextWriter.WriteAttributeString("left_pupil_diameter", "0");
-            xmlTextWriter.WriteAttributeString("left_validation", "1");
+            xmlTextWriter.WriteAttributeString("left_pupil_diameter", gazeData.LeftPupil.ToString());
+            xmlTextWriter.WriteAttributeString("left_validation", gazeData.LeftValidation.ToString());
 
-            xmlTextWriter.WriteAttributeString("right_x", gazeData.X.ToString());
-            xmlTextWriter.WriteAttributeString("right_y", gazeData.Y.ToString());
+            xmlTextWriter.WriteAttributeString("right_x", gazeData.RightX.ToString());
+            xmlTextWriter.WriteAttributeString("right_y", gazeData.RightY.ToString());
 
-            xmlTextWriter.WriteAttributeString("right_pupil_diameter", "0");
-            xmlTextWriter.WriteAttributeString("right_validation", "1");
+            xmlTextWriter.WriteAttributeString("right_pupil_diameter", gazeData.RightPupil.ToString());
+            xmlTextWriter.WriteAttributeString("right_validation", gazeData.RightValidation.ToString());
 
-            xmlTextWriter.WriteAttributeString("tracker_time", "0");
-            xmlTextWriter.WriteAttributeString("system_time", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
-            xmlTextWriter.WriteAttributeString("event_time", DateTimeOffset.UtcNow.ToUnixTimeMilliseconds().ToString());    // No nanoseconds in c#
+            xmlTextWriter.WriteAttributeString("tracker_time", gazeData.TrackerTime.ToString());
+            xmlTextWriter.WriteAttributeString("system_time", gazeData.SystemTime.ToString());
+            xmlTextWriter.WriteAttributeString("event_time", gazeData.EventTime.ToString());
 
             xmlTextWriter.WriteEndElement();
         }
