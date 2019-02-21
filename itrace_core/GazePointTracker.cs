@@ -123,7 +123,6 @@ namespace iTrace_Core
 
         private void ListenForData()
         {
-            Console.WriteLine("LISTEN!");
             String gazeData = "";
             while (!gazeData.Contains("<ACK ID=\"ENABLE_SEND_DATA\" STATE=\"0\" />"))
             {
