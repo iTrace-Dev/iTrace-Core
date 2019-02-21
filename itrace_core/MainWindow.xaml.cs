@@ -43,7 +43,7 @@ namespace iTrace_Core
                 TrackerManager.StopTracker();
             }
 
-            if (sessionInformation.IsLoaded)
+            if (sessionInformation != null && sessionInformation.IsLoaded)
             {
                 sessionInformation.Close();
             }
