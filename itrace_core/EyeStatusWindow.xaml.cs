@@ -42,28 +42,27 @@ namespace iTrace_Core
             this.Content = containerCanvas;
         }
 
-        Vector4 HomogeneousTransform(Vector4 vec, Matrix4x4 mat)
+        Vector3 HomogeneousTo3D(Vector4 vec)
         {
-            Vector4 result = Vector4.Transform(vec, mat);
+            Vector3 result;
 
-            result.X = result.X / result.W;
-            result.Y = result.Y / result.W;
-            result.Z = result.Z / result.W;
+            result.X = vec.X / vec.W;
+            result.Y = vec.Y / vec.W;
+            result.Z = vec.Z / vec.W;
 
             return result;
         }
 
         public void UpdateEyePosition(Vector3 leftEyePosition, Vector3 rightEyePosition)
         {
-            Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, 1);
-            Vector4 rightEyeHomogeneous = new Vector4(rightEyePosition, 1);
-            Matrix4x4 projectionMatrix = Matrix4x4.CreatePerspectiveFieldOfView(Convert.ToSingle(Math.PI / 8), 16.0f / 9.0f, 1, 1000);
+            Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, leftEyePosition.Z / 10);
+            Vector4 rightEyeHomogeneous = new Vector4(rightEyePosition, rightEyePosition.Z / 10);
 
-            Vector4 leftEyeProjected = HomogeneousTransform(leftEyeHomogeneous, projectionMatrix);
-            Vector4 rightEyeProjected = HomogeneousTransform(rightEyeHomogeneous, projectionMatrix);
+            Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
+            Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
 
-            leftEyeCircle.Center = new Point(leftEyeProjected.X + 400, leftEyeProjected.Y + 400);
-            rightEyeCircle.Center = new Point(rightEyeProjected.X + 400, rightEyeProjected.Y + 400);
+            leftEyeCircle.Center = new Point(leftEyeProjected.X + (Width / 2), leftEyeProjected.Y + (Height / 2));
+            rightEyeCircle.Center = new Point(rightEyeProjected.X + (Width / 2), rightEyeProjected.Y + (Height / 2));
         }
 
         //Temporary for testing
