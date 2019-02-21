@@ -79,7 +79,7 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.Valid)
+            if (e.ReceivedGazeData.IsValid())
             {
                 SendToClients(e.ReceivedGazeData.Serialize());
             }

@@ -31,7 +31,7 @@
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.Valid)
+            if (e.ReceivedGazeData.IsValid())
             {
                 reticle.UpdateReticle(e.ReceivedGazeData.X, e.ReceivedGazeData.Y);
             }
