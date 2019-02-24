@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.IO;
 using System.Windows;
 using System.Xml;
 
@@ -9,6 +8,15 @@ namespace iTrace_Core
     {
         public abstract List<Point> GetLeftEyePoints();
         public abstract List<Point> GetRightEyePoints();
+        public abstract bool Empty();
+    }
+
+    class EmptyCalibrationResult : CalibrationResult
+    {
+        public override bool Empty() { return true; }
+
+        public override List<Point> GetLeftEyePoints() { return new List<Point>(); }
+        public override List<Point> GetRightEyePoints() { return new List<Point>(); }
     }
 
     class TobiiCalibrationResult : CalibrationResult
@@ -23,6 +31,8 @@ namespace iTrace_Core
             this.calibrationScreenWidth = calibrationScreenWidth;
             this.calibrationScreenHeight = calibrationScreenHeight;
         }
+
+        public override bool Empty() { return false; }
 
         public override List<Point> GetLeftEyePoints()
         {
@@ -82,7 +92,7 @@ namespace iTrace_Core
                     writer.WriteStartElement("point");
                     writer.WriteAttributeString("x", calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.X.ToString());
                     writer.WriteAttributeString("y", calibrationResult.CalibrationPoints[i].PositionOnDisplayArea.Y.ToString());
-                    
+
                     for (int j = 0; j < calibrationResult.CalibrationPoints[i].CalibrationSamples.Count; ++j)
                     {
                         Tobii.Research.CalibrationSample calibrationSample = calibrationResult.CalibrationPoints[i].CalibrationSamples[j];
