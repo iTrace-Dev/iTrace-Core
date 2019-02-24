@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Configuration;
 using System.Windows.Controls;
+using System.Collections.Generic;
 
 namespace iTrace_Core
 {
@@ -17,6 +18,15 @@ namespace iTrace_Core
         WebSocketServer webSocketServer;
         XMLGazeDataWriter xmlGazeDataWriter;
         SessionSetupWindow sessionInformation;
+        List<Setting> settings;
+
+        class Setting
+        {
+            public string Option { get; set; }
+            public string Value { get; set; }
+        }
+
+        List<string> options = new List<string> { "socket_port", "websocket_port", "xml_output_filename" };
 
         public MainWindow()
         {
@@ -28,11 +38,33 @@ namespace iTrace_Core
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
             xmlGazeDataWriter = new XMLGazeDataWriter();
+
+            InitializeSettingsGrid();
         }
 
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
+        }
+
+        private void InitializeSettingsGrid()
+        {
+            settings = new List<Setting>();
+
+            foreach(string s in options)
+            {
+                settings.Add(new Setting { Option = s, Value = ConfigurationRegistry.Instance.AssignFromConfiguration(s, "") });
+            }
+
+            settingsDataGrid.ItemsSource = settings;
+        }
+
+        private void ApplySettings(object sender, RoutedEventArgs e)
+        {
+            foreach(Setting s in settings)
+            {
+                ConfigurationRegistry.Instance.WriteConfiguration(s.Option, s.Value);
+            }
         }
 
         // Cleanup for when core closes
