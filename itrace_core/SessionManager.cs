@@ -18,6 +18,8 @@ namespace iTrace_Core
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
 
+        public CalibrationResult lastCalibration { get; private set; }
+
         private SessionManager() { }
 
         public static SessionManager GetInstance()
@@ -34,6 +36,8 @@ namespace iTrace_Core
             ResearcherName = researcher;
             ParticipantID = participant;
             DataRootDir = dataRoot;
+
+            lastCalibration = new EmptyCalibrationResult();
         }
 
         public void StartSession() 
@@ -44,6 +48,11 @@ namespace iTrace_Core
         public void GenerateCalibrationID()
         {
             CurrentCalibrationID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
+        }
+
+        public void SetCalibration(CalibrationResult r)
+        {
+            lastCalibration = r;
         }
     }
 }
