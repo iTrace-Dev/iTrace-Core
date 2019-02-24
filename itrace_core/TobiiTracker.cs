@@ -84,7 +84,15 @@ namespace iTrace_Core
 
             if(isEyeStatusOpen)
             {
-                //Send necessary data to eye status window
+                System.Numerics.Vector3 leftEyePosition = new System.Numerics.Vector3(e.LeftEye.GazeOrigin.PositionInUserCoordinates.X,
+                                                                                      e.LeftEye.GazeOrigin.PositionInUserCoordinates.Y,
+                                                                                      e.LeftEye.GazeOrigin.PositionInUserCoordinates.Z);
+
+                System.Numerics.Vector3 rightEyePosition = new System.Numerics.Vector3(e.LeftEye.GazeOrigin.PositionInUserCoordinates.X,
+                                                                                       e.LeftEye.GazeOrigin.PositionInUserCoordinates.Y,
+                                                                                       e.LeftEye.GazeOrigin.PositionInUserCoordinates.Z);
+
+                eyeStatusWindow.UpdateEyePosition(leftEyePosition, rightEyePosition);
             }
         }
 
