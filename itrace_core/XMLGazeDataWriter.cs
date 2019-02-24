@@ -3,6 +3,7 @@ using System.Text;
 using System.Threading;
 using System.Windows;
 using System.Xml;
+using System.Collections.Generic;
 
 namespace iTrace_Core
 {
@@ -19,45 +20,48 @@ namespace iTrace_Core
 
         public void StartWriting(string filename)
         {
-            Writing = true;
             xmlTextWriter = new XmlTextWriter(filename, Encoding.UTF8);
-
             xmlTextWriter.Formatting = Formatting.Indented;
-
             xmlTextWriter.WriteStartDocument();
-            xmlTextWriter.WriteStartElement("core");
 
+            WriteSessionInformation();
             WriteEnvironment();
+            WriteCalibration();
+            WriteOpeningGazeTag();
+
+            Writing = true;
         }
 
+        private void WriteSessionInformation()
+        {
+            xmlTextWriter.WriteStartElement("itrace_core");
+
+            xmlTextWriter.WriteAttributeString("session_id", SessionManager.GetInstance().CurrentSessionID);
+            xmlTextWriter.WriteAttributeString("session_data_time", "[timestamp_milli]");                       // Todo: Complete this attribute
+            xmlTextWriter.WriteAttributeString("session_name", SessionManager.GetInstance().StudyName);
+            xmlTextWriter.WriteAttributeString("researcher", SessionManager.GetInstance().ResearcherName);
+            xmlTextWriter.WriteAttributeString("participant_id", SessionManager.GetInstance().ParticipantID);
+        }
+        
         private void WriteEnvironment()
         {
             xmlTextWriter.WriteStartElement("environment");
-
-            xmlTextWriter.WriteStartElement("screen-size");
-            xmlTextWriter.WriteAttributeString("width", SystemParameters.PrimaryScreenWidth.ToString());
-            xmlTextWriter.WriteAttributeString("height", SystemParameters.PrimaryScreenHeight.ToString());
-            xmlTextWriter.WriteEndElement();
-
-            xmlTextWriter.WriteStartElement("eye-tracker");
-            xmlTextWriter.WriteAttributeString("type", "mouse"); //TODO: Change to current tracker
-            xmlTextWriter.WriteEndElement();
-
-            xmlTextWriter.WriteStartElement("date");
-            xmlTextWriter.WriteValue(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            xmlTextWriter.WriteEndElement();
-
-            xmlTextWriter.WriteStartElement("time");
-            xmlTextWriter.WriteValue(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
-            xmlTextWriter.WriteEndElement();
-
-            xmlTextWriter.WriteStartElement("session");
-            xmlTextWriter.WriteAttributeString("id", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString());
-            xmlTextWriter.WriteEndElement();
-
-            //TODO: calibration id, study, researcher, participant, etc...
+            
+            xmlTextWriter.WriteAttributeString("screen_width", SessionManager.GetInstance().ScreenWidth.ToString());
+            xmlTextWriter.WriteAttributeString("session_height", SessionManager.GetInstance().ScreenHeight.ToString());
+            xmlTextWriter.WriteAttributeString("tracker_type", "mouse");             // Todo: Get tracker type
 
             xmlTextWriter.WriteEndElement();
+        }
+
+        private void WriteCalibration()
+        {
+            SessionManager.GetInstance().LastCalibration.WriteToXMLWriter(xmlTextWriter, "[timestamp_milli]"); // Todo: Assign timestamp
+        }
+
+        private void WriteOpeningGazeTag()
+        {
+            xmlTextWriter.WriteStartElement("gazes");
         }
 
         private void WriteGaze(GazeData gazeData)
@@ -90,7 +94,6 @@ namespace iTrace_Core
         {
             mutex.WaitOne();
 
-            xmlTextWriter.WriteEndElement();
             xmlTextWriter.WriteEndDocument();
 
             xmlTextWriter.Flush();

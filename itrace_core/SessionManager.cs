@@ -18,7 +18,7 @@ namespace iTrace_Core
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
 
-        public CalibrationResult lastCalibration { get; private set; }
+        public CalibrationResult LastCalibration { get; private set; }
 
         private SessionManager() { }
 
@@ -37,7 +37,7 @@ namespace iTrace_Core
             ParticipantID = participant;
             DataRootDir = dataRoot;
 
-            lastCalibration = new EmptyCalibrationResult();
+            LastCalibration = new EmptyCalibrationResult();
         }
 
         public void StartSession() 
@@ -52,7 +52,7 @@ namespace iTrace_Core
 
         public void SetCalibration(CalibrationResult r)
         {
-            lastCalibration = r;
+            LastCalibration = r;
         }
     }
 }

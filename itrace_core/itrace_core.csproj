@@ -139,7 +139,7 @@
     <Compile Include="WebSocket.cs" />
     <Compile Include="WebSocketServer.cs" />
     <Compile Include="SocketServer.cs" />
-    <Compile Include="TobiiCalibrationResults.cs" />
+    <Compile Include="CalibrationResult.cs" />
     <Compile Include="TobiiTracker.cs" />
     <Compile Include="TrackerManager.cs" />
     <Compile Include="ITracker.cs" />

@@ -57,7 +57,7 @@ namespace iTrace_Core
                 Console.WriteLine("Calibration failed!");
             }
 
-            calibrationResult.SaveResultsToXML();
+            SessionManager.GetInstance().SetCalibration(calibrationResult);
 
             Calibration.LeaveCalibrationMode();
 
