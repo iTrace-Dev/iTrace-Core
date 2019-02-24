@@ -50,18 +50,18 @@ namespace iTrace_Core
 
         private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
         {
-            TobiiCalibrationResults calibrationResults = new TobiiCalibrationResults(Calibration.ComputeAndApply(), calibrationWindow.ActualWidth, calibrationWindow.ActualHeight);
+            TobiiCalibrationResult calibrationResult = new TobiiCalibrationResult(Calibration.ComputeAndApply(), calibrationWindow.ActualWidth, calibrationWindow.ActualHeight);
 
-            if(calibrationResults.IsFailure())
+            if(calibrationResult.IsFailure())
             {
                 Console.WriteLine("Calibration failed!");
             }
 
-            calibrationResults.SaveResultsToXML();
+            calibrationResult.SaveResultsToXML();
 
             Calibration.LeaveCalibrationMode();
 
-            calibrationWindow.ShowResultsAndClose(calibrationResults.GetLeftEyePoints().ToArray(), calibrationResults.GetRightEyePoints().ToArray());
+            calibrationWindow.ShowResultsAndClose(calibrationResult.GetLeftEyePoints().ToArray(), calibrationResult.GetRightEyePoints().ToArray());
         }
 
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)

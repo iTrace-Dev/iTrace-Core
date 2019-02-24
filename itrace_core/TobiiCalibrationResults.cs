@@ -5,20 +5,26 @@ using System.Xml;
 
 namespace iTrace_Core
 {
-    class TobiiCalibrationResults
+    abstract class CalibrationResult
+    {
+        public abstract List<Point> GetLeftEyePoints();
+        public abstract List<Point> GetRightEyePoints();
+    }
+
+    class TobiiCalibrationResult : CalibrationResult
     {
         private Tobii.Research.CalibrationResult calibrationResult;
         private double calibrationScreenWidth;
         private double calibrationScreenHeight;
 
-        public TobiiCalibrationResults(Tobii.Research.CalibrationResult calibrationResult, double calibrationScreenWidth, double calibrationScreenHeight)
+        public TobiiCalibrationResult(Tobii.Research.CalibrationResult calibrationResult, double calibrationScreenWidth, double calibrationScreenHeight)
         {
             this.calibrationResult = calibrationResult;
             this.calibrationScreenWidth = calibrationScreenWidth;
             this.calibrationScreenHeight = calibrationScreenHeight;
         }
 
-        public List<Point> GetLeftEyePoints()
+        public override List<Point> GetLeftEyePoints()
         {
             List<Point> leftEyePoints = new List<Point>();
 
@@ -36,7 +42,7 @@ namespace iTrace_Core
             return leftEyePoints;
         }
 
-        public List<Point> GetRightEyePoints()
+        public override List<Point> GetRightEyePoints()
         {
             List<Point> rightEyePoints = new List<Point>();
 
