@@ -43,7 +43,7 @@
             </TabItem>
 
             <TabItem Header="Settings">
-                <DataGrid Margin="118,0,132,0">
+                <DataGrid Margin="118,0,132,0" Name="settingsDataGrid">
                     <DataGrid.Columns>
                         <DataGridTextColumn Width="1*" Header="Option"/>
                         <DataGridTextColumn Width="1*" Header="Value"/>
