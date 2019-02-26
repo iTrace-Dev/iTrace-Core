@@ -80,13 +80,15 @@ namespace iTrace_Core
             Writer.Write("<SET ID=\"CALIBRATE_START\" STATE=\"1\" />\r\n"); Writer.Flush();Reader.ReadLine();
 
             String calibrationData = "";
+            int calibrationPointCount = 0;
             while (!calibrationData.Contains("ID=\"CALIB_RESULT\""))
             {
                 calibrationData = Reader.ReadLine();
+                ++calibrationPointCount;
             }
 
             // Get complete calibration data
-            Console.WriteLine(calibrationData);
+            Console.WriteLine(calibrationData + "\r\nCAL POINTS:" + (calibrationPointCount - 1) / 2);
         }
 
         public void LeaveCalibration() {}

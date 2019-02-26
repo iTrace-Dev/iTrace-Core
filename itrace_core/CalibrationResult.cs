@@ -104,4 +104,51 @@ namespace iTrace_Core
             xmlTextWriter.WriteEndElement();
         }
     }
+
+    class GazePointCalibrationResult : CalibrationResult
+    {
+
+        XmlDocument XmlDoc = null;
+        int CalibrationPointCount = 0;
+
+        public GazePointCalibrationResult(string xmlCalibrationData, int numberOfPoints)
+        {
+            CalibrationPointCount = numberOfPoints;
+            XmlDoc = new XmlDocument();
+            XmlDoc.LoadXml(xmlCalibrationData);
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter, string timestamp)
+        {
+            XmlNode recNode = XmlDoc.FirstChild;
+
+            xmlTextWriter.WriteStartElement("calibration");
+            xmlTextWriter.WriteAttributeString("timestamp", "[timestamp_milli]");
+
+            for (int i = 1; i <= CalibrationPointCount; ++i)
+            {
+                xmlTextWriter.WriteStartElement("calibration_point");
+                xmlTextWriter.WriteAttributeString("x", recNode.Attributes["CALX" + i].Value);
+                xmlTextWriter.WriteAttributeString("y", recNode.Attributes["CALY" + i].Value);
+
+                xmlTextWriter.WriteStartElement("sample");
+
+                xmlTextWriter.WriteAttributeString("left_x", recNode.Attributes["LX" + i].Value);
+                xmlTextWriter.WriteAttributeString("left_y", recNode.Attributes["LY" + i].Value);
+                xmlTextWriter.WriteAttributeString("left_validity", recNode.Attributes["LV" + i].Value);
+
+                xmlTextWriter.WriteAttributeString("right_x", recNode.Attributes["RX" + i].Value);
+                xmlTextWriter.WriteAttributeString("right_y", recNode.Attributes["RY" + i].Value);
+                xmlTextWriter.WriteAttributeString("right_validity", recNode.Attributes["RV" + i].Value);
+
+                // Close Sample
+                xmlTextWriter.WriteEndElement();
+
+                // Close Calibration Point
+                xmlTextWriter.WriteEndElement();
+            }
+
+            xmlTextWriter.WriteEndElement();
+        }
+    }
 }
