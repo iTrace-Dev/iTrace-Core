@@ -175,12 +175,12 @@ namespace iTrace_Core
             Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
 
             RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
-            RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
             RightPupil = Double.Parse(recNode.Attributes["RPD"].Value);
             RightValidation = Int32.Parse(recNode.Attributes["RPOGV"].Value);
 
             LeftX = Double.Parse(recNode.Attributes["LPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
-            LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
             LeftPupil = Double.Parse(recNode.Attributes["LPD"].Value);
             LeftValidation = Int32.Parse(recNode.Attributes["LPOGV"].Value);
 
