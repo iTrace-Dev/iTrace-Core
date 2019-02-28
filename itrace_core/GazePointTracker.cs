@@ -117,7 +117,7 @@ namespace iTrace_Core
             // Set gazepoint to default to the primary screen
             Writer.Write("<SET ID=\"SCREEN_SIZE\" X=\"0\" Y=\"0\" WIDTH=\"{0}\" HEIGHT=\"{1}\" />\r\n", System.Windows.SystemParameters.PrimaryScreenWidth, System.Windows.SystemParameters.PrimaryScreenHeight); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
 
-            // Enable timing and counting for messages (recorded and data and debuging)
+            // Enable timing and counting for messages (recorded data and debuging)
             Writer.Write("<SET ID=\"ENABLE_SEND_COUNTER\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
             Writer.Write("<SET ID=\"ENABLE_SEND_TIME_TICK\" STATE=\"1\" />\r\n"); Writer.Flush(); Console.WriteLine(Reader.ReadLine());
 
