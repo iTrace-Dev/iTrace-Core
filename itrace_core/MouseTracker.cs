@@ -23,6 +23,12 @@ namespace iTrace_Core
             return TRACKER_NAME;
         }
 
+        public String GetSerialNumber()
+        {
+            // Not sure if this would even be useful for the mouse, but the Interface requires it
+            return "";
+        }
+
         public void StartTracker()
         {
             MouseLocationTick.Start();

@@ -9,6 +9,7 @@ namespace iTrace_Core
         void StartTracker();
         void StopTracker();
         String GetTrackerName();
+        String GetTrackerSerialNumber();
         void ShowEyeStatusWindow();
     }
 }

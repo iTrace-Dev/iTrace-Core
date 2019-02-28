@@ -14,6 +14,7 @@ namespace iTrace_Core
         private System.IO.StreamReader Reader;
         private System.IO.StreamWriter Writer;
         private String TrackerName;
+        private String TrackerSerialNumber;
 
         public GazePointTracker()
         {
@@ -28,6 +29,10 @@ namespace iTrace_Core
                 System.Xml.XmlDocument gazePointData = new System.Xml.XmlDocument();
                 gazePointData.LoadXml(Reader.ReadLine());
                 TrackerName = gazePointData.DocumentElement.GetAttribute("VALUE");
+
+                Writer.Write("<GET ID=\"SERIAL_ID\" />\r\n"); Writer.Flush();
+                gazePointData.LoadXml(Reader.ReadLine());
+                TrackerSerialNumber = gazePointData.DocumentElement.GetAttribute("VALUE");
 
                 TrackerInit();
             }
@@ -52,6 +57,11 @@ namespace iTrace_Core
         public String GetTrackerName()
         {
             return TrackerName;
+        }
+
+        public String GetTrackerSerialNumber()
+        {
+            return TrackerSerialNumber;
         }
 
         public void StartTracker()

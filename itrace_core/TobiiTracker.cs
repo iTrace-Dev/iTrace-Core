@@ -25,6 +25,11 @@ namespace iTrace_Core
             return TrackingDevice.DeviceName;
         }
 
+        public String GetSerialNumber()
+        {
+            return TrackingDevice.SerialNumber;
+        }
+
         public void StartTracker()
         {
             TrackingDevice.GazeDataReceived += ReceiveRawGaze;
