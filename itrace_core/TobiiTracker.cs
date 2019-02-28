@@ -25,7 +25,7 @@ namespace iTrace_Core
             return TrackingDevice.DeviceName;
         }
 
-        public String GetSerialNumber()
+        public String GetTrackerSerialNumber()
         {
             return TrackingDevice.SerialNumber;
         }
