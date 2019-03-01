@@ -70,6 +70,10 @@ namespace iTrace_Core
         {
             xmlTextWriter.WriteStartElement("response");
 
+            xmlTextWriter.WriteAttributeString("event_id", gazeData.EventTime.ToString());
+            xmlTextWriter.WriteAttributeString("core_time", gazeData.SystemTime.ToString());
+            xmlTextWriter.WriteAttributeString("tracker_time", gazeData.TrackerTime.ToString());
+
             xmlTextWriter.WriteAttributeString("x", gazeData.X.ToString());
             xmlTextWriter.WriteAttributeString("y", gazeData.Y.ToString());
 
@@ -85,9 +89,13 @@ namespace iTrace_Core
             xmlTextWriter.WriteAttributeString("right_pupil_diameter", gazeData.RightPupil.ToString());
             xmlTextWriter.WriteAttributeString("right_validation", gazeData.RightValidation.ToString());
 
-            xmlTextWriter.WriteAttributeString("tracker_time", gazeData.TrackerTime.ToString());
-            xmlTextWriter.WriteAttributeString("system_time", gazeData.SystemTime.ToString());
-            xmlTextWriter.WriteAttributeString("event_time", gazeData.EventTime.ToString());
+            xmlTextWriter.WriteAttributeString("user_left_x", gazeData.UserLeftX.ToString());
+            xmlTextWriter.WriteAttributeString("user_left_y", gazeData.UserLeftY.ToString());
+            xmlTextWriter.WriteAttributeString("user_left_z", gazeData.UserLeftZ.ToString());
+
+            xmlTextWriter.WriteAttributeString("user_right_x", gazeData.UserRightX.ToString());
+            xmlTextWriter.WriteAttributeString("user_right_y", gazeData.UserRightY.ToString());
+            xmlTextWriter.WriteAttributeString("user_right_z", gazeData.UserRightZ.ToString());
 
             xmlTextWriter.WriteEndElement();
         }
