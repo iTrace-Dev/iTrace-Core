@@ -25,7 +25,7 @@ namespace iTrace_Core
 
         public string ScreenRecordingStart { get; private set; }
 
-        private SessionManager() { }
+        private SessionManager() { ScreenRecordingStart = "0"; }
 
         public static SessionManager GetInstance()
         {
@@ -68,7 +68,7 @@ namespace iTrace_Core
 
         public void GenerateScreenRecordingStart()
         {
-            ScreenRecordingStart = "";
+            ScreenRecordingStart = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
     }
 }

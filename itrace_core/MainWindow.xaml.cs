@@ -162,6 +162,7 @@ namespace iTrace_Core
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
                     rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                    SessionManager.GetInstance().GenerateScreenRecordingStart();
                 }
 				ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
