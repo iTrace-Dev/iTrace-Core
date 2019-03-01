@@ -49,7 +49,8 @@ namespace iTrace_Core
             
             xmlTextWriter.WriteAttributeString("screen_width", SessionManager.GetInstance().ScreenWidth.ToString());
             xmlTextWriter.WriteAttributeString("session_height", SessionManager.GetInstance().ScreenHeight.ToString());
-            xmlTextWriter.WriteAttributeString("tracker_type", "mouse");             // Todo: Get tracker type
+            xmlTextWriter.WriteAttributeString("tracker_type", SessionManager.GetInstance().TrackerType);
+            xmlTextWriter.WriteAttributeString("tracker_serial_number", SessionManager.GetInstance().TrackerSerialNumber);
 
             xmlTextWriter.WriteEndElement();
         }

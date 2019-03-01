@@ -48,9 +48,15 @@ namespace iTrace_Core
                 if (tracker.GetTrackerName().Equals(trackerName))
                 {
                     ActiveTracker = tracker;
+                    UpdateSessionInfo();
                     break;
                 }
             }
+        }
+
+        private void UpdateSessionInfo()
+        {
+            SessionManager.GetInstance().SetTrackerData(ActiveTracker.GetTrackerName(), ActiveTracker.GetTrackerSerialNumber());
         }
 
         public List<String> GetAttachedTrackers()
