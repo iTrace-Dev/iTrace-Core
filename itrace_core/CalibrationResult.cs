@@ -21,15 +21,13 @@ namespace iTrace_Core
         private double calibrationScreenWidth;
         private double calibrationScreenHeight;
 
-        private long timestamp;
-
         public TobiiCalibrationResult(Tobii.Research.CalibrationResult calibrationResult, double calibrationScreenWidth, double calibrationScreenHeight)
         {
             this.calibrationResult = calibrationResult;
             this.calibrationScreenWidth = calibrationScreenWidth;
             this.calibrationScreenHeight = calibrationScreenHeight;
 
-            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            SessionManager.GetInstance().GenerateCalibrationID();
         }
 
         public List<Point> GetLeftEyePoints()
@@ -76,7 +74,7 @@ namespace iTrace_Core
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", timestamp.ToString());
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationID);
 
             for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
             {
@@ -114,7 +112,6 @@ namespace iTrace_Core
     {
         XmlDocument XmlDoc = null;
         int CalibrationPointCount = 0;
-        long timestamp;
 
         public GazePointCalibrationResult(string xmlCalibrationData, int numberOfPoints)
         {
@@ -122,7 +119,7 @@ namespace iTrace_Core
             XmlDoc = new XmlDocument();
             XmlDoc.LoadXml(xmlCalibrationData);
 
-            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
+            SessionManager.GetInstance().GenerateCalibrationID();
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
@@ -130,7 +127,7 @@ namespace iTrace_Core
             XmlNode recNode = XmlDoc.FirstChild;
 
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", timestamp.ToString());
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationID);
 
             for (int i = 1; i <= CalibrationPointCount; ++i)
             {
