@@ -51,6 +51,7 @@ namespace iTrace_Core
             xmlTextWriter.WriteAttributeString("session_height", SessionManager.GetInstance().ScreenHeight.ToString());
             xmlTextWriter.WriteAttributeString("tracker_type", SessionManager.GetInstance().TrackerType);
             xmlTextWriter.WriteAttributeString("tracker_serial_number", SessionManager.GetInstance().TrackerSerialNumber);
+            xmlTextWriter.WriteAttributeString("screen_recording_start", SessionManager.GetInstance().ScreenRecordingStart);
 
             xmlTextWriter.WriteEndElement();
         }

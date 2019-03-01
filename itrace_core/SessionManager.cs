@@ -23,6 +23,8 @@ namespace iTrace_Core
         public string TrackerType { get; private set; }
         public string TrackerSerialNumber { get; private set; }
 
+        public string ScreenRecordingStart { get; private set; }
+
         private SessionManager() { }
 
         public static SessionManager GetInstance()
@@ -62,6 +64,11 @@ namespace iTrace_Core
         {
             TrackerType = trackerType;
             TrackerSerialNumber = trackerSerialNumber;
+        }
+
+        public void GenerateScreenRecordingStart()
+        {
+            ScreenRecordingStart = "";
         }
     }
 }
