@@ -32,6 +32,8 @@ namespace iTrace_Core
         private void DirectoryBrowseButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderDialogue = new System.Windows.Forms.FolderBrowserDialog();
+            //folderDialogue.SelectedPath = "[LAST USED OUTPUT DIRECTORY FROM CONFIG FILE]"; //ISSUE #92
+
             System.Windows.Forms.DialogResult result = folderDialogue.ShowDialog();
 
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialogue.SelectedPath))
@@ -43,6 +45,7 @@ namespace iTrace_Core
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             SessionManager.GetInstance().SetupSession(StudyName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
+            Close();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
