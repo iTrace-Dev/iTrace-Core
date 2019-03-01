@@ -93,17 +93,6 @@ namespace iTrace_Core
     {
         public TobiiGazeData(Tobii.Research.GazeDataEventArgs tobiiRawGaze) : base()
         {
-            /* Useful Data (same applies to right eye):
-             *   tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X
-             *   tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y
-             *   tobiiRawGaze.LeftEye.Pupil.PupilDiameter
-             *   tobiiRawGaze.LeftEye.Pupil.Validity
-             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.X // Useful for eye status window
-             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y // Useful for eye status window
-             *   tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z // Useful for eye status window
-             *   tobiiRawGaze.LeftEye.GazePoint.Validity;
-            */
-
             bool isLeftEyeValid = tobiiRawGaze.LeftEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
             bool isRightEyeValid = tobiiRawGaze.RightEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
 
