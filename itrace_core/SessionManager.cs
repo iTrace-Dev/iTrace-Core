@@ -20,6 +20,9 @@ namespace iTrace_Core
 
         public CalibrationResult LastCalibration { get; private set; }
 
+        public string TrackerType { get; private set; }
+        public string TrackerSerialNumber { get; private set; }
+
         private SessionManager() { }
 
         public static SessionManager GetInstance()
@@ -53,6 +56,12 @@ namespace iTrace_Core
         public void SetCalibration(CalibrationResult r)
         {
             LastCalibration = r;
+        }
+
+        public void SetTrackerData(string trackerType, string trackerSerialNumber)
+        {
+            TrackerType = trackerType;
+            TrackerSerialNumber = trackerSerialNumber;
         }
     }
 }
