@@ -156,6 +156,9 @@ namespace iTrace_Core
             }
             else
             {
+                //Start the session (SHOULD HAPPPEN FIRST)
+                SessionManager.GetInstance().StartSession();
+
                 // Load previously use directory for data storage or the current users desktop directory
                 xmlGazeDataWriter.StartWriting(SessionManager.GetInstance().DataRootDir);
 
@@ -165,7 +168,7 @@ namespace iTrace_Core
 				//Name of .avi hardcoded for now
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
-                    rec = new Recorder(new RecorderParams("out.avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                    rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
                     SessionManager.GetInstance().GenerateScreenRecordingStart();
                 }
 				ActivateTrackerButton.Content = Properties.Resources.StopTracking;
