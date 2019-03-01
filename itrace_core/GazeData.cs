@@ -22,6 +22,14 @@ namespace iTrace_Core
         public double LeftPupil { get; protected set; }
         public int LeftValidation { get; protected set; }
 
+        // Data recorded for user space coordinates
+        public double UserRightX { get; protected set; }
+        public double UserRightY { get; protected set; }
+        public double UserRightZ { get; protected set; }
+        public double UserLeftX { get; protected set; }
+        public double UserLeftY { get; protected set; }
+        public double UserLeftZ { get; protected set; }
+
         // Used to synchronize data sent between tracker and plugin
         public long EventTime { get; protected set; }
 
@@ -45,6 +53,14 @@ namespace iTrace_Core
             LeftY = 0;
             LeftPupil = 0;
             LeftValidation = 0;
+
+            UserLeftX = 0;
+            UserLeftY = 0;
+            UserLeftZ = 0;
+
+            UserRightX = 0;
+            UserRightY = 0;
+            UserRightZ = 0;
 
             //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
             EventTime = DateTime.UtcNow.Ticks;
@@ -127,6 +143,14 @@ namespace iTrace_Core
             LeftPupil = tobiiRawGaze.LeftEye.Pupil.PupilDiameter;
             LeftValidation = Convert.ToInt32(isLeftEyeValid);
 
+            UserLeftX = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.X;
+            UserLeftY = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y;
+            UserLeftZ = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z;
+
+            UserRightX = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.X;
+            UserRightY = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.Y;
+            UserRightZ = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.Z;
+
             //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
             EventTime = DateTime.UtcNow.Ticks;
 
@@ -183,6 +207,14 @@ namespace iTrace_Core
             LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
             LeftPupil = Double.Parse(recNode.Attributes["LPD"].Value);
             LeftValidation = Int32.Parse(recNode.Attributes["LPOGV"].Value);
+
+            UserLeftX = Double.Parse(recNode.Attributes["LEYEX"].Value);
+            UserLeftY = Double.Parse(recNode.Attributes["LEYEY"].Value);
+            UserLeftZ = Double.Parse(recNode.Attributes["LEYEZ"].Value);
+
+            UserRightX = Double.Parse(recNode.Attributes["REYEX"].Value);
+            UserRightY = Double.Parse(recNode.Attributes["REYEY"].Value); ;
+            UserRightZ = Double.Parse(recNode.Attributes["REYEZ"].Value); ;
 
             //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
             EventTime = DateTime.UtcNow.Ticks;
