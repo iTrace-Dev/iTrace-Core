@@ -18,7 +18,7 @@ namespace iTrace_Core
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
 
-        public CalibrationResult LastCalibration { get; private set; }
+        public CalibrationResult CurrentCalibration { get; private set; }
 
         public string TrackerType { get; private set; }
         public string TrackerSerialNumber { get; private set; }
@@ -40,7 +40,7 @@ namespace iTrace_Core
             ParticipantID = participant;
             DataRootDir = dataRoot;
 
-            LastCalibration = new EmptyCalibrationResult();
+            CurrentCalibration = new EmptyCalibrationResult();
         }
 
         public void StartSession() 
@@ -55,7 +55,7 @@ namespace iTrace_Core
 
         public void SetCalibration(CalibrationResult r)
         {
-            LastCalibration = r;
+            CurrentCalibration = r;
         }
 
         public void SetTrackerData(string trackerType, string trackerSerialNumber)

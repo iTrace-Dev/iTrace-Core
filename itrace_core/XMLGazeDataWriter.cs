@@ -57,7 +57,7 @@ namespace iTrace_Core
 
         private void WriteCalibration()
         {
-            SessionManager.GetInstance().LastCalibration.WriteToXMLWriter(xmlTextWriter);
+            SessionManager.GetInstance().CurrentCalibration.WriteToXMLWriter(xmlTextWriter);
         }
 
         private void WriteOpeningGazeTag()
