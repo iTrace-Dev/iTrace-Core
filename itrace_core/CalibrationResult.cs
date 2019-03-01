@@ -1,17 +1,18 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
 using System.Xml;
+using System;
 
 namespace iTrace_Core
 {
     abstract class CalibrationResult
     {
-        public abstract void WriteToXMLWriter(XmlTextWriter xmlTextWriter, string timestamp);
+        public abstract void WriteToXMLWriter(XmlTextWriter xmlTextWriter);
     }
 
     class EmptyCalibrationResult : CalibrationResult
     {
-        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter, string timestamp) { }
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter) { }
     }
 
     class TobiiCalibrationResult : CalibrationResult
@@ -20,11 +21,15 @@ namespace iTrace_Core
         private double calibrationScreenWidth;
         private double calibrationScreenHeight;
 
+        private long timestamp;
+
         public TobiiCalibrationResult(Tobii.Research.CalibrationResult calibrationResult, double calibrationScreenWidth, double calibrationScreenHeight)
         {
             this.calibrationResult = calibrationResult;
             this.calibrationScreenWidth = calibrationScreenWidth;
             this.calibrationScreenHeight = calibrationScreenHeight;
+
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
         public List<Point> GetLeftEyePoints()
@@ -68,10 +73,10 @@ namespace iTrace_Core
             return calibrationResult.Status == Tobii.Research.CalibrationStatus.Failure;
         }
 
-        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter, string timestamp)
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", "[timestamp_milli]");
+            xmlTextWriter.WriteAttributeString("timestamp", timestamp.ToString());
 
             for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
             {
@@ -107,23 +112,25 @@ namespace iTrace_Core
 
     class GazePointCalibrationResult : CalibrationResult
     {
-
         XmlDocument XmlDoc = null;
         int CalibrationPointCount = 0;
+        long timestamp;
 
         public GazePointCalibrationResult(string xmlCalibrationData, int numberOfPoints)
         {
             CalibrationPointCount = numberOfPoints;
             XmlDoc = new XmlDocument();
             XmlDoc.LoadXml(xmlCalibrationData);
+
+            timestamp = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
 
-        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter, string timestamp)
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             XmlNode recNode = XmlDoc.FirstChild;
 
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", "[timestamp_milli]");
+            xmlTextWriter.WriteAttributeString("timestamp", timestamp.ToString());
 
             for (int i = 1; i <= CalibrationPointCount; ++i)
             {

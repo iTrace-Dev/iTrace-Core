@@ -56,7 +56,7 @@ namespace iTrace_Core
 
         private void WriteCalibration()
         {
-            SessionManager.GetInstance().LastCalibration.WriteToXMLWriter(xmlTextWriter, "[timestamp_milli]"); // Todo: Assign timestamp
+            SessionManager.GetInstance().LastCalibration.WriteToXMLWriter(xmlTextWriter);
         }
 
         private void WriteOpeningGazeTag()
