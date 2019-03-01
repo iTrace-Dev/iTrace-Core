@@ -37,7 +37,7 @@ namespace iTrace_Core
             xmlTextWriter.WriteStartElement("itrace_core");
 
             xmlTextWriter.WriteAttributeString("session_id", SessionManager.GetInstance().CurrentSessionID);
-            xmlTextWriter.WriteAttributeString("session_data_time", "[timestamp_milli]");                       // Todo: Complete this attribute
+            xmlTextWriter.WriteAttributeString("session_data_time", SessionManager.GetInstance().CurrentSessionTimeStamp);
             xmlTextWriter.WriteAttributeString("study_name", SessionManager.GetInstance().StudyName);
             xmlTextWriter.WriteAttributeString("researcher", SessionManager.GetInstance().ResearcherName);
             xmlTextWriter.WriteAttributeString("participant_id", SessionManager.GetInstance().ParticipantID);

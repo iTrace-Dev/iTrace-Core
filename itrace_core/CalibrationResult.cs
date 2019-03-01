@@ -27,7 +27,7 @@ namespace iTrace_Core
             this.calibrationScreenWidth = calibrationScreenWidth;
             this.calibrationScreenHeight = calibrationScreenHeight;
 
-            SessionManager.GetInstance().GenerateCalibrationID();
+            SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }
 
         public List<Point> GetLeftEyePoints()
@@ -74,7 +74,7 @@ namespace iTrace_Core
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationID);
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationTimeStamp);
 
             for (int i = 0; i < calibrationResult.CalibrationPoints.Count; ++i)
             {
@@ -119,7 +119,7 @@ namespace iTrace_Core
             XmlDoc = new XmlDocument();
             XmlDoc.LoadXml(xmlCalibrationData);
 
-            SessionManager.GetInstance().GenerateCalibrationID();
+            SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
@@ -127,7 +127,7 @@ namespace iTrace_Core
             XmlNode recNode = XmlDoc.FirstChild;
 
             xmlTextWriter.WriteStartElement("calibration");
-            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationID);
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationTimeStamp);
 
             for (int i = 1; i <= CalibrationPointCount; ++i)
             {

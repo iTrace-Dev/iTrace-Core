@@ -11,9 +11,13 @@ namespace iTrace_Core
         public string ParticipantID { get; private set; }
         public string DataRootDir { get; private set; }
         
-        // Timestamp generated at the start of each tracking session
-        public string CurrentSessionID { get; private set; }        
-        public string CurrentCalibrationID { get; private set; }
+        // TimeStamp in ticks
+        public string CurrentSessionID { get; private set; }
+
+        // Unix UTC TimeStamp
+        public string CurrentSessionTimeStamp { get; private set; }
+
+        public string CurrentCalibrationTimeStamp { get; private set; }
         
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
@@ -57,12 +61,13 @@ namespace iTrace_Core
 
         public void StartSession() 
         {
-            CurrentSessionID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            CurrentSessionID = Convert.ToString(DateTime.UtcNow.Ticks);
+            CurrentSessionTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
         }
 
-        public void GenerateCalibrationID()
+        public void GenerateCalibrationTimeStamp()
         {
-            CurrentCalibrationID = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
+            CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
         }
 
         public void SetCalibration(CalibrationResult r)

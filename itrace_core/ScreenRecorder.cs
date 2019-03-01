@@ -117,7 +117,7 @@ namespace iTrace_Core
 
 			while (!stopThread.WaitOne(timeTillNextFrame))
 			{
-				var timestamp = DateTime.Now;
+				var timeStamp = DateTime.Now;
 
 				Screenshot(buffer);
 
@@ -127,7 +127,7 @@ namespace iTrace_Core
 				// Start asynchronous (encoding and) writing of the new frame
 				videoWriteTask = videoStream.WriteFrameAsync(true, buffer, 0, buffer.Length);
 
-				timeTillNextFrame = timestamp + frameInterval - DateTime.Now;
+				timeTillNextFrame = timeStamp + frameInterval - DateTime.Now;
 				if (timeTillNextFrame < TimeSpan.Zero)
 					timeTillNextFrame = TimeSpan.Zero;
 			}
