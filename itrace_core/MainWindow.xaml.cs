@@ -26,8 +26,6 @@ namespace iTrace_Core
             public string Value { get; set; }
         }
 
-        List<string> options = new List<string> { "socket_port", "websocket_port", "xml_output_filename" };
-
         public MainWindow()
         {
             InitializeComponent();
@@ -53,8 +51,9 @@ namespace iTrace_Core
         private void InitializeSettingsGrid()
         {
             settings = new List<Setting>();
+            List<string> options = new List<string> { "socket_port", "websocket_port", "xml_output_filename" };
 
-            foreach(string s in options)
+            foreach (string s in options)
             {
                 settings.Add(new Setting { Option = s, Value = ConfigurationRegistry.Instance.AssignFromConfiguration(s, "") });
             }
@@ -154,7 +153,8 @@ namespace iTrace_Core
             }
             else
             {
-                xmlGazeDataWriter.StartWriting(ConfigurationRegistry.Instance.AssignFromConfiguration("xml_output_filename", "out.xml"));
+                xmlGazeDataWriter.StartWriting(ConfigurationRegistry.Instance.AssignFromConfiguration("xml_output_filename",
+                    "itrace_core" + "-" + Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + ".xml"));
                 socketServer.SendSessionData(SessionManager.GetInstance());
                 webSocketServer.SendSessionData(SessionManager.GetInstance());
 
