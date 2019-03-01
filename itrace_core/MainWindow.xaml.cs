@@ -34,6 +34,9 @@ namespace iTrace_Core
             // Initialize Session
             SessionManager.GetInstance().SetScreenDimensions(System.Windows.SystemParameters.PrimaryScreenWidth,
                 System.Windows.SystemParameters.PrimaryScreenHeight);
+
+            // Default the session to the last used output directory and empty everything else
+            SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             SessionManager.GetInstance().SetCalibration(new EmptyCalibrationResult());
 
             socketServer = new SocketServer();
@@ -51,7 +54,7 @@ namespace iTrace_Core
         private void InitializeSettingsGrid()
         {
             settings = new List<Setting>();
-            List<string> options = new List<string> { "socket_port", "websocket_port", "xml_output_filename" };
+            List<string> options = new List<string> { "socket_port", "websocket_port"};
 
             foreach (string s in options)
             {
@@ -153,8 +156,9 @@ namespace iTrace_Core
             }
             else
             {
-                xmlGazeDataWriter.StartWriting(ConfigurationRegistry.Instance.AssignFromConfiguration("xml_output_filename",
-                    "itrace_core" + "-" + Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + ".xml"));
+                // Load previously use directory for data storage or the current users desktop directory
+                xmlGazeDataWriter.StartWriting(SessionManager.GetInstance().DataRootDir);
+
                 socketServer.SendSessionData();
                 webSocketServer.SendSessionData();
 

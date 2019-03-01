@@ -32,7 +32,7 @@ namespace iTrace_Core
         private void DirectoryBrowseButton_Click(object sender, RoutedEventArgs e)
         {
             System.Windows.Forms.FolderBrowserDialog folderDialogue = new System.Windows.Forms.FolderBrowserDialog();
-            //folderDialogue.SelectedPath = "[LAST USED OUTPUT DIRECTORY FROM CONFIG FILE]"; //ISSUE #92
+            folderDialogue.SelectedPath = SessionManager.GetInstance().DataRootDir;
 
             System.Windows.Forms.DialogResult result = folderDialogue.ShowDialog();
 
@@ -53,8 +53,7 @@ namespace iTrace_Core
             StudyName.Text = "";
             ResearcherName.Text = "";
             ParticipantID.Text = "";
-            DataOutputDir.Text = "";
-
+            DataOutputDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
             SessionManager.GetInstance().SetupSession(StudyName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
         }
     }

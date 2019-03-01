@@ -18,9 +18,9 @@ namespace iTrace_Core
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
         }
 
-        public void StartWriting(string filename)
+        public void StartWriting(string rootDirectory)
         {
-            xmlTextWriter = new XmlTextWriter(filename, Encoding.UTF8);
+            xmlTextWriter = new XmlTextWriter(rootDirectory + "/itrace_core-" + Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + ".xml", Encoding.UTF8);
             xmlTextWriter.Formatting = Formatting.Indented;
             xmlTextWriter.WriteStartDocument();
 
