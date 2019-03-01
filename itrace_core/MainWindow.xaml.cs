@@ -155,8 +155,8 @@ namespace iTrace_Core
             {
                 xmlGazeDataWriter.StartWriting(ConfigurationRegistry.Instance.AssignFromConfiguration("xml_output_filename",
                     "itrace_core" + "-" + Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + ".xml"));
-                socketServer.SendSessionData(SessionManager.GetInstance());
-                webSocketServer.SendSessionData(SessionManager.GetInstance());
+                socketServer.SendSessionData();
+                webSocketServer.SendSessionData();
 
 				//Name of .avi hardcoded for now
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)

@@ -71,9 +71,9 @@ namespace iTrace_Core
             }
         }
 
-        public void SendSessionData(SessionManager s)
+        public void SendSessionData()
         {
-            string data = "session," + s.DataRootDir + @"\\" + s.ResearcherName + @"\\" + s.ParticipantID + @"\\" + s.CurrentSessionID + "\n";
+            string data = "session," + SessionManager.GetInstance().DataRootDir + '\n';
             SendToClients(data);
         }
 
