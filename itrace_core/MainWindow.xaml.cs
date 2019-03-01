@@ -85,6 +85,9 @@ namespace iTrace_Core
 
             if (reticleController != null)
                 reticleController.Close();
+
+            if (xmlGazeDataWriter.Writing)
+                xmlGazeDataWriter.StopWriting();
         }
 
         private void MenuSettingsClick(object sender, RoutedEventArgs e)
@@ -95,12 +98,6 @@ namespace iTrace_Core
         private void MenuExitClick(object sender, RoutedEventArgs e)
         {
             System.Console.WriteLine("EXIT!");
-
-            if(xmlGazeDataWriter.Writing)
-            {
-                xmlGazeDataWriter.StopWriting();
-            }
-
             Close();
         }
 
