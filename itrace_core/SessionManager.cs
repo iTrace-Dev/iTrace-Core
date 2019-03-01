@@ -35,6 +35,16 @@ namespace iTrace_Core
             return instance;
         }
 
+        public void SetScreenDimensions(double width, double height)
+        {
+            /* 
+             * C# provided screen size is double
+             *   If conversion causes issues, we can always revert to double 
+            */
+            ScreenWidth = Convert.ToInt32(width);
+            ScreenHeight = Convert.ToInt32(height);
+        }
+
         public void SetupSession(string study, string researcher, string participant, string dataRoot)
         {
             StudyName = study;

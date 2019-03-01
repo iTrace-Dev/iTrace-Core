@@ -32,7 +32,8 @@ namespace iTrace_Core
         {
             InitializeComponent();
             TrackerManager = new TrackerManager();
-            Console.WriteLine("Screen Dimensions: {0}x{1}", System.Windows.SystemParameters.PrimaryScreenWidth, 
+
+            SessionManager.GetInstance().SetScreenDimensions(System.Windows.SystemParameters.PrimaryScreenWidth,
                 System.Windows.SystemParameters.PrimaryScreenHeight);
 
             socketServer = new SocketServer();
