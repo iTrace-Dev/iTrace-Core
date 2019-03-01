@@ -33,8 +33,10 @@ namespace iTrace_Core
             InitializeComponent();
             TrackerManager = new TrackerManager();
 
+            // Initialize Session
             SessionManager.GetInstance().SetScreenDimensions(System.Windows.SystemParameters.PrimaryScreenWidth,
                 System.Windows.SystemParameters.PrimaryScreenHeight);
+            SessionManager.GetInstance().SetCalibration(new EmptyCalibrationResult());
 
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
