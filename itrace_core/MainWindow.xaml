@@ -50,7 +50,7 @@
                     </DataGrid>
 
                     <Button Content="Apply" HorizontalAlignment="Right" Width="80" Margin="0,95,74,149" Click="ApplySettings"/>
-                    <Label Margin="362,136,39,40">
+                    <Label HorizontalAlignment="Right" Margin="0,136,39,40">
                         <TextBlock TextWrapping="Wrap" Text="Some changes may require a program restart to be applied" Height="69" Width="125"></TextBlock>
                     </Label>
                 </Grid>
