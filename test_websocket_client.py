@@ -4,9 +4,9 @@
 from websocket import create_connection
 
 ws = create_connection("ws://localhost:7007")
-print 'Connected to iTrace WebSocket'
+print ('Connected to iTrace WebSocket')
 
 while (True):
-	print ws.recv()
+	print (ws.recv())
 
 ws.close()
