@@ -78,8 +78,8 @@ namespace iTrace_Core
 
         public void UpdateEyePosition(Vector3 leftEyePosition, Vector3 rightEyePosition)
         {
-            Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, leftEyePosition.Z / 10);
-            Vector4 rightEyeHomogeneous = new Vector4(rightEyePosition, rightEyePosition.Z / 10);
+            Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, leftEyePosition.Z / 1000f);
+            Vector4 rightEyeHomogeneous = new Vector4(rightEyePosition, rightEyePosition.Z / 1000f);
 
             Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
             Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
