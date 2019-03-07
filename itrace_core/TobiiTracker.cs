@@ -67,6 +67,7 @@ namespace iTrace_Core
             Calibration.LeaveCalibrationMode();
 
             calibrationWindow.ShowResultsAndClose(calibrationResult.GetLeftEyePoints().ToArray(), calibrationResult.GetRightEyePoints().ToArray());
+            SessionManager.GetInstance().SetCalibration(calibrationResult);
         }
 
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)

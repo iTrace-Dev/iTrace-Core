@@ -98,6 +98,7 @@ namespace iTrace_Core
             }
 
             // Get complete calibration data
+            SessionManager.GetInstance().SetCalibration(new GazePointCalibrationResult(calibrationData, ((calibrationPointCount - 1) / 2)));
             Console.WriteLine(calibrationData + "\r\nCAL POINTS:" + (calibrationPointCount - 1) / 2);
         }
 
