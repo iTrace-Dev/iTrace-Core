@@ -8,7 +8,8 @@
         mc:Ignorable="d"
         Title="iTrace Core" Height="350" Width="550"
         Loaded="ApplicationLoaded"
-        Closed="ApplicationClosed" Icon="icon.ico">
+        Closed="ApplicationClosed" Icon="icon.ico"
+        ResizeMode="CanMinimize">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="749*" />
