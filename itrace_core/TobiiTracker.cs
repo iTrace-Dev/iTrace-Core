@@ -87,19 +87,6 @@ namespace iTrace_Core
         private void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
         {
             GazeHandler.Instance.EnqueueGaze(new TobiiGazeData(e));
-
-            if(isEyeStatusOpen)
-            {
-                System.Numerics.Vector3 leftEyePosition = new System.Numerics.Vector3(e.LeftEye.GazeOrigin.PositionInUserCoordinates.X,
-                                                                                      e.LeftEye.GazeOrigin.PositionInUserCoordinates.Y,
-                                                                                      e.LeftEye.GazeOrigin.PositionInUserCoordinates.Z);
-
-                System.Numerics.Vector3 rightEyePosition = new System.Numerics.Vector3(e.LeftEye.GazeOrigin.PositionInUserCoordinates.X,
-                                                                                       e.LeftEye.GazeOrigin.PositionInUserCoordinates.Y,
-                                                                                       e.LeftEye.GazeOrigin.PositionInUserCoordinates.Z);
-
-                eyeStatusWindow.UpdateEyePosition(leftEyePosition, rightEyePosition);
-            }
         }
 
         public void ShowEyeStatusWindow()
