@@ -132,13 +132,13 @@ namespace iTrace_Core
             LeftPupil = tobiiRawGaze.LeftEye.Pupil.PupilDiameter;
             LeftValidation = Convert.ToInt32(isLeftEyeValid);
 
-            UserLeftX = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.X;
-            UserLeftY = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Y;
-            UserLeftZ = tobiiRawGaze.LeftEye.GazePoint.PositionInUserCoordinates.Z;
+            UserLeftX = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.X;
+            UserLeftY = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.Y;
+            UserLeftZ = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.Z;
 
-            UserRightX = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.X;
-            UserRightY = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.Y;
-            UserRightZ = tobiiRawGaze.RightEye.GazePoint.PositionInUserCoordinates.Z;
+            UserRightX = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.X;
+            UserRightY = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Y;
+            UserRightZ = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Z;
 
             //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
             EventTime = DateTime.UtcNow.Ticks;
