@@ -18,7 +18,7 @@ namespace iTrace_Core
 
         public void StartWriting(string rootDirectory)
         {
-            xmlTextWriter = new XmlTextWriter(rootDirectory + "/itrace_core-" + Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()) + ".xml", Encoding.UTF8);
+            xmlTextWriter = new XmlTextWriter(rootDirectory + "/itrace_core-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".xml", Encoding.UTF8);
             xmlTextWriter.Formatting = Formatting.Indented;
             xmlTextWriter.WriteStartDocument();
 

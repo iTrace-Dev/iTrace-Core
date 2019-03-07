@@ -62,12 +62,12 @@ namespace iTrace_Core
         public void StartSession() 
         {
             CurrentSessionID = Convert.ToString(DateTime.UtcNow.Ticks);
-            CurrentSessionTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds());
+            CurrentSessionTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
 
         public void GenerateCalibrationTimeStamp()
         {
-            CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeSeconds()); 
+            CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()); 
         }
 
         public void SetCalibration(CalibrationResult r)
