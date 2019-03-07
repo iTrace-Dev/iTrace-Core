@@ -72,6 +72,7 @@ namespace iTrace_Core
         public void ShowEyeStatusWindow()
         {
             EyeStatusWindow s = new EyeStatusWindow();
+            s.Subscribe();
             s.Show();
         }
     }

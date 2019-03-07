@@ -109,8 +109,11 @@ namespace iTrace_Core
 
                 isEyeStatusOpen = true;
 
+                eyeStatusWindow.Subscribe();
+
                 eyeStatusWindow.Closing += (object sender, CancelEventArgs e) =>
                 {
+                    eyeStatusWindow.Unsubscribe();
                     isEyeStatusOpen = false;
                 };
 

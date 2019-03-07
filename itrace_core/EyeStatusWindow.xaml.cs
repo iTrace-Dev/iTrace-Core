@@ -1,10 +1,9 @@
-﻿using System.Windows;
+﻿using System;
 using System.Numerics;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
-using System.Windows.Media.Animation;
 using System.Windows.Shapes;
-using System;
 
 namespace iTrace_Core
 {
@@ -20,7 +19,7 @@ namespace iTrace_Core
         {
             InitializeComponent();
 
-            leftEyeCircle = new EllipseGeometry(new Point(400,300), 5, 5);
+            leftEyeCircle = new EllipseGeometry(new Point(400, 300), 5, 5);
             rightEyeCircle = new EllipseGeometry(new Point(500, 300), 5, 5);
 
             this.RegisterName(registeredLeftEyeName, leftEyeCircle);
@@ -42,6 +41,30 @@ namespace iTrace_Core
             this.Content = containerCanvas;
         }
 
+        public void Subscribe()
+        {
+            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+        }
+
+        public void Unsubscribe()
+        {
+            GazeHandler.Instance.OnGazeDataReceived -= ReceiveGazeData;
+        }
+
+        private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
+        {
+            Vector3 leftEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserLeftX),
+                                                  Convert.ToSingle(e.ReceivedGazeData.UserLeftY),
+                                                  Convert.ToSingle(e.ReceivedGazeData.UserLeftZ));
+
+
+            Vector3 rightEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserRightX),
+                                                   Convert.ToSingle(e.ReceivedGazeData.UserRightY),
+                                                   Convert.ToSingle(e.ReceivedGazeData.UserRightZ));
+
+            UpdateEyePosition(leftEyePosition, rightEyePosition);
+        }
+
         Vector3 HomogeneousTo3D(Vector4 vec)
         {
             Vector3 result;
@@ -61,8 +84,14 @@ namespace iTrace_Core
             Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
             Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
 
-            leftEyeCircle.Center = new Point(leftEyeProjected.X + (Width / 2), leftEyeProjected.Y + (Height / 2));
-            rightEyeCircle.Center = new Point(rightEyeProjected.X + (Width / 2), rightEyeProjected.Y + (Height / 2));
+            Dispatcher.Invoke(
+                () =>
+                {
+
+                    leftEyeCircle.Center = new Point(leftEyeProjected.X + (Width / 2), leftEyeProjected.Y + (Height / 2));
+                    rightEyeCircle.Center = new Point(rightEyeProjected.X + (Width / 2), rightEyeProjected.Y + (Height / 2));
+
+                });
         }
 
         //Temporary for testing
