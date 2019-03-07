@@ -6,7 +6,7 @@ namespace iTrace_Core
     {
         static SessionManager instance;
         
-        public string StudyName { get; private set; }
+        public string TaskName { get; private set; }
         public string ResearcherName { get; private set; }
         public string ParticipantID { get; private set; }
         public string DataRootDir { get; private set; }
@@ -49,9 +49,9 @@ namespace iTrace_Core
             ScreenHeight = Convert.ToInt32(height);
         }
 
-        public void SetupSession(string study, string researcher, string participant, string dataRoot)
+        public void SetupSession(string task, string researcher, string participant, string dataRoot)
         {
-            StudyName = study;
+            TaskName = task;
             ResearcherName = researcher;
             ParticipantID = participant;
             DataRootDir = dataRoot;

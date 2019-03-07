@@ -1,16 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace iTrace_Core
 {
@@ -23,7 +12,7 @@ namespace iTrace_Core
         {
             SessionManager sessionData = SessionManager.GetInstance();
             InitializeComponent();
-            StudyName.Text = sessionData.StudyName;
+            TaskName.Text = sessionData.TaskName;
             ResearcherName.Text = sessionData.ResearcherName;
             ParticipantID.Text = sessionData.ParticipantID;
             DataOutputDir.Text = sessionData.DataRootDir;
@@ -44,17 +33,17 @@ namespace iTrace_Core
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            SessionManager.GetInstance().SetupSession(StudyName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
+            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
             Close();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
-            StudyName.Text = "";
+            TaskName.Text = "";
             ResearcherName.Text = "";
             ParticipantID.Text = "";
             DataOutputDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            SessionManager.GetInstance().SetupSession(StudyName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
+            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
         }
     }
 }

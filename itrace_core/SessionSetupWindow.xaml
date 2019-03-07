@@ -8,8 +8,8 @@
         Title="SessionSetupWindow" Height="450" Width="450">
     <Grid>
         <Canvas HorizontalAlignment="Left" Height="450"  Width="450" Margin="0,0,0,0" VerticalAlignment="Top">
-            <Label Content="Study Name" Canvas.Left="23" Canvas.Top="58" Width="103"/>
-            <TextBox x:Name="StudyName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="62" Width="172"/>
+            <Label Content="Task Name" Canvas.Left="23" Canvas.Top="58" Width="103"/>
+            <TextBox x:Name="TaskName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="62" Width="172"/>
 
             <Label Content="Researcher Name" Canvas.Left="23" Canvas.Top="111"/>
             <TextBox x:Name="ResearcherName" Height="23" Canvas.Left="136" TextWrapping="Wrap" Canvas.Top="115" Width="172"/>

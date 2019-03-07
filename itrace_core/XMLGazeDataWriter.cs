@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Text;
 using System.Threading;
-using System.Windows;
 using System.Xml;
-using System.Collections.Generic;
 
 namespace iTrace_Core
 {
@@ -38,7 +36,7 @@ namespace iTrace_Core
 
             xmlTextWriter.WriteAttributeString("session_id", SessionManager.GetInstance().CurrentSessionID);
             xmlTextWriter.WriteAttributeString("session_data_time", SessionManager.GetInstance().CurrentSessionTimeStamp);
-            xmlTextWriter.WriteAttributeString("study_name", SessionManager.GetInstance().StudyName);
+            xmlTextWriter.WriteAttributeString("task_name", SessionManager.GetInstance().TaskName);
             xmlTextWriter.WriteAttributeString("researcher", SessionManager.GetInstance().ResearcherName);
             xmlTextWriter.WriteAttributeString("participant_id", SessionManager.GetInstance().ParticipantID);
         }
