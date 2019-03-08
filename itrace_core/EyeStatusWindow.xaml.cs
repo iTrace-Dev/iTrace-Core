@@ -32,8 +32,7 @@ namespace iTrace_Core
             Path rightEyePath = new Path();
             rightEyePath.Fill = Brushes.White;
             rightEyePath.Data = rightEyeCircle;
-
-            this.KeyUp += Grid_KeyUp;
+            
             Canvas containerCanvas = new Canvas();
             containerCanvas.Background = Brushes.Black;
             containerCanvas.Children.Add(leftEyePath);
@@ -92,48 +91,6 @@ namespace iTrace_Core
                     rightEyeCircle.Center = new Point(rightEyeProjected.X + (Width / 2), rightEyeProjected.Y + (Height / 2));
 
                 });
-        }
-
-        //Temporary for testing
-        Vector3 currentLeftEyePosition = new Vector3(10.0f, 0.0f, 5.0f);
-        Vector3 currentRightEyePosition = new Vector3(-10.0f, 0.0f, 5.0f);
-
-        private void Grid_KeyUp(object sender, System.Windows.Input.KeyEventArgs e)
-        {
-            if (e.Key == System.Windows.Input.Key.W)
-            {
-                currentRightEyePosition.Z += 1.0f;
-                currentLeftEyePosition.Z += 1.0f;
-            }
-            else if (e.Key == System.Windows.Input.Key.S)
-            {
-                currentRightEyePosition.Z -= 1.0f;
-                currentLeftEyePosition.Z -= 1.0f;
-            }
-            else if (e.Key == System.Windows.Input.Key.A)
-            {
-                currentRightEyePosition.X += 10.0f;
-                currentLeftEyePosition.X += 10.0f;
-            }
-            else if (e.Key == System.Windows.Input.Key.D)
-            {
-                currentRightEyePosition.X -= 10.0f;
-                currentLeftEyePosition.X -= 10.0f;
-            }
-            else if (e.Key == System.Windows.Input.Key.R)
-            {
-                currentRightEyePosition.Y += 10.0f;
-                currentLeftEyePosition.Y += 10.0f;
-            }
-            else if (e.Key == System.Windows.Input.Key.F)
-            {
-                currentRightEyePosition.Y -= 10.0f;
-                currentLeftEyePosition.Y -= 10.0f;
-            }
-
-            Console.WriteLine(currentLeftEyePosition.ToString());
-
-            UpdateEyePosition(currentLeftEyePosition, currentRightEyePosition);
         }
     }
 }
