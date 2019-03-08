@@ -29,7 +29,9 @@ namespace iTrace_Core
 
         public string ScreenRecordingStart { get; private set; }
 
-        private SessionManager() { ScreenRecordingStart = "0"; }
+        public bool Active { get; private set; }
+
+        private SessionManager() { ScreenRecordingStart = "0"; Active = false; }
 
         public static SessionManager GetInstance()
         {
@@ -63,6 +65,12 @@ namespace iTrace_Core
         {
             CurrentSessionID = Convert.ToString(DateTime.UtcNow.Ticks);
             CurrentSessionTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
+            Active = true;
+        }
+
+        public void StopSession()
+        {
+            Active = false;
         }
 
         public void GenerateCalibrationTimeStamp()

@@ -140,6 +140,8 @@ namespace iTrace_Core
         {
             if (TrackerManager.Running())
             {
+                SessionManager.GetInstance().StopSession();
+
                 ActivateTrackerButton.Content = Properties.Resources.StartTracking;
                 TrackerManager.StopTracker();
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
