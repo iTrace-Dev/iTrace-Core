@@ -43,6 +43,11 @@ namespace iTrace_Core
             SendToClients(SessionManager.GetInstance().Serialize());
         }
 
+        public void SendSessionData(TcpClient client)
+        {
+            SendToClient(client, SessionManager.GetInstance().Serialize());
+        }
+
         private void ListenForConnections()
         {
             TcpClient client;
@@ -62,12 +67,12 @@ namespace iTrace_Core
 
             for (int i = clientQueueCount; i != 0; --i)
             {
-                if (SessionManager.GetInstance().Active)
-                {
-
-                }
                 TcpClient client = clientAcceptQueue.Take();
 
+                if (SessionManager.GetInstance().Active)
+                {
+                    SendSessionData(client);
+                }
 
                 clients.Add(client);
             }
