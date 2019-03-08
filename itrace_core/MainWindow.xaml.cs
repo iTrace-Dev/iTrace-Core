@@ -1,18 +1,14 @@
 ﻿using System;
-using System.Windows;
-using System.Configuration;
-using System.Windows.Controls;
 using System.Collections.Generic;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace iTrace_Core
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
-		Recorder rec;
+        Recorder rec;
         ReticleController reticleController;
         SocketServer socketServer;
         WebSocketServer webSocketServer;
@@ -54,7 +50,7 @@ namespace iTrace_Core
         private void InitializeSettingsGrid()
         {
             settings = new List<Setting>();
-            List<string> options = new List<string> { "socket_port", "websocket_port"};
+            List<string> options = new List<string> { "socket_port", "websocket_port" };
 
             foreach (string s in options)
             {
@@ -66,7 +62,7 @@ namespace iTrace_Core
 
         private void ApplySettings(object sender, RoutedEventArgs e)
         {
-            foreach(Setting s in settings)
+            foreach (Setting s in settings)
             {
                 ConfigurationRegistry.Instance.WriteConfiguration(s.Option, s.Value);
             }
@@ -144,7 +140,7 @@ namespace iTrace_Core
         {
             if (TrackerManager.Running())
             {
-				ActivateTrackerButton.Content = Properties.Resources.StartTracking;
+                ActivateTrackerButton.Content = Properties.Resources.StartTracking;
                 TrackerManager.StopTracker();
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
@@ -165,13 +161,13 @@ namespace iTrace_Core
                 socketServer.SendSessionData();
                 webSocketServer.SendSessionData();
 
-				//Name of .avi hardcoded for now
+                //Name of .avi hardcoded for now
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
                     rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
                     SessionManager.GetInstance().GenerateScreenRecordingStart();
                 }
-				ActivateTrackerButton.Content = Properties.Resources.StopTracking;
+                ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
                 TrackerManager.StartTracker();
                 ActivateCalibrationButton.IsEnabled = false;
@@ -189,7 +185,7 @@ namespace iTrace_Core
             if (reticleController == null)
                 reticleController = new ReticleController();
 
-            if(reticleController.IsShown())
+            if (reticleController.IsShown())
             {
                 reticleController.HideReticle();
                 ActivateReticleButton.Content = Properties.Resources.ShowReticle;

@@ -5,12 +5,12 @@ namespace iTrace_Core
     class SessionManager
     {
         static SessionManager instance;
-        
+
         public string TaskName { get; private set; }
         public string ResearcherName { get; private set; }
         public string ParticipantID { get; private set; }
         public string DataRootDir { get; private set; }
-        
+
         // TimeStamp in ticks
         public string CurrentSessionID { get; private set; }
 
@@ -18,7 +18,7 @@ namespace iTrace_Core
         public string CurrentSessionTimeStamp { get; private set; }
 
         public string CurrentCalibrationTimeStamp { get; private set; }
-        
+
         public int ScreenWidth { get; private set; }
         public int ScreenHeight { get; private set; }
 
@@ -59,7 +59,7 @@ namespace iTrace_Core
             CurrentCalibration = new EmptyCalibrationResult();
         }
 
-        public void StartSession() 
+        public void StartSession()
         {
             CurrentSessionID = Convert.ToString(DateTime.UtcNow.Ticks);
             CurrentSessionTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
@@ -67,7 +67,7 @@ namespace iTrace_Core
 
         public void GenerateCalibrationTimeStamp()
         {
-            CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds()); 
+            CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
 
         public void SetCalibration(CalibrationResult r)

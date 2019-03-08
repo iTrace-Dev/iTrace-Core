@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Windows;
 
 namespace iTrace_Core
 {
-    class TobiiTracker: ITracker
+    class TobiiTracker : ITracker
     {
         private readonly Tobii.Research.IEyeTracker TrackingDevice;
         private Tobii.Research.ScreenBasedCalibration Calibration;
@@ -57,7 +55,7 @@ namespace iTrace_Core
         {
             TobiiCalibrationResult calibrationResult = new TobiiCalibrationResult(Calibration.ComputeAndApply(), calibrationWindow.ActualWidth, calibrationWindow.ActualHeight);
 
-            if(calibrationResult.IsFailure())
+            if (calibrationResult.IsFailure())
             {
                 Console.WriteLine("Calibration failed!");
             }
@@ -73,8 +71,8 @@ namespace iTrace_Core
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)
         {
             Tobii.Research.NormalizedPoint2D point = new Tobii.Research.NormalizedPoint2D(
-                    (float) (e.CalibrationPoint.X / calibrationWindow.ActualWidth),
-                    (float) (e.CalibrationPoint.Y / calibrationWindow.ActualHeight)
+                    (float)(e.CalibrationPoint.X / calibrationWindow.ActualWidth),
+                    (float)(e.CalibrationPoint.Y / calibrationWindow.ActualHeight)
                 );
             Calibration.CollectData(point);
         }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Xml;
 
@@ -40,11 +39,11 @@ namespace iTrace_Core
             xmlTextWriter.WriteAttributeString("researcher", SessionManager.GetInstance().ResearcherName);
             xmlTextWriter.WriteAttributeString("participant_id", SessionManager.GetInstance().ParticipantID);
         }
-        
+
         private void WriteEnvironment()
         {
             xmlTextWriter.WriteStartElement("environment");
-            
+
             xmlTextWriter.WriteAttributeString("screen_width", SessionManager.GetInstance().ScreenWidth.ToString());
             xmlTextWriter.WriteAttributeString("session_height", SessionManager.GetInstance().ScreenHeight.ToString());
             xmlTextWriter.WriteAttributeString("tracker_type", SessionManager.GetInstance().TrackerType);

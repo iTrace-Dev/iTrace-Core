@@ -55,7 +55,7 @@ namespace iTrace_Core
         private void CalibrationWindow_OnCalibrationFinished(object sender, EventArgs e)
         {
             System.Windows.Point[] leftEye = new System.Windows.Point[0];
-            System.Windows.Point[] rightEye = new System.Windows.Point[0]; 
+            System.Windows.Point[] rightEye = new System.Windows.Point[0];
 
             calibrationWindow.ShowResultsAndClose(leftEye, rightEye);
         }

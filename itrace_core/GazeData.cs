@@ -105,12 +105,12 @@ namespace iTrace_Core
                 Y = Convert.ToInt32(avgY * Screen.PrimaryScreen.Bounds.Height);
 
             }
-            else if(isLeftEyeValid)
+            else if (isLeftEyeValid)
             {
                 X = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
             }
-            else if(isRightEyeValid)
+            else if (isRightEyeValid)
             {
                 X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
                 Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);

@@ -1,10 +1,10 @@
 ﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.IO;
 
 namespace iTrace_Core
 {
@@ -16,7 +16,7 @@ namespace iTrace_Core
         byte[] mask = new byte[4] { 16, 68, 42, 10 };
 
         public bool Connected { get; private set; }
-        
+
         public WebSocket() { }
 
         public void WaitForConnection(string address, int port)
@@ -43,7 +43,7 @@ namespace iTrace_Core
                 Thread.Sleep(updateLength);
                 timeoutCountDown += updateLength;
 
-                if(timeoutCountDown > timeout)
+                if (timeoutCountDown > timeout)
                 {
                     return false;
                 }
@@ -79,7 +79,7 @@ namespace iTrace_Core
             {
                 return false;
             }
-        }   
+        }
 
         public void SendMessage(string message)
         {
@@ -115,7 +115,7 @@ namespace iTrace_Core
             {
                 stream.Write(frame, 0, frame.Length);
             }
-            catch(IOException e)
+            catch (IOException e)
             {
                 Connected = false;
             }

@@ -6,17 +6,17 @@ namespace iTrace_Core
 {
     sealed class ConfigurationRegistry
     {
-        private static readonly Lazy<ConfigurationRegistry> Singleton = 
+        private static readonly Lazy<ConfigurationRegistry> Singleton =
             new Lazy<ConfigurationRegistry>(() => new ConfigurationRegistry());
 
         public static ConfigurationRegistry Instance { get { return Singleton.Value; } }
 
         private Dictionary<string, string> configurations;
 
-        private ConfigurationRegistry() 
+        private ConfigurationRegistry()
         {
             configurations = new Dictionary<string, string>();
-            
+
             foreach (var key in ConfigurationManager.AppSettings.AllKeys)
             {
                 configurations[key] = ConfigurationManager.AppSettings[key];
@@ -39,7 +39,7 @@ namespace iTrace_Core
 
             return defaultValue;
         }
-        
+
         public void WriteConfiguration(string key, string value)
         {
             configurations[key] = value;
