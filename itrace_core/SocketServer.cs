@@ -28,14 +28,15 @@ namespace iTrace_Core
             server = new TcpListener(IPAddress.Parse(localhostAddress), port);
             server.Start();
 
-            connectionsListener = new Thread(new ThreadStart(() => {
+            connectionsListener = new Thread(new ThreadStart(() =>
+            {
                 Thread.CurrentThread.IsBackground = true;
                 ListenForConnections();
             }));
             connectionsListener.Start();
 
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
-        } 
+        }
 
         public void SendSessionData()
         {
@@ -47,7 +48,7 @@ namespace iTrace_Core
         {
             TcpClient client;
 
-            while(true)
+            while (true)
             {
                 client = server.AcceptTcpClient();
                 clientAcceptQueue.Add(client);
@@ -60,7 +61,7 @@ namespace iTrace_Core
         {
             int clientQueueCount = clientAcceptQueue.Count;
 
-            for(int i = clientQueueCount; i != 0; --i)
+            for (int i = clientQueueCount; i != 0; --i)
             {
                 TcpClient client = clientAcceptQueue.Take();
                 clients.Add(client);
@@ -73,7 +74,7 @@ namespace iTrace_Core
 
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
-            for(int i = clients.Count - 1; i >= 0; i--)
+            for (int i = clients.Count - 1; i >= 0; i--)
             {
                 try
                 {
@@ -83,6 +84,20 @@ namespace iTrace_Core
                 {   //client was disconnected
                     clients.RemoveAt(i);
                 }
+            }
+        }
+
+        private void SendToClient(TcpClient client, string message)
+        {
+            byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
+
+            try
+            {
+                client.GetStream().Write(messageInBytes, 0, messageInBytes.Length);
+            }
+            catch (System.IO.IOException e)
+            {
+
             }
         }
 
