@@ -73,8 +73,7 @@ namespace iTrace_Core
 
         public void SendSessionData()
         {
-            string data = "session," + SessionManager.GetInstance().DataRootDir + '\n';
-            SendToClients(data);
+            SendToClients(SessionManager.GetInstance().Serialize());
         }
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)

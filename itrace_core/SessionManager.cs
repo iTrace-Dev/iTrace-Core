@@ -93,5 +93,10 @@ namespace iTrace_Core
         {
             ScreenRecordingStart = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
+
+        public string Serialize()
+        {
+            return "session," + DataRootDir + '\n';
+        }
     }
 }
