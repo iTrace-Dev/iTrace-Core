@@ -39,7 +39,14 @@ namespace iTrace_Core
                 new Thread(() =>
                 {
                     if (ws.PerformHandshake(10000))
+                    {
+                        if (SessionManager.GetInstance().Active)
+                        {
+                            ws.SendMessage(SessionManager.GetInstance().Serialize());
+                        }
+
                         clientAcceptQueue.Add(ws);
+                    }
                 }).Start();
             }
         }
