@@ -94,6 +94,10 @@ namespace iTrace_Core
                 {   //client was disconnected
                     clients.RemoveAt(i);
                 }
+                catch (InvalidOperationException e)
+                {
+                    clients.RemoveAt(i);
+                }
             }
         }
 
