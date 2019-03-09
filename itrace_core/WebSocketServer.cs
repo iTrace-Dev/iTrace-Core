@@ -82,6 +82,11 @@ namespace iTrace_Core
         {
             SendToClients(SessionManager.GetInstance().Serialize());
         }
+        
+        public void SendEndSession()
+        {
+            // SendToClients("message");
+        }
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {

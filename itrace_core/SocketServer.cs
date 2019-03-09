@@ -48,6 +48,11 @@ namespace iTrace_Core
             SendToClient(client, SessionManager.GetInstance().Serialize());
         }
 
+        public void SendEndSession()
+        {
+            // SendToClients("message");
+        }
+
         private void ListenForConnections()
         {
             TcpClient client;

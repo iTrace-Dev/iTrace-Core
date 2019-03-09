@@ -144,10 +144,15 @@ namespace iTrace_Core
 
                 ActivateTrackerButton.Content = Properties.Resources.StartTracking;
                 TrackerManager.StopTracker();
+
+                socketServer.SendEndSession();
+                webSocketServer.SendEndSession();
+
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
                 {
                     rec.Dispose();
                 }
+
                 xmlGazeDataWriter.StopWriting();
                 ActivateCalibrationButton.IsEnabled = true;
                 ShowEyeStatusButton.IsEnabled = true;
