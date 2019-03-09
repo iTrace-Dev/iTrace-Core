@@ -56,8 +56,6 @@ namespace iTrace_Core
             {
                 client = server.AcceptTcpClient();
                 clientAcceptQueue.Add(client);
-
-                Console.WriteLine("Client connected!");
             }
         }
 
