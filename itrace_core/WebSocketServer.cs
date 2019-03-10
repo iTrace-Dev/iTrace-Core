@@ -85,7 +85,7 @@ namespace iTrace_Core
         
         public void SendEndSession()
         {
-            // SendToClients("message");
+            SendToClients("session_stop\n");
         }
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)

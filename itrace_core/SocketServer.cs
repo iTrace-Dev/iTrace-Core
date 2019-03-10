@@ -50,7 +50,7 @@ namespace iTrace_Core
 
         public void SendEndSession()
         {
-            // SendToClients("message");
+            SendToClients("session_end\n");
         }
 
         private void ListenForConnections()

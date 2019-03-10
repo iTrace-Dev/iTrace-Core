@@ -96,7 +96,7 @@ namespace iTrace_Core
 
         public string Serialize()
         {
-            return "session," + DataRootDir + '\n';
+            return "session_start," + DataRootDir + '\n';
         }
     }
 }
