@@ -80,6 +80,10 @@ namespace iTrace_Core
             Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, leftEyePosition.Z / 1000f);
             Vector4 rightEyeHomogeneous = new Vector4(rightEyePosition, rightEyePosition.Z / 1000f);
 
+            Vector4 reflect = new Vector4(1, 1, 1, 1);
+            leftEyeHomogeneous = leftEyeHomogeneous * reflect;
+            rightEyeHomogeneous = leftEyeHomogeneous * reflect;
+
             Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
             Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
 
