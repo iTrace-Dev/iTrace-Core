@@ -19,8 +19,8 @@ namespace iTrace_Core
         {
             InitializeComponent();
 
-            leftEyeCircle = new EllipseGeometry(new Point(400, 300), 5, 5);
-            rightEyeCircle = new EllipseGeometry(new Point(500, 300), 5, 5);
+            leftEyeCircle = new EllipseGeometry(new Point(150, 100), 5, 5);
+            rightEyeCircle = new EllipseGeometry(new Point(250, 100), 5, 5);
 
             this.RegisterName(registeredLeftEyeName, leftEyeCircle);
             this.RegisterName(registeredRightEyeName, rightEyeCircle);
