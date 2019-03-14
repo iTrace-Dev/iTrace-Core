@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Numerics;
 using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Media;
 using System.Windows.Shapes;
 
@@ -33,11 +32,9 @@ namespace iTrace_Core
             rightEyePath.Fill = Brushes.White;
             rightEyePath.Data = rightEyeCircle;
             
-            Canvas containerCanvas = new Canvas();
-            containerCanvas.Background = Brushes.Black;
-            containerCanvas.Children.Add(leftEyePath);
-            containerCanvas.Children.Add(rightEyePath);
-            this.Content = containerCanvas;
+            DrawDestination.Background = Brushes.Black;
+            DrawDestination.Children.Add(leftEyePath);
+            DrawDestination.Children.Add(rightEyePath);
         }
 
         public void Subscribe()

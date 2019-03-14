@@ -7,6 +7,7 @@
         mc:Ignorable="d"
         Title="EyeStatusWindow" Height="300" Width="400">
     <Grid>
-
+        <Canvas Name="DrawDestination"></Canvas>
+        <Grid HorizontalAlignment="Right" Height="Auto" Width="80"></Grid>
     </Grid>
 </Window>
