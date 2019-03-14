@@ -96,7 +96,7 @@ namespace iTrace_Core
 
         public string Serialize()
         {
-            return "session_start," + currentSessionID + "," + CurrentSessionTimeStamp + "," + DataRootDir + '\n';
+            return "session_start," + CurrentSessionID + "," + CurrentSessionTimeStamp + "," + DataRootDir + '\n';
         }
     }
 }
