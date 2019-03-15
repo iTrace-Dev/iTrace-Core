@@ -87,10 +87,8 @@ namespace iTrace_Core
             Dispatcher.Invoke(
                 () =>
                 {
-
-                    leftEyeCircle.Center = new Point(leftEyeProjected.X + (Width / 2), leftEyeProjected.Y + (Height / 2));
-                    rightEyeCircle.Center = new Point(rightEyeProjected.X + (Width / 2), rightEyeProjected.Y + (Height / 2));
-
+                    leftEyeCircle.Center = new Point(leftEyeProjected.X + (DrawDestination.Width / 2), leftEyeProjected.Y + (DrawDestination.Height / 2));
+                    rightEyeCircle.Center = new Point(rightEyeProjected.X + (DrawDestination.Width / 2), rightEyeProjected.Y + (DrawDestination.Height / 2));
                 });
         }
     }

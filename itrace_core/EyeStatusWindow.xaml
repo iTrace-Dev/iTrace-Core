@@ -7,7 +7,16 @@
         mc:Ignorable="d"
         Title="EyeStatusWindow" Height="300" Width="400">
     <Grid>
-        <Canvas Name="DrawDestination"></Canvas>
-        <Grid HorizontalAlignment="Right" Height="Auto" Width="80"></Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="80" />
+        </Grid.ColumnDefinitions>
+        <Grid Name="ContainingGrid">
+            <Canvas Grid.Column="0" Name="DrawDestination" Height="Auto" Width="{Binding ElementName=ContainingGrid, Path=ActualWidth}" HorizontalAlignment="Left"/>
+        </Grid>
+        
+        <Grid Grid.Column="2" HorizontalAlignment="Right" Height="Auto" Width="80">
+            <Label>HI</Label>
+        </Grid>
     </Grid>
 </Window>
