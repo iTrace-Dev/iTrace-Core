@@ -83,8 +83,6 @@ namespace iTrace_Core
 
         private void SendToClients(string message)
         {
-            AcceptQueuedClients();
-
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
             for (int i = clients.Count - 1; i >= 0; i--)
@@ -122,6 +120,8 @@ namespace iTrace_Core
         {
             if (e.ReceivedGazeData.IsValid())
             {
+                AcceptQueuedClients();
+
                 SendToClients(e.ReceivedGazeData.Serialize());
             }
         }
