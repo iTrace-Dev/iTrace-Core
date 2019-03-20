@@ -5,7 +5,9 @@ namespace iTrace_Core
     class MouseTracker : ITracker
     {
         private readonly String TRACKER_NAME = "Mouse";
-        private const Double TIME_INTERVAL = 8.0; // 125 samples per second
+        private const Double TIME_INTERVAL_160 = 6.25;   // 160 samples per second
+        private const Double TIME_INTERVAL_125 = 8.0;    // 125 samples per second
+        private const Double TIME_INTERVAL_60 = 17.0;   // 60 samples per second
         private System.Timers.Timer MouseLocationTick;
 
         // for testing
@@ -13,7 +15,7 @@ namespace iTrace_Core
 
         public MouseTracker()
         {
-            MouseLocationTick = new System.Timers.Timer(TIME_INTERVAL);
+            MouseLocationTick = new System.Timers.Timer(TIME_INTERVAL_60);
             MouseLocationTick.Elapsed += MousePosition;
             MouseLocationTick.AutoReset = true;
         }
