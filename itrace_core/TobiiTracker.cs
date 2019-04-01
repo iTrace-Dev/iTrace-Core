@@ -34,7 +34,7 @@ namespace iTrace_Core
                 }
             }
 
-            if (foundDevice.GetGazeOutputFrequency() != MAXIMUM_TRACKING_SPEED)
+            if (foundDevice.GetGazeOutputFrequency() > MAXIMUM_TRACKING_SPEED)
             {
                 ThrottleSkip = Convert.ToInt64((foundDevice.GetGazeOutputFrequency() / MAXIMUM_TRACKING_SPEED) - 1);
                 SkipCount = ThrottleSkip;
