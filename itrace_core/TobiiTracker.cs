@@ -11,11 +11,35 @@ namespace iTrace_Core
 
         private EyeStatusWindow eyeStatusWindow;
         private bool isEyeStatusOpen;
+        private Single previousTrackingSpeed = 0;
+
+        private readonly Single MAXIMUM_TRACKING_SPEED = 60;
+        private static long ThrottleSkip = 0;
+        private static long SkipCount = 0;
+
 
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
             TrackingDevice = foundDevice;
             isEyeStatusOpen = false;
+            
+            // Check if device supports 60Hz
+            foreach (Single x in foundDevice.GetAllGazeOutputFrequencies())
+            {
+                if (x == MAXIMUM_TRACKING_SPEED)
+                {
+                    // Cache the old speed to restore later
+                    previousTrackingSpeed = foundDevice.GetGazeOutputFrequency();
+                    foundDevice.SetGazeOutputFrequency(MAXIMUM_TRACKING_SPEED);
+                }
+            }
+
+            if (foundDevice.GetGazeOutputFrequency() != MAXIMUM_TRACKING_SPEED)
+            {
+                ThrottleSkip = Convert.ToInt64((foundDevice.GetGazeOutputFrequency() / MAXIMUM_TRACKING_SPEED) - 1);
+                SkipCount = ThrottleSkip;
+            }
+
         }
 
         public String GetTrackerName()
@@ -84,7 +108,15 @@ namespace iTrace_Core
 
         private void ReceiveRawGaze(object sender, Tobii.Research.GazeDataEventArgs e)
         {
-            GazeHandler.Instance.EnqueueGaze(new TobiiGazeData(e));
+            if (System.Threading.Interlocked.Read(ref SkipCount) == ThrottleSkip)
+            {
+                GazeHandler.Instance.EnqueueGaze(new TobiiGazeData(e));
+                System.Threading.Interlocked.Exchange(ref SkipCount, 0);
+            }
+            else
+            {
+                System.Threading.Interlocked.Increment(ref SkipCount);
+            }
         }
 
         public void ShowEyeStatusWindow()
@@ -104,6 +136,15 @@ namespace iTrace_Core
                 };
 
                 eyeStatusWindow.Show();
+            }
+        }
+
+        ~ TobiiTracker()
+        {
+            if (previousTrackingSpeed > 0)
+            {
+                // Restore previous tracking speed
+                TrackingDevice.SetGazeOutputFrequency(previousTrackingSpeed);
             }
         }
     }
