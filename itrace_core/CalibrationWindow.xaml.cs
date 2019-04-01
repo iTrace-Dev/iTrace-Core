@@ -53,6 +53,9 @@ namespace iTrace_Core
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
+            Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Left;
+            Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Top;
+
             GenerateTargets();
 
             CreateReticle();
