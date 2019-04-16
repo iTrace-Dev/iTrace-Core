@@ -108,6 +108,7 @@
     <Compile Include="EyeStatusWindow.xaml.cs">
       <DependentUpon>EyeStatusWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="PreciseSystemTime.cs" />
     <Compile Include="SessionSetupWindow.xaml.cs">
       <DependentUpon>SessionSetupWindow.xaml</DependentUpon>
     </Compile>
