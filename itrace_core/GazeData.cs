@@ -139,13 +139,8 @@ namespace iTrace_Core
             UserRightX = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.X;
             UserRightY = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Y;
             UserRightZ = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Z;
-
-            //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
-            EventTime = DateTime.UtcNow.Ticks;
-
+            
             TrackerTime = tobiiRawGaze.DeviceTimeStamp;
-
-            SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 
@@ -205,12 +200,7 @@ namespace iTrace_Core
             UserRightY = Double.Parse(recNode.Attributes["REYEY"].Value); ;
             UserRightZ = Double.Parse(recNode.Attributes["REYEZ"].Value); ;
 
-            //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
-            EventTime = DateTime.UtcNow.Ticks;
-
             TrackerTime = Convert.ToInt64(recNode.Attributes["TIME_TICK"].Value);
-
-            SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
         }
     }
 }
