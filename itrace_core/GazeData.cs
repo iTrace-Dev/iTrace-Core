@@ -63,7 +63,8 @@ namespace iTrace_Core
             UserRightZ = 0;
 
             //Should be high resolution, but the offset is probably from the .NET epoch (DateTime.MinValue)
-            EventTime = DateTime.UtcNow.Ticks;
+            //EventTime = DateTime.UtcNow.Ticks;
+            EventTime = PreciseSystemTime.GetTime();
 
             //Should be decent enough resolution for post processing calculations
             SystemTime = DateTimeOffset.UtcNow.ToUnixTimeMilliseconds();
