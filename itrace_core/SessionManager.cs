@@ -94,6 +94,12 @@ namespace iTrace_Core
             ScreenRecordingStart = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
 
+        public void ClearCalibration()
+        {
+            CurrentCalibration = new EmptyCalibrationResult();
+            CurrentCalibrationTimeStamp = "0";
+        }
+
         public string Serialize()
         {
             return "session_start," + CurrentSessionID + "," + CurrentSessionTimeStamp + "," + DataRootDir + '\n';

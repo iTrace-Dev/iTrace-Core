@@ -103,6 +103,8 @@ namespace iTrace_Core
         {
             if (TrackerList.SelectedIndex >= 0)
             {
+                SessionManager.GetInstance().ClearCalibration();
+
                 System.Console.WriteLine(TrackerList.SelectedItem.ToString());
                 TrackerManager.SetActiveTracker(TrackerList.SelectedItem.ToString());
                 if (TrackerList.SelectedItem.ToString() == "Mouse")
@@ -125,6 +127,8 @@ namespace iTrace_Core
 
         private void RefreshTrackerList()
         {
+            SessionManager.GetInstance().ClearCalibration();
+
             TrackerManager.FindTrackers();
             TrackerList.ItemsSource = TrackerManager.GetAttachedTrackers();
 
