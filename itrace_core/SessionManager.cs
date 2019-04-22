@@ -23,6 +23,7 @@ namespace iTrace_Core
         public int ScreenHeight { get; private set; }
 
         public CalibrationResult CurrentCalibration { get; private set; }
+        public string CalibratedTrackerID { get; private set; }
 
         public string TrackerType { get; private set; }
         public string TrackerSerialNumber { get; private set; }
@@ -78,9 +79,10 @@ namespace iTrace_Core
             CurrentCalibrationTimeStamp = Convert.ToString(DateTimeOffset.UtcNow.ToUnixTimeMilliseconds());
         }
 
-        public void SetCalibration(CalibrationResult r)
+        public void SetCalibration(CalibrationResult r, ITracker calibratedTracker)
         {
             CurrentCalibration = r;
+            CalibratedTrackerID = calibratedTracker.GetTrackerName() + calibratedTracker.GetTrackerSerialNumber();
         }
 
         public void SetTrackerData(string trackerType, string trackerSerialNumber)
@@ -98,6 +100,7 @@ namespace iTrace_Core
         {
             CurrentCalibration = new EmptyCalibrationResult();
             CurrentCalibrationTimeStamp = "0";
+            CalibratedTrackerID = "";
         }
 
         public string Serialize()

@@ -59,13 +59,12 @@ namespace iTrace_Core
             {
                 Console.WriteLine("Calibration failed!");
             }
-
-            SessionManager.GetInstance().SetCalibration(calibrationResult);
-
+            
             Calibration.LeaveCalibrationMode();
+            SessionManager.GetInstance().SetCalibration(calibrationResult, this);
 
             calibrationWindow.ShowResultsAndClose(calibrationResult.GetLeftEyePoints().ToArray(), calibrationResult.GetRightEyePoints().ToArray());
-            SessionManager.GetInstance().SetCalibration(calibrationResult);
+
         }
 
         private void CalibrationWindow_OnCalibrationPointReached(object sender, CalibrationPointReachedEventArgs e)

@@ -33,7 +33,7 @@ namespace iTrace_Core
 
             // Default the session to the last used output directory and empty everything else
             SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
-            SessionManager.GetInstance().SetCalibration(new EmptyCalibrationResult());
+            SessionManager.GetInstance().ClearCalibration();
 
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
@@ -103,8 +103,6 @@ namespace iTrace_Core
         {
             if (TrackerList.SelectedIndex >= 0)
             {
-                SessionManager.GetInstance().ClearCalibration();
-
                 System.Console.WriteLine(TrackerList.SelectedItem.ToString());
                 TrackerManager.SetActiveTracker(TrackerList.SelectedItem.ToString());
                 if (TrackerList.SelectedItem.ToString() == "Mouse")
@@ -127,8 +125,6 @@ namespace iTrace_Core
 
         private void RefreshTrackerList()
         {
-            SessionManager.GetInstance().ClearCalibration();
-
             TrackerManager.FindTrackers();
             TrackerList.ItemsSource = TrackerManager.GetAttachedTrackers();
 
@@ -163,6 +159,10 @@ namespace iTrace_Core
             }
             else
             {
+                string trackerID = TrackerManager.GetActiveTracker().GetTrackerName() + TrackerManager.GetActiveTracker().GetTrackerSerialNumber();
+                if (trackerID != SessionManager.GetInstance().CalibratedTrackerID)
+                    SessionManager.GetInstance().ClearCalibration();
+
                 //Start the session (SHOULD HAPPPEN FIRST)
                 SessionManager.GetInstance().StartSession();
 

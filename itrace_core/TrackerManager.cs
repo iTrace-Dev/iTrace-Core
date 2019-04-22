@@ -108,5 +108,10 @@ namespace iTrace_Core
             if (ActiveTracker != null)
                 ActiveTracker.ShowEyeStatusWindow();
         }
+
+        public ITracker GetActiveTracker()
+        {
+            return ActiveTracker;
+        }
     }
 }
