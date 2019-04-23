@@ -26,6 +26,9 @@
                     </LinearGradientBrush>
                 </Label.Background>
             </Label>
+            <Label Name="Slider" Margin="15,0,0,0">
+                ◁100cm
+            </Label>
         </Grid>
     </Grid>
 </Window>
