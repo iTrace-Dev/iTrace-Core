@@ -72,6 +72,11 @@ namespace iTrace_Core
             return result;
         }
 
+        float Lerp(float origin, float destination, float percent)
+        {
+            return origin * (1 - percent) + destination * percent;
+        }
+
         public void UpdateEyePosition(Vector3 leftEyePosition, Vector3 rightEyePosition)
         {
             Vector4 leftEyeHomogeneous = new Vector4(leftEyePosition, leftEyePosition.Z / 1000f);
