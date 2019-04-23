@@ -104,10 +104,10 @@ namespace iTrace_Core
                     leftEyeCircle.Center = new Point(leftEyeProjected.X + (DrawDestination.ActualWidth / 2), leftEyeProjected.Y + (DrawDestination.ActualHeight / 2));
                     rightEyeCircle.Center = new Point(rightEyeProjected.X + (DrawDestination.ActualWidth / 2), rightEyeProjected.Y + (DrawDestination.ActualHeight / 2));
 
-                    Slider.Content = "◁" + distanceInCentimeters.ToString() + " cm";
+                    Slider.Content = "◁ " + distanceInCentimeters.ToString() + " cm";
 
                     Thickness margin = Slider.Margin;
-                    margin.Top = ClampedLerp(0.0, ActualHeight - 55.0, distanceInCentimeters / maxDistCentimeter);
+                    margin.Top = ClampedLerp(0.0, ActualHeight - 65.0, distanceInCentimeters / maxDistCentimeter);
                     Slider.Margin = margin;
                 });
         }
