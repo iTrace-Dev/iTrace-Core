@@ -14,6 +14,8 @@ namespace iTrace_Core
         EllipseGeometry leftEyeCircle;
         EllipseGeometry rightEyeCircle;
 
+        const double maxDistCentimeter = 100.0;
+
         public EyeStatusWindow()
         {
             InitializeComponent();
@@ -72,8 +74,13 @@ namespace iTrace_Core
             return result;
         }
 
-        float Lerp(float origin, float destination, float percent)
+        double ClampedLerp(double origin, double destination, double percent)
         {
+            if (percent > 1.0)
+                percent = 1.0;
+            else if (percent < 0)
+                percent = 0.0;
+
             return origin * (1 - percent) + destination * percent;
         }
 
@@ -89,11 +96,19 @@ namespace iTrace_Core
             Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
             Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
 
+            int distanceInCentimeters = Convert.ToInt32((leftEyePosition.Z + rightEyePosition.Z) / 2.0);
+
             Dispatcher.Invoke(
                 () =>
                 {
                     leftEyeCircle.Center = new Point(leftEyeProjected.X + (DrawDestination.ActualWidth / 2), leftEyeProjected.Y + (DrawDestination.ActualHeight / 2));
                     rightEyeCircle.Center = new Point(rightEyeProjected.X + (DrawDestination.ActualWidth / 2), rightEyeProjected.Y + (DrawDestination.ActualHeight / 2));
+
+                    Slider.Content = "◁" + distanceInCentimeters.ToString() + " cm";
+
+                    Thickness margin = Slider.Margin;
+                    margin.Top = ClampedLerp(0.0, ActualHeight - 55.0, distanceInCentimeters / maxDistCentimeter);
+                    Slider.Margin = margin;
                 });
         }
     }
