@@ -38,9 +38,9 @@ namespace iTrace_Core
         {
             mutex.WaitOne();
 
-            if (e.ReceivedGazeData.IsValid() && !closed)
+            if (e.ReceivedGazeData.IsValid() && !closed && e.ReceivedGazeData.X.HasValue && e.ReceivedGazeData.Y.HasValue)
             {
-                reticle.UpdateReticle(e.ReceivedGazeData.X, e.ReceivedGazeData.Y);
+                reticle.UpdateReticle(e.ReceivedGazeData.X.Value, e.ReceivedGazeData.Y.Value);
             }
 
             mutex.ReleaseMutex();

@@ -7,8 +7,8 @@ namespace iTrace_Core
     public abstract class GazeData
     {
         // Data sent to plugins
-        public int X { get; protected set; }
-        public int Y { get; protected set; }
+        public int? X { get; protected set; }
+        public int? Y { get; protected set; }
 
         // Data recorded for the right eye
         public double RightX { get; protected set; }
@@ -41,8 +41,8 @@ namespace iTrace_Core
 
         public GazeData()
         {
-            X = 0;
-            Y = 0;
+            X = null;
+            Y = null;
 
             RightX = 0;
             RightY = 0;
@@ -119,8 +119,8 @@ namespace iTrace_Core
             else
             {
                 //Both eyes invalid.
-                X = 0;
-                Y = 0;
+                X = null;
+                Y = null;
             }
 
             RightX = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
@@ -175,8 +175,8 @@ namespace iTrace_Core
 
             if (recNode.Attributes["BPOGX"] == null)
             {
-                X = 0;
-                Y = 0;
+                X = null;
+                Y = null;
                 return;
             }
 

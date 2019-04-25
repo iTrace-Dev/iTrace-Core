@@ -71,8 +71,8 @@ namespace iTrace_Core
             xmlTextWriter.WriteAttributeString("core_time", gazeData.SystemTime.ToString());
             xmlTextWriter.WriteAttributeString("tracker_time", gazeData.TrackerTime.ToString());
 
-            xmlTextWriter.WriteAttributeString("x", gazeData.X.ToString());
-            xmlTextWriter.WriteAttributeString("y", gazeData.Y.ToString());
+            xmlTextWriter.WriteAttributeString("x", gazeData.X.HasValue ? gazeData.X.ToString() : "NaN");
+            xmlTextWriter.WriteAttributeString("y", gazeData.Y.HasValue ? gazeData.Y.ToString() : "NaN");
 
             xmlTextWriter.WriteAttributeString("left_x", gazeData.LeftX.ToString());
             xmlTextWriter.WriteAttributeString("left_y", gazeData.LeftY.ToString());
