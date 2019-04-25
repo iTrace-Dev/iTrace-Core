@@ -49,12 +49,14 @@ namespace iTrace_Core
         public CalibrationWindow()
         {
             InitializeComponent();
+            
+            Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Left;
+            Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Top;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
         {
-            Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Left;
-            Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Top;
+            WindowState = WindowState.Maximized;
 
             GenerateTargets();
 
