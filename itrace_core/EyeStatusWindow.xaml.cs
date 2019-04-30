@@ -99,7 +99,22 @@ namespace iTrace_Core
             Vector3 leftEyeProjected = HomogeneousTo3D(leftEyeHomogeneous);
             Vector3 rightEyeProjected = HomogeneousTo3D(rightEyeHomogeneous);
 
-            int distanceInCentimeters = Convert.ToInt32((leftEyePosition.Z + rightEyePosition.Z) / 2.0);
+            float avgZ = 0.0f;
+
+            if(Single.IsNaN(leftEyePosition.Z))
+            {
+                avgZ = rightEyePosition.Z;
+            }
+            else if (Single.IsNaN(rightEyePosition.Z))
+            {
+                avgZ = leftEyePosition.Z;
+            }
+            else
+            {
+                avgZ = (leftEyePosition.Z + rightEyePosition.Z) / 2.0f;
+            }
+
+            int distanceInCentimeters = Convert.ToInt32(avgZ / 10.0f); //Divided by 10 to convert to cm
 
             Dispatcher.Invoke(
                 () =>
