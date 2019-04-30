@@ -51,16 +51,19 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            Vector3 leftEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserLeftX),
-                                                  Convert.ToSingle(e.ReceivedGazeData.UserLeftY),
-                                                  Convert.ToSingle(e.ReceivedGazeData.UserLeftZ));
+            if (e.ReceivedGazeData.IsValid())
+            {
+                Vector3 leftEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserLeftX),
+                                                      Convert.ToSingle(e.ReceivedGazeData.UserLeftY),
+                                                      Convert.ToSingle(e.ReceivedGazeData.UserLeftZ));
 
 
-            Vector3 rightEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserRightX),
-                                                   Convert.ToSingle(e.ReceivedGazeData.UserRightY),
-                                                   Convert.ToSingle(e.ReceivedGazeData.UserRightZ));
+                Vector3 rightEyePosition = new Vector3(Convert.ToSingle(e.ReceivedGazeData.UserRightX),
+                                                       Convert.ToSingle(e.ReceivedGazeData.UserRightY),
+                                                       Convert.ToSingle(e.ReceivedGazeData.UserRightZ));
 
-            UpdateEyePosition(leftEyePosition, rightEyePosition);
+                UpdateEyePosition(leftEyePosition, rightEyePosition);
+            }
         }
 
         Vector3 HomogeneousTo3D(Vector4 vec)
