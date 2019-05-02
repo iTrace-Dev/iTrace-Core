@@ -23,8 +23,6 @@
 
         <Menu Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
             <MenuItem Header="_File">
-                <MenuItem x:Name="MenuSettings" Click="MenuSettingsClick" Header="_Settings"></MenuItem>
-                <Separator/>
                 <MenuItem x:Name="MenuExit" Click="MenuExitClick" Header="_Exit"></MenuItem>
             </MenuItem>
         </Menu>

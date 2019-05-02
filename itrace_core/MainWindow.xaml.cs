@@ -88,14 +88,8 @@ namespace iTrace_Core
                 xmlGazeDataWriter.StopWriting();
         }
 
-        private void MenuSettingsClick(object sender, RoutedEventArgs e)
-        {
-            System.Console.WriteLine("SETTINGS!");
-        }
-
         private void MenuExitClick(object sender, RoutedEventArgs e)
         {
-            System.Console.WriteLine("EXIT!");
             Close();
         }
 
