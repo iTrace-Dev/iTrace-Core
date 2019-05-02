@@ -18,7 +18,12 @@ namespace iTrace_Core
 
         class Setting
         {
-            public string Option { get; set; }
+            public Setting(string option)
+            {
+                Option = option;
+            }
+            
+            public string Option { get; }
             public string Value { get; set; }
         }
 
@@ -54,10 +59,11 @@ namespace iTrace_Core
 
             foreach (string s in options)
             {
-                settings.Add(new Setting { Option = s, Value = ConfigurationRegistry.Instance.AssignFromConfiguration(s, "") });
+                settings.Add(new Setting(s) { Value = ConfigurationRegistry.Instance.AssignFromConfiguration(s, "") });
             }
 
             settingsDataGrid.ItemsSource = settings;
+            
         }
 
         private void ApplySettings(object sender, RoutedEventArgs e)
