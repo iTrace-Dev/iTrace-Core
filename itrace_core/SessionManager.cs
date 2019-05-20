@@ -59,7 +59,8 @@ namespace iTrace_Core
             ParticipantID = participant;
             DataRootDir = dataRoot;
 
-            CurrentCalibration = new EmptyCalibrationResult();
+            if (CalibratedTrackerID == "")
+                CurrentCalibration = new EmptyCalibrationResult();
         }
 
         public void StartSession()
