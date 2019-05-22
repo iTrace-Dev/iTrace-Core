@@ -154,8 +154,12 @@ namespace iTrace_Core
                 }
 
                 xmlGazeDataWriter.StopWriting();
-                ActivateCalibrationButton.IsEnabled = true;
-                ShowEyeStatusButton.IsEnabled = true;
+
+                if (TrackerManager.GetActiveTracker().GetTrackerName() != "Mouse")
+                {
+                    ActivateCalibrationButton.IsEnabled = true;
+                    ShowEyeStatusButton.IsEnabled = true;
+                }
             }
             else
             {
