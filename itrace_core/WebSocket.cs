@@ -12,9 +12,7 @@ namespace iTrace_Core
     {
         TcpClient client;
         NetworkStream stream;
-
-        byte[] mask = new byte[4] { 16, 68, 42, 10 };
-
+        
         public bool Connected { get; private set; }
 
         public WebSocket() { }
@@ -90,25 +88,19 @@ namespace iTrace_Core
             }
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-            byte[] frame = new byte[6 + messageBytes.Length];
+            byte[] frame = new byte[2 + messageBytes.Length];
 
 
             //Whole message sent in this frame, no extensions, Opcode type is text message
             frame[0] = 129;
 
-            //Length of message, with mask bit set to 1. Max message length is 128 characters
-            frame[1] = Convert.ToByte(128 + messageBytes.Length);
-
-            //Mask
-            frame[2] = mask[0];
-            frame[3] = mask[1];
-            frame[4] = mask[2];
-            frame[5] = mask[3];
+            //Length of message, with mask bit set to 0. Max message length is 128 characters
+            frame[1] = Convert.ToByte(messageBytes.Length);
 
             //Masked message
             for (int i = 0; i < messageBytes.Length; ++i)
             {
-                frame[6 + i] = Convert.ToByte(messageBytes[i] ^ mask[i % 4]);
+                frame[2 + i] = Convert.ToByte(messageBytes[i]);
             }
 
             try
