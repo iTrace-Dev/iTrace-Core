@@ -7,6 +7,6 @@ ws = create_connection("ws://localhost:7007")
 print ('Connected to iTrace WebSocket')
 
 while (True):
-	print (ws.recv())
+	print (ws.recv().strip('\n'))
 
 ws.close()
