@@ -2,7 +2,7 @@
 ## iTrace Core
 ---
 ### Dependencies
-	- Requires Microsoft Visual Studio [Installer Projects Plugin](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2017InstallerProjects)
+	- Requires Microsoft Visual Studio [Installer Projects Plugin] (https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2017InstallerProjects)
 	- This Repo
 ### Steps to Generate Installer
 	1. Open the itrace_core.sln file in Visual Studio
