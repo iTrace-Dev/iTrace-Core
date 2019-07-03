@@ -1,6 +1,5 @@
 # Packaging
 ## iTrace Core
----
 ### Dependencies
 - Requires Microsoft Visual Studio [Installer Projects Plugin](https://marketplace.visualstudio.com/items?itemName=VisualStudioClient.MicrosoftVisualStudio2017InstallerProjects)
 - This Repo
