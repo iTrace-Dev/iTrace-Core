@@ -15,7 +15,13 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_28A707A444E146C0CFEB4F8CD93F4DA9"
+        "MsmKey" = "8:_14983AF466C17A1DAFB84973A3540C93"
+        "OwnerKey" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6665304FF53556A442773B418D94F914"
         "OwnerKey" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -33,14 +39,14 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_940E68539F39F98E9C59DF2FDE539D7D"
+        "MsmKey" = "8:_9F31329CFA67BA7D0C2D33EA11ECEB06"
         "OwnerKey" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_9F31329CFA67BA7D0C2D33EA11ECEB06"
-        "OwnerKey" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
+        "MsmKey" = "8:_B45128455096489CA926D5A43482C598"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -58,13 +64,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_940E68539F39F98E9C59DF2FDE539D7D"
+        "OwnerKey" = "8:_6665304FF53556A442773B418D94F914"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_28A707A444E146C0CFEB4F8CD93F4DA9"
+        "OwnerKey" = "8:_14983AF466C17A1DAFB84973A3540C93"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -85,6 +91,22 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:.NETFramework,Version=v4.6.1"
+                    {
+                    "Name" = "8:Microsoft .NET Framework 4.6.1 (x86 and x64)"
+                    "ProductCode" = "8:.NETFramework,Version=v4.6.1"
+                    }
+                }
+            }
         }
         "Release"
         {
@@ -101,6 +123,14 @@
         "PrivateKeyFile" = "8:"
         "TimeStampServer" = "8:"
         "InstallerBootstrapper" = "3:2"
+            "BootstrapperCfg:{63ACBE69-63AA-4F98-B2B6-99F9E24495F2}"
+            {
+            "Enabled" = "11:TRUE"
+            "PromptEnabled" = "11:TRUE"
+            "PrerequisitesLocation" = "2:1"
+            "Url" = "8:"
+            "ComponentsUrl" = "8:"
+            }
         }
     }
     "Deployable"
@@ -130,20 +160,51 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_28A707A444E146C0CFEB4F8CD93F4DA9"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_14983AF466C17A1DAFB84973A3540C93"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:SharpAvi, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_28A707A444E146C0CFEB4F8CD93F4DA9"
+                    "_14983AF466C17A1DAFB84973A3540C93"
                     {
                     "Name" = "8:SharpAvi.dll"
                     "Attributes" = "3:512"
                     }
                 }
             "SourcePath" = "8:SharpAvi.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_C6623950E95647CFB41680207B8DA6E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6665304FF53556A442773B418D94F914"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:Tobii.Research, Version=1.6.1.987, Culture=neutral, PublicKeyToken=70326046dcdce6cb, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_6665304FF53556A442773B418D94F914"
+                    {
+                    "Name" = "8:Tobii.Research.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:Tobii.Research.dll"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C6623950E95647CFB41680207B8DA6E5"
@@ -181,37 +242,6 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_940E68539F39F98E9C59DF2FDE539D7D"
-            {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:Tobii.Research, Version=1.6.1.987, Culture=neutral, PublicKeyToken=70326046dcdce6cb, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_940E68539F39F98E9C59DF2FDE539D7D"
-                    {
-                    "Name" = "8:Tobii.Research.dll"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:Tobii.Research.dll"
-            "TargetName" = "8:"
-            "Tag" = "8:"
-            "Folder" = "8:_C6623950E95647CFB41680207B8DA6E5"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:TRUE"
-            "IsolateTo" = "8:"
-            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_9F31329CFA67BA7D0C2D33EA11ECEB06"
             {
             "AssemblyRegister" = "3:1"
@@ -241,6 +271,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_B45128455096489CA926D5A43482C598"
+            {
+            "SourcePath" = "8:..\\icon.ico"
+            "TargetName" = "8:icon.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_C6623950E95647CFB41680207B8DA6E5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -298,9 +348,9 @@
         "Product"
         {
         "Name" = "8:Microsoft Visual Studio"
-        "ProductName" = "8:iTrace Core Installer"
+        "ProductName" = "8:iTrace Core"
         "ProductCode" = "8:{A7EFB593-0877-4721-9844-6A14F8085D6D}"
-        "PackageCode" = "8:{4A12D8E7-E12F-4068-8B3F-25F6D6D1DF13}"
+        "PackageCode" = "8:{AC811F67-44B1-4E4D-94E3-F3C4D820F16C}"
         "UpgradeCode" = "8:{A5DEF99D-2C28-4CFD-9DEF-38D62020EC18}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
@@ -317,7 +367,7 @@
         "Keywords" = "8:"
         "ARPCOMMENTS" = "8:"
         "ARPURLINFOABOUT" = "8:http://www.i-trace.org/"
-        "ARPPRODUCTICON" = "8:"
+        "ARPPRODUCTICON" = "8:_B45128455096489CA926D5A43482C598"
         "ARPIconIndex" = "3:0"
         "SearchPath" = "8:"
         "UseSystemSearchPath" = "11:TRUE"
@@ -430,6 +480,20 @@
             "Transitive" = "11:FALSE"
             "Target" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
             "Folder" = "8:_14C206C0976C41FC9A5959679BCC562F"
+            "WorkingFolder" = "8:_C6623950E95647CFB41680207B8DA6E5"
+            "Icon" = "8:_B45128455096489CA926D5A43482C598"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_EEE08A0AD73348D1BAA2953114DB20BE"
+            {
+            "Name" = "8:iTrace Core"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
+            "Folder" = "8:_A7521F37DA7C4D3E81034D62D06B33C5"
             "WorkingFolder" = "8:_C6623950E95647CFB41680207B8DA6E5"
             "Icon" = "8:"
             "Feature" = "8:"
@@ -966,7 +1030,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_920CDE51CE7A4FBC969EFAE9DAD0F6DC"
             {
-            "SourcePath" = "8:..\\itrace_core\\obj\\x64\\Release\\iTrace Core.exe"
+            "SourcePath" = "8:..\\itrace_core\\obj\\Release\\iTrace Core.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_C6623950E95647CFB41680207B8DA6E5"
