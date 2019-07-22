@@ -22,10 +22,10 @@ AppUpdatesURL={#MyAppURL}
 DefaultDirName={pf}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
-LicenseFile=C:\Users\pjley\Programming\iTrace-Core\license.rtf
-OutputDir=C:\Users\pjley\Programming\iTrace-Core\dist\itrace_build_iss
+LicenseFile=..\license.rtf
+OutputDir=..\dist\win_installer
 OutputBaseFilename=iTrace-Core-Installer
-SetupIconFile=C:\Users\pjley\Programming\iTrace-Core\icon.ico
+SetupIconFile=..\icon.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -36,9 +36,9 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "C:\Users\pjley\Programming\iTrace-Core\itrace_core\bin\Release\iTrace Core.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\Users\pjley\Programming\iTrace-Core\itrace_core\bin\Release\en\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "C:\Users\pjley\Programming\iTrace-Core\itrace_core\bin\Release\ru-RU\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\itrace_core\bin\Release\iTrace Core.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\Release\en\*"; DestDir: "{app}\en"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\itrace_core\bin\Release\ru-RU\*"; DestDir: "{app}\ru-RU"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 Source: "..\itrace_core\bin\Release\iTrace Core.exe.config"; DestDir: "{app}"; Flags: ignoreversion
 Source: "..\itrace_core\bin\Release\iTrace Core.pdb"; DestDir: "{app}"; Flags: ignoreversion

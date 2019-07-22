@@ -20,6 +20,7 @@
 
 #### Steps to Generate Installer
 1. If you want to re-create the .iss file, simply create a new script in the Inno Script Studio. It has a great wizard for creating the scripts.
-2. Otherwise, the installer can be re-created by 'compiling' the .iss script. Compiling cna be done in a few ways, however the simplest is to open the file in Inno Script Setup go to Project->Compile.
+2. Otherwise, the installer can be re-created by 'compiling' the .iss script. Compiling can be done in a few ways, however the simplest is to open the file in Inno Script Setup go to Project->Compile.
 3. Once compiled, the actuall installer exe will be in whatever folder specified by the line
 	```OutputDir=```
+   Default is ```win_installer```
