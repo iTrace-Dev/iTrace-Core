@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
@@ -46,7 +49,7 @@ namespace iTrace_Core
 
             InitializeSettingsGrid();
         }
-
+        
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
@@ -54,24 +57,21 @@ namespace iTrace_Core
 
         private void InitializeSettingsGrid()
         {
-            settings = new List<Setting>();
-            List<string> options = new List<string> { "socket_port", "websocket_port" };
-
-            foreach (string s in options)
+            settings = new List<Setting>()
             {
-                settings.Add(new Setting(s) { Value = ConfigurationRegistry.Instance.AssignFromConfiguration(s, "") });
-            }
+                new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
+                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() }
+            };
 
             settingsDataGrid.ItemsSource = settings;
-            
         }
 
         private void ApplySettings(object sender, RoutedEventArgs e)
         {
-            foreach (Setting s in settings)
-            {
-                ConfigurationRegistry.Instance.WriteConfiguration(s.Option, s.Value);
-            }
+            Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
+            Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
+
+            Settings.Default.Save();
         }
 
         // Cleanup for when core closes

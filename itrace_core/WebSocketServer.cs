@@ -1,6 +1,7 @@
 ﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading;
+using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
@@ -18,7 +19,7 @@ namespace iTrace_Core
             clients = new List<WebSocket>();
             clientAcceptQueue = new BlockingCollection<WebSocket>();
 
-            port = ConfigurationRegistry.Instance.AssignFromConfiguration("websocket_port", defaultPort);
+            port = Settings.Default.websocket_port;
 
             GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
 

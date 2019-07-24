@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
@@ -24,7 +25,7 @@ namespace iTrace_Core
             clients = new List<TcpClient>();
             clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            port = ConfigurationRegistry.Instance.AssignFromConfiguration("socket_port", defaultPort);
+            port = Settings.Default.socket_port;
             server = new TcpListener(IPAddress.Parse(localhostAddress), port);
             server.Start();
 

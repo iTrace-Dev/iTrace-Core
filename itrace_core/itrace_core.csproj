@@ -132,7 +132,6 @@
     <Compile Include="CalibrationWindow.xaml.cs">
       <DependentUpon>CalibrationWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="ConfigurationRegistry.cs" />
     <Compile Include="GazeData.cs" />
     <Compile Include="GazeHandler.cs" />
     <Compile Include="GazePointTracker.cs" />
