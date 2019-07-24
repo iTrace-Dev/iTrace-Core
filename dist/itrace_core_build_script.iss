@@ -2,10 +2,10 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "iTrace-Core"
-#define MyAppVersion "0.0.1"
+#define MyAppVersion "0.1.0"
 #define MyAppPublisher "iTrace"
 #define MyAppURL "http://www.i-trace.org/"
-#define MyAppExeName "iTrace Core.exe"
+#define MyAppExeName "iTrace-Core.exe"
 
 [Setup]
 ; NOTE: The value of AppId uniquely identifies this application.
@@ -19,7 +19,7 @@ AppPublisher={#MyAppPublisher}
 AppPublisherURL={#MyAppURL}
 AppSupportURL={#MyAppURL}
 AppUpdatesURL={#MyAppURL}
-DefaultDirName={pf}\{#MyAppName}
+DefaultDirName={pf64}\{#MyAppName}
 DefaultGroupName={#MyAppName}
 AllowNoIcons=yes
 LicenseFile=..\license.rtf
@@ -36,18 +36,18 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\itrace_core\bin\Release\iTrace Core.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\en\*"; DestDir: "{app}\en"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\itrace_core\bin\Release\ru-RU\*"; DestDir: "{app}\ru-RU"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\itrace_core\bin\x64\Release\iTrace-Core.exe"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\en\*"; DestDir: "{app}\en"; Flags: ignoreversion recursesubdirs createallsubdirs
+Source: "..\itrace_core\bin\x64\Release\ru-RU\*"; DestDir: "{app}\ru-RU"; Flags: ignoreversion recursesubdirs createallsubdirs
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\itrace_core\bin\Release\iTrace Core.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\iTrace Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\SharpAvi.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\SharpAvi.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\Tobii.Research.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\Tobii.Research.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\tobii_firmware_upgrade.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\Release\tobii_pro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\iTrace-Core.exe.config"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\iTrace-Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\SharpAvi.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\SharpAvi.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\Tobii.Research.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\Tobii.Research.xml"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\tobii_firmware_upgrade.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\x64\Release\tobii_pro.dll"; DestDir: "{app}"; Flags: ignoreversion
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"
