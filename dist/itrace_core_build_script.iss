@@ -36,18 +36,7 @@ Name: "english"; MessagesFile: "compiler:Default.isl"
 Name: "desktopicon"; Description: "{cm:CreateDesktopIcon}"; GroupDescription: "{cm:AdditionalIcons}"; Flags: unchecked
 
 [Files]
-Source: "..\itrace_core\bin\x64\Release\iTrace-Core.exe"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\en\*"; DestDir: "{app}\en"; Flags: ignoreversion recursesubdirs createallsubdirs
-Source: "..\itrace_core\bin\x64\Release\ru-RU\*"; DestDir: "{app}\ru-RU"; Flags: ignoreversion recursesubdirs createallsubdirs
-; NOTE: Don't use "Flags: ignoreversion" on any shared system files
-Source: "..\itrace_core\bin\x64\Release\iTrace-Core.exe.config"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\iTrace-Core.pdb"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\SharpAvi.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\SharpAvi.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\Tobii.Research.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\Tobii.Research.xml"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\tobii_firmware_upgrade.dll"; DestDir: "{app}"; Flags: ignoreversion
-Source: "..\itrace_core\bin\x64\Release\tobii_pro.dll"; DestDir: "{app}"; Flags: ignoreversion
+Source: "..\itrace_core\bin\Release\*"; DestDir: "{app}"; Flags: ignoreversion recursesubdirs createallsubdirs
 
 [Icons]
 Name: "{group}\{#MyAppName}"; Filename: "{app}\{#MyAppExeName}"

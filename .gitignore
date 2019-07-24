@@ -46,6 +46,9 @@ TestResult.xml
 [Rr]eleasePS/
 dlldata.c
 
+# Distribution
+win_installer/
+
 # Benchmark Results
 BenchmarkDotNet.Artifacts/
 
