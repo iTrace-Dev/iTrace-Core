@@ -91,7 +91,7 @@ namespace iTrace_Core
 
             if (! ((websocketPort <= WebSocketServer.MAX_WEBSOCKET_PORT_NUM) && (websocketPort >= WebSocketServer.MIN_WEBSOCKET_PORT_NUM)) )
             {
-                MessageBox.Show("Websocket port values must be in the range: " + WebSocketServer.MIN_WEBSOCKET_PORT_NUM + "-" + WebSocketServer.MAX_WEBSOCKET_PORT_NUM + "!", "Invalid Websockt Port Value", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Websocket port values must be in the range: " + WebSocketServer.MIN_WEBSOCKET_PORT_NUM + "-" + WebSocketServer.MAX_WEBSOCKET_PORT_NUM + "!", "Invalid Websocket Port Value", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
                         
