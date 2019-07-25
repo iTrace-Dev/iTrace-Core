@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
+using System.Windows;
 
 namespace iTrace_Core
 {
@@ -45,6 +46,12 @@ namespace iTrace_Core
             }
             catch (SocketException e)
             {
+                if (e.SocketErrorCode.Equals(SocketError.AddressAlreadyInUse))
+                {
+                    System.Console.WriteLine("Web");
+                    MessageBox.Show("Another service is running on port " + port + ".\nStop that service or change the port for iTrace Core in settings and restart the Core.", "Websocket Server Cannot Start", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
                 Started = false;
             }
         }

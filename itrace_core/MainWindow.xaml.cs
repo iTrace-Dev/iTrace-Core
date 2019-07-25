@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using iTrace_Core.Properties;
-using System.Windows.Forms;
 
 namespace iTrace_Core
 {
@@ -43,8 +40,8 @@ namespace iTrace_Core
             SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             SessionManager.GetInstance().ClearCalibration();
 
-            socketServer = new SocketServer();
-            webSocketServer = new WebSocketServer();
+            //socketServer = new SocketServer();
+            //webSocketServer = new WebSocketServer();
             xmlGazeDataWriter = new XMLGazeDataWriter();
 
             InitializeSettingsGrid();
@@ -52,20 +49,8 @@ namespace iTrace_Core
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
-
-            if (!socketServer.Started)
-            {
-                string content = "Unable to start the Socket server! Ports may be overlapping. Please change the port number in the settings.";
-                string title = "Socket Server Error";
-                System.Windows.Forms.MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
-
-            if (!webSocketServer.Started)
-            {
-                string content = "Unable to start the WebSocket server! Ports may be overlapping. Please change the port number in the settings.";
-                string title = "WebSocket Server Error";
-                System.Windows.Forms.MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            }
+            socketServer = new SocketServer();
+            webSocketServer = new WebSocketServer();
         }
 
         private void InitializeSettingsGrid()

@@ -3,11 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
-using System.Windows.Forms;
 using System.Text;
 using System.Threading;
-using System.Windows.Threading;
 using iTrace_Core.Properties;
+using System.Windows;
 
 namespace iTrace_Core
 {
@@ -51,6 +50,12 @@ namespace iTrace_Core
             }
             catch (SocketException e)
             {
+                if (e.SocketErrorCode.Equals(SocketError.AddressAlreadyInUse))
+                {
+                    System.Console.WriteLine("Socket");
+                    MessageBox.Show("Another service is running on port " + port + ".\nStop that service or change the port for iTrace Core in settings and restart the Core.", "Socket Server Cannot Start", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+
                 Started = false;
             }
         }
