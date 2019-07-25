@@ -3,8 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using System.Text;
 using System.Threading;
+
 using iTrace_Core.Properties;
 
 namespace iTrace_Core
@@ -17,26 +19,41 @@ namespace iTrace_Core
         Thread connectionsListener;
 
         const string localhostAddress = "127.0.0.1";
-        const int defaultPort = 8008;
         int port;
+
+        private bool operational;
 
         public SocketServer()
         {
-            clients = new List<TcpClient>();
-            clientAcceptQueue = new BlockingCollection<TcpClient>();
-
-            port = Settings.Default.socket_port;
-            server = new TcpListener(IPAddress.Parse(localhostAddress), port);
-            server.Start();
-
-            connectionsListener = new Thread(new ThreadStart(() =>
+            try
             {
-                Thread.CurrentThread.IsBackground = true;
-                ListenForConnections();
-            }));
-            connectionsListener.Start();
+                clients = new List<TcpClient>();
+                clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+                port = Settings.Default.socket_port;
+
+                server = new TcpListener(IPAddress.Parse(localhostAddress), port);
+                server.Start();
+
+                connectionsListener = new Thread(new ThreadStart(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    ListenForConnections();
+                }));
+                connectionsListener.Start();
+
+                GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+
+                operational = true;
+            }
+            catch (SocketException e)
+            {
+                operational = false;
+
+                string content = "Error starting Socket server! Ports may be overlapping. Please change port number in the settings.";
+                string title = "Error starting Socket server";
+                MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         public void SendSessionData()
@@ -84,6 +101,9 @@ namespace iTrace_Core
 
         private void SendToClients(string message)
         {
+            if (!operational)
+                return;
+
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
             for (int i = clients.Count - 1; i >= 0; i--)
@@ -119,7 +139,7 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.IsValid())
+            if (e.ReceivedGazeData.IsValid() && operational)
             {
                 AcceptQueuedClients();
 
