@@ -17,7 +17,7 @@ namespace iTrace_Core
         WebSocketServer webSocketServer;
         XMLGazeDataWriter xmlGazeDataWriter;
         SessionSetupWindow sessionInformation;
-        List<Setting> settings;
+        List<Setting> settings;   
 
         class Setting
         {
@@ -68,9 +68,35 @@ namespace iTrace_Core
 
         private void ApplySettings(object sender, RoutedEventArgs e)
         {
+            int socketPort = 0;
+            int websocketPort = 0;
+            if (! (int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort)) )
+            {
+                MessageBox.Show("Port values must be numeric!", "Invalid Port Value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (socketPort == websocketPort)
+            {
+                MessageBox.Show("Port values cannot be the same value!", "Duplicate Port Values", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            // These are separate in the event that the max values are actually different
+            if (! ((socketPort <= SocketServer.MAX_PORT_NUM) && (socketPort >= SocketServer.MIN_PORT_NUM)) )
+            {
+                MessageBox.Show("Socket port values must be in the range: " + SocketServer.MIN_PORT_NUM + "-" + SocketServer.MAX_PORT_NUM + "!", "Invalid Socket Port Value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (! ((websocketPort <= WebSocketServer.MAX_WEBSOCKET_PORT_NUM) && (websocketPort >= WebSocketServer.MIN_WEBSOCKET_PORT_NUM)) )
+            {
+                MessageBox.Show("Websocket port values must be in the range: " + WebSocketServer.MIN_WEBSOCKET_PORT_NUM + "-" + WebSocketServer.MAX_WEBSOCKET_PORT_NUM + "!", "Invalid Websockt Port Value", MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+                        
             Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
             Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
-
             Settings.Default.Save();
         }
 

@@ -18,6 +18,8 @@ namespace iTrace_Core
 
         const string localhostAddress = "127.0.0.1";
         const int defaultPort = 8008;
+        public const int MIN_PORT_NUM = 1025;
+        public const int MAX_PORT_NUM = 65535;
         int port;
 
         public SocketServer()
