@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using iTrace_Core.Properties;
+using System.Windows.Forms;
 
 namespace iTrace_Core
 {
@@ -36,8 +37,7 @@ namespace iTrace_Core
             TrackerManager = new TrackerManager();
 
             // Initialize Session
-            SessionManager.GetInstance().SetScreenDimensions(System.Windows.SystemParameters.PrimaryScreenWidth,
-                System.Windows.SystemParameters.PrimaryScreenHeight);
+            SessionManager.GetInstance().SetScreenDimensions(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
 
             // Default the session to the last used output directory and empty everything else
             SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
@@ -49,10 +49,23 @@ namespace iTrace_Core
 
             InitializeSettingsGrid();
         }
-        
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
+
+            if (!socketServer.Started)
+            {
+                string content = "Unable to start the Socket server! Ports may be overlapping. Please change the port number in the settings.";
+                string title = "Socket Server Error";
+                System.Windows.Forms.MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
+
+            if (!webSocketServer.Started)
+            {
+                string content = "Unable to start the WebSocket server! Ports may be overlapping. Please change the port number in the settings.";
+                string title = "WebSocket Server Error";
+                System.Windows.Forms.MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            }
         }
 
         private void InitializeSettingsGrid()

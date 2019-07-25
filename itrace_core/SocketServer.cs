@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Windows.Forms;
 using System.Text;
 using System.Threading;
-
+using System.Windows.Threading;
 using iTrace_Core.Properties;
 
 namespace iTrace_Core
@@ -21,7 +21,7 @@ namespace iTrace_Core
         const string localhostAddress = "127.0.0.1";
         int port;
 
-        private bool operational;
+        public bool Started { get; private set; }
 
         public SocketServer()
         {
@@ -44,15 +44,11 @@ namespace iTrace_Core
 
                 GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
 
-                operational = true;
+                Started = true;
             }
             catch (SocketException e)
             {
-                operational = false;
-
-                string content = "Error starting Socket server! Ports may be overlapping. Please change port number in the settings.";
-                string title = "Error starting Socket server";
-                MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                Started = false;
             }
         }
 
@@ -101,7 +97,7 @@ namespace iTrace_Core
 
         private void SendToClients(string message)
         {
-            if (!operational)
+            if (!Started)
                 return;
 
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
@@ -139,7 +135,7 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.IsValid() && operational)
+            if (e.ReceivedGazeData.IsValid() && Started)
             {
                 AcceptQueuedClients();
 
