@@ -3,8 +3,10 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
+using System.Windows.Forms;
 using System.Text;
 using System.Threading;
+using System.Windows.Threading;
 using iTrace_Core.Properties;
 
 namespace iTrace_Core
@@ -22,23 +24,35 @@ namespace iTrace_Core
         public const int MAX_PORT_NUM = 65535;
         int port;
 
+        public bool Started { get; private set; }
+
         public SocketServer()
         {
-            clients = new List<TcpClient>();
-            clientAcceptQueue = new BlockingCollection<TcpClient>();
-
-            port = Settings.Default.socket_port;
-            server = new TcpListener(IPAddress.Parse(localhostAddress), port);
-            server.Start();
-
-            connectionsListener = new Thread(new ThreadStart(() =>
+            try
             {
-                Thread.CurrentThread.IsBackground = true;
-                ListenForConnections();
-            }));
-            connectionsListener.Start();
+                clients = new List<TcpClient>();
+                clientAcceptQueue = new BlockingCollection<TcpClient>();
 
-            GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+                port = Settings.Default.socket_port;
+
+                server = new TcpListener(IPAddress.Parse(localhostAddress), port);
+                server.Start();
+
+                connectionsListener = new Thread(new ThreadStart(() =>
+                {
+                    Thread.CurrentThread.IsBackground = true;
+                    ListenForConnections();
+                }));
+                connectionsListener.Start();
+
+                GazeHandler.Instance.OnGazeDataReceived += ReceiveGazeData;
+
+                Started = true;
+            }
+            catch (SocketException e)
+            {
+                Started = false;
+            }
         }
 
         public void SendSessionData()
@@ -86,6 +100,9 @@ namespace iTrace_Core
 
         private void SendToClients(string message)
         {
+            if (!Started)
+                return;
+
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
             for (int i = clients.Count - 1; i >= 0; i--)
@@ -121,7 +138,7 @@ namespace iTrace_Core
 
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
-            if (e.ReceivedGazeData.IsValid())
+            if (e.ReceivedGazeData.IsValid() && Started)
             {
                 AcceptQueuedClients();
 

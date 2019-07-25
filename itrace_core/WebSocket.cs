@@ -15,17 +15,10 @@ namespace iTrace_Core
         
         public bool Connected { get; private set; }
 
-        public WebSocket() { }
-
-        public void WaitForConnection(string address, int port)
+        public WebSocket(TcpClient connection)
         {
-            TcpListener server = new TcpListener(IPAddress.Parse(address), port);
-            server.Start();
-
-            client = server.AcceptTcpClient();
+            client = connection;
             stream = client.GetStream();
-
-            server.Stop();
         }
 
         //Returns true if succeeded, false if failed.
