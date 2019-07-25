@@ -1,11 +1,9 @@
-﻿using System.Collections.Concurrent;
+﻿using iTrace_Core.Properties;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
-using System.Windows.Forms;
-
-using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
@@ -50,31 +48,22 @@ namespace iTrace_Core
 
         void AcceptIncomingWebsocketConnections()
         {
-            try
+            while (true)
             {
-                while (true)
+                WebSocket ws = new WebSocket(server.AcceptTcpClient());
+
+                new Thread(() =>
                 {
-                    WebSocket ws = new WebSocket(server.AcceptTcpClient());
-
-                    new Thread(() =>
+                    if (ws.PerformHandshake(10000))
                     {
-                        if (ws.PerformHandshake(10000))
+                        if (SessionManager.GetInstance().Active)
                         {
-                            if (SessionManager.GetInstance().Active)
-                            {
-                                ws.SendMessage(SessionManager.GetInstance().Serialize());
-                            }
-
-                            clientAcceptQueue.Add(ws);
+                            ws.SendMessage(SessionManager.GetInstance().Serialize());
                         }
-                    }).Start();
-                }
-            }
-            catch (SocketException e)
-            {
-                string content = "Error starting WebSocket server! Ports may be overlapping. Please change port number in the settings.";
-                string title = "Error starting WebSocket server";
-                MessageBox.Show(content, title, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+
+                        clientAcceptQueue.Add(ws);
+                    }
+                }).Start();
             }
         }
 
@@ -108,7 +97,7 @@ namespace iTrace_Core
         {
             SendToClients(SessionManager.GetInstance().Serialize());
         }
-        
+
         public void SendEndSession()
         {
             SendToClients("session_stop\n");
