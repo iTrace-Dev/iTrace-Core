@@ -43,7 +43,7 @@
 
             <TabItem Header="Settings">
                 <Grid>
-                    <DataGrid Margin="35,-1,215,1" Name="settingsDataGrid" CanUserAddRows="False">
+                    <DataGrid Margin="35,-1,215,1" Name="settingsDataGrid" CanUserAddRows="False" CanUserDeleteRows="False">
                         <DataGrid.Columns>
                         </DataGrid.Columns>
                     </DataGrid>
