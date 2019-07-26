@@ -19,9 +19,7 @@ namespace iTrace_Core
         public const int MIN_WEBSOCKET_PORT_NUM = 1025;
         public const int MAX_WEBSOCKET_PORT_NUM = 65535;
         int port;
-
-        public bool Started { get; private set; }
-
+        
         public WebSocketServer()
         {
             try
@@ -41,8 +39,6 @@ namespace iTrace_Core
                     Thread.CurrentThread.IsBackground = true;
                     AcceptIncomingWebsocketConnections();
                 }).Start();
-
-                Started = true;
             }
             catch (SocketException e)
             {
@@ -51,8 +47,6 @@ namespace iTrace_Core
                     System.Console.WriteLine("Web");
                     MessageBox.Show("Another service is running on port " + port + ".\nStop that service or change the port for iTrace Core in settings and restart the Core.", "Websocket Server Cannot Start", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
-
-                Started = false;
             }
         }
 
