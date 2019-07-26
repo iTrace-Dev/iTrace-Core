@@ -39,9 +39,7 @@ namespace iTrace_Core
             // Default the session to the last used output directory and empty everything else
             SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             SessionManager.GetInstance().ClearCalibration();
-
-            //socketServer = new SocketServer();
-            //webSocketServer = new WebSocketServer();
+            
             xmlGazeDataWriter = new XMLGazeDataWriter();
 
             InitializeSettingsGrid();
