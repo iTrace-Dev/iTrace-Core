@@ -52,8 +52,10 @@ namespace iTrace_Core
             {
                 if (e.SocketErrorCode.Equals(SocketError.AddressAlreadyInUse))
                 {
-                    System.Console.WriteLine("Socket");
-                    MessageBox.Show("Another service is running on port " + port + ".\nStop that service or change the port for iTrace Core in settings and restart the Core.", "Socket Server Cannot Start", MessageBoxButton.OK, MessageBoxImage.Error);
+                    string content = "Another service is running on port " + port +
+                                     ".\nStop that service or change the port for iTrace Core in settings and restart the Core.";
+                    string title = "Socket Server Cannot Start";
+                    MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
 
                 Started = false;
