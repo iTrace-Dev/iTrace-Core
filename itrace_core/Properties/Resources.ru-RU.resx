@@ -141,6 +141,9 @@
   <data name="ShowReticle" xml:space="preserve">
     <value>Показать Прицел</value>
   </data>
+  <data name="SocketServerCannotStart" xml:space="preserve">
+    <value>Socket Server Cannot Start</value>
+  </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Начать Отслеживание</value>
   </data>

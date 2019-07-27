@@ -133,6 +133,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Socket Server Cannot Start.
+        /// </summary>
+        public static string SocketServerCannotStart {
+            get {
+                return ResourceManager.GetString("SocketServerCannotStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Tracking.
         /// </summary>
         public static string StartTracking {
