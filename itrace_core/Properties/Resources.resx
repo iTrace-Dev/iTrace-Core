@@ -153,4 +153,7 @@
   <data name="Trackers" xml:space="preserve">
     <value>Trackers:</value>
   </data>
+  <data name="WebSocketServerCannotStart" xml:space="preserve">
+    <value>Websocket Server Cannot Start</value>
+  </data>
 </root>

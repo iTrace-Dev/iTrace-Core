@@ -167,5 +167,14 @@ namespace iTrace_Core.Properties {
                 return ResourceManager.GetString("Trackers", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Websocket Server Cannot Start.
+        /// </summary>
+        public static string WebSocketServerCannotStart {
+            get {
+                return ResourceManager.GetString("WebSocketServerCannotStart", resourceCulture);
+            }
+        }
     }
 }
