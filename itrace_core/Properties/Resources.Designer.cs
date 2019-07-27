@@ -70,6 +70,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Changes require a program restart to be applied.
+        /// </summary>
+        public static string ChangeRequiresRestart {
+            get {
+                return ResourceManager.GetString("ChangeRequiresRestart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Screen Recording.
         /// </summary>
         public static string EnableScreenRecording {

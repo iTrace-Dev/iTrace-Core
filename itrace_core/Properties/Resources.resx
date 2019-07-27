@@ -120,6 +120,9 @@
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
+  <data name="ChangeRequiresRestart" xml:space="preserve">
+    <value>Changes require a program restart to be applied</value>
+  </data>
   <data name="EnableScreenRecording" xml:space="preserve">
     <value>Enable Screen Recording</value>
   </data>
