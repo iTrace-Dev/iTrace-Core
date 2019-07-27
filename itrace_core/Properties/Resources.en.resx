@@ -129,6 +129,12 @@
   <data name="HideReticle" xml:space="preserve">
     <value>Hide Reticle</value>
   </data>
+  <data name="PortValuesNumericWarningContent" xml:space="preserve">
+    <value>Port values must be numeric!</value>
+  </data>
+  <data name="PortValuesNumericWarningTitle" xml:space="preserve">
+    <value>Invalid Port Value</value>
+  </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
   </data>

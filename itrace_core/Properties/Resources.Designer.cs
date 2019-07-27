@@ -97,6 +97,24 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Port values must be numeric!.
+        /// </summary>
+        public static string PortValuesNumericWarningContent {
+            get {
+                return ResourceManager.GetString("PortValuesNumericWarningContent", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Port Value.
+        /// </summary>
+        public static string PortValuesNumericWarningTitle {
+            get {
+                return ResourceManager.GetString("PortValuesNumericWarningTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Refresh.
         /// </summary>
         public static string Refresh {
