@@ -187,6 +187,7 @@ namespace iTrace_Core
                 SessionSetupButton.IsEnabled = true;
                 settingsDataGrid.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
+                CheckScreenCap.IsEnabled = true;
             }
             else
             {
@@ -220,6 +221,7 @@ namespace iTrace_Core
                 SessionSetupButton.IsEnabled = false;
                 settingsDataGrid.IsEnabled = false;
                 ApplyButton.IsEnabled = false;
+                CheckScreenCap.IsEnabled = false;
 
             }
         }
