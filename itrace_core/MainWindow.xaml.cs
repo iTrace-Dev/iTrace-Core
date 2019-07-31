@@ -185,6 +185,8 @@ namespace iTrace_Core
                 TrackerList.IsEnabled = true;
                 TrackerRefreshButton.IsEnabled = true;
                 SessionSetupButton.IsEnabled = true;
+                settingsDataGrid.IsEnabled = true;
+                ApplyButton.IsEnabled = true;
             }
             else
             {
@@ -216,6 +218,8 @@ namespace iTrace_Core
                 TrackerList.IsEnabled = false;
                 TrackerRefreshButton.IsEnabled = false;
                 SessionSetupButton.IsEnabled = false;
+                settingsDataGrid.IsEnabled = false;
+                ApplyButton.IsEnabled = false;
 
             }
         }
