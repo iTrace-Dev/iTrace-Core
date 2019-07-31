@@ -182,6 +182,9 @@ namespace iTrace_Core
                     ActivateCalibrationButton.IsEnabled = true;
                     ShowEyeStatusButton.IsEnabled = true;
                 }
+                TrackerList.IsEnabled = true;
+                TrackerRefreshButton.IsEnabled = true;
+                SessionSetupButton.IsEnabled = true;
             }
             else
             {
@@ -210,6 +213,10 @@ namespace iTrace_Core
                 TrackerManager.StartTracker();
                 ActivateCalibrationButton.IsEnabled = false;
                 ShowEyeStatusButton.IsEnabled = false;
+                TrackerList.IsEnabled = false;
+                TrackerRefreshButton.IsEnabled = false;
+                SessionSetupButton.IsEnabled = false;
+
             }
         }
 
