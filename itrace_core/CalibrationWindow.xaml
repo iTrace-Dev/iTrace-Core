@@ -6,6 +6,6 @@
         xmlns:local="clr-namespace:iTrace_Core"
         mc:Ignorable="d"
         WindowStyle="None"
-        Title="CalibrationWindow" Loaded="WindowLoaded" KeyUp="Window_KeyUp" MouseUp="Window_MouseUp">
+        Title="Calibration" Loaded="WindowLoaded" KeyUp="Window_KeyUp" MouseUp="Window_MouseUp">
     <Grid/>
 </Window>

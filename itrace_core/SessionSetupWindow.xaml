@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:iTrace_Core"
         mc:Ignorable="d"
-        Title="SessionSetupWindow" Height="450" Width="450">
+        Title="Session Setup" Height="450" Width="450">
     <Grid>
         <Canvas HorizontalAlignment="Left" Height="450"  Width="450" Margin="0,0,0,0" VerticalAlignment="Top">
             <Label Content="Task Name" Canvas.Left="23" Canvas.Top="58" Width="103"/>

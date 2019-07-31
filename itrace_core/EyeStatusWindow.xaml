@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:iTrace_Core"
         mc:Ignorable="d"
-        Title="EyeStatusWindow" Height="300" Width="400">
+        Title="Eye Status" Height="300" Width="400">
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
