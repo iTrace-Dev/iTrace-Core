@@ -117,6 +117,9 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnotherServiceIsRunningOnPort" xml:space="preserve">
+    <value>Another service is running on port </value>
+  </data>
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
@@ -152,6 +155,9 @@
   </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Start Tracking</value>
+  </data>
+  <data name="StopThatService" xml:space="preserve">
+    <value>Stop that service or change the port for iTrace Core in settings and restart the Core.</value>
   </data>
   <data name="StopTracking" xml:space="preserve">
     <value>Stop Tracking</value>

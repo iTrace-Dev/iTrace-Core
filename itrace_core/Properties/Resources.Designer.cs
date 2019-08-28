@@ -61,6 +61,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Another service is running on port .
+        /// </summary>
+        public static string AnotherServiceIsRunningOnPort {
+            get {
+                return ResourceManager.GetString("AnotherServiceIsRunningOnPort", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Calibrate.
         /// </summary>
         public static string Calibrate {
@@ -165,6 +174,15 @@ namespace iTrace_Core.Properties {
         public static string StartTracking {
             get {
                 return ResourceManager.GetString("StartTracking", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Stop that service or change the port for iTrace Core in settings and restart the Core..
+        /// </summary>
+        public static string StopThatService {
+            get {
+                return ResourceManager.GetString("StopThatService", resourceCulture);
             }
         }
         
