@@ -88,6 +88,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Duplicate Port Values.
+        /// </summary>
+        public static string DuplicatePortValues {
+            get {
+                return ResourceManager.GetString("DuplicatePortValues", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Enable Screen Recording.
         /// </summary>
         public static string EnableScreenRecording {
@@ -106,20 +115,47 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Port values must be numeric!.
+        ///   Looks up a localized string similar to Invalid Port Value.
         /// </summary>
-        public static string PortValuesNumericWarningContent {
+        public static string InvalidPortValue {
             get {
-                return ResourceManager.GetString("PortValuesNumericWarningContent", resourceCulture);
+                return ResourceManager.GetString("InvalidPortValue", resourceCulture);
             }
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Invalid Port Value.
+        ///   Looks up a localized string similar to Invalid Socket Port Value.
         /// </summary>
-        public static string PortValuesNumericWarningTitle {
+        public static string InvalidSocketPortValue {
             get {
-                return ResourceManager.GetString("PortValuesNumericWarningTitle", resourceCulture);
+                return ResourceManager.GetString("InvalidSocketPortValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Websocket Port Value&quot;.
+        /// </summary>
+        public static string InvalidWebSocketPortValue {
+            get {
+                return ResourceManager.GetString("InvalidWebSocketPortValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port values cannot be the same value!.
+        /// </summary>
+        public static string PortValuesCannotBeSameValue {
+            get {
+                return ResourceManager.GetString("PortValuesCannotBeSameValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Port values must be numeric!.
+        /// </summary>
+        public static string PortValuesMustBeNumeric {
+            get {
+                return ResourceManager.GetString("PortValuesMustBeNumeric", resourceCulture);
             }
         }
         
@@ -169,6 +205,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Socket port values must be in the range: .
+        /// </summary>
+        public static string SocketValuesMustBeInRange {
+            get {
+                return ResourceManager.GetString("SocketValuesMustBeInRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Start Tracking.
         /// </summary>
         public static string StartTracking {
@@ -180,9 +225,9 @@ namespace iTrace_Core.Properties {
         /// <summary>
         ///   Looks up a localized string similar to Stop that service or change the port for iTrace Core in settings and restart the Core..
         /// </summary>
-        public static string StopThatService {
+        public static string StopServiceOrChangePortThenRestart {
             get {
-                return ResourceManager.GetString("StopThatService", resourceCulture);
+                return ResourceManager.GetString("StopServiceOrChangePortThenRestart", resourceCulture);
             }
         }
         
@@ -210,6 +255,15 @@ namespace iTrace_Core.Properties {
         public static string WebSocketServerCannotStart {
             get {
                 return ResourceManager.GetString("WebSocketServerCannotStart", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Websocket port values must be in the range: .
+        /// </summary>
+        public static string WebSocketValuesMustBeInRange {
+            get {
+                return ResourceManager.GetString("WebSocketValuesMustBeInRange", resourceCulture);
             }
         }
     }

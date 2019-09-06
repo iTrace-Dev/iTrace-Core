@@ -44,7 +44,7 @@ namespace iTrace_Core
             {
                 if (e.SocketErrorCode.Equals(SocketError.AddressAlreadyInUse))
                 {
-                    string content = Resources.AnotherServiceIsRunningOnPort + port + '\n' + Resources.StopThatService;
+                    string content = Resources.AnotherServiceIsRunningOnPort + port + '\n' + Resources.StopServiceOrChangePortThenRestart;
                     string title = Resources.WebSocketServerCannotStart;
                     MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
