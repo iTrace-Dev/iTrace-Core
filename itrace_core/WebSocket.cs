@@ -81,19 +81,56 @@ namespace iTrace_Core
             }
 
             byte[] messageBytes = Encoding.UTF8.GetBytes(message);
-            byte[] frame = new byte[2 + messageBytes.Length];
+            int websocketFrameOffset = 2 ;
+            if (messageBytes.Length > 125)
+            {
+                if (messageBytes.Length <= 65535)
+                {
+                    websocketFrameOffset += 2;
+                }
+                else
+                {
+                    websocketFrameOffset += 8;
+                }
+            }
+            byte[] frame = new byte[websocketFrameOffset + messageBytes.Length];
 
 
             //Whole message sent in this frame, no extensions, Opcode type is text message
             frame[0] = 129;
 
-            //Length of message, with mask bit set to 0. Max message length is 128 characters
-            frame[1] = Convert.ToByte(messageBytes.Length);
+            //Length of message, with mask bit set to 0.
+            // bottom 7 bits are length if length is less than 125
+            if (messageBytes.Length <= 125)
+            {
+                frame[1] = Convert.ToByte(messageBytes.Length);
+            }
+            // bottom 7 bits are 126, the next two bytes are the length
+            else if (messageBytes.Length <= 65535)
+            {
+                frame[1] = Convert.ToByte(126);
+                frame[2] = Convert.ToByte(messageBytes.Length & 0xff00);
+                frame[3] = Convert.ToByte(messageBytes.Length & 0x00ff);
+            }
+            // bottom 7 bits are 127, the next 8 bytes are the length
+            else
+            {
+                frame[1] = Convert.ToByte(127);
+                frame[2] = Convert.ToByte(0);
+                frame[3] = Convert.ToByte(0);
+                frame[4] = Convert.ToByte(0);
+                frame[5] = Convert.ToByte(0);
+                frame[6] = Convert.ToByte(messageBytes.Length & 0xff000000);
+                frame[7] = Convert.ToByte(messageBytes.Length & 0x00ff0000);
+                frame[8] = Convert.ToByte(messageBytes.Length & 0x0000ff00);
+                frame[9] = Convert.ToByte(messageBytes.Length & 0x000000ff);
+            }
+
 
             //Masked message
             for (int i = 0; i < messageBytes.Length; ++i)
             {
-                frame[2 + i] = Convert.ToByte(messageBytes[i]);
+                frame[websocketFrameOffset + i] = Convert.ToByte(messageBytes[i]);
             }
 
             try
