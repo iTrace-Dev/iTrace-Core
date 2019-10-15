@@ -109,7 +109,7 @@ namespace iTrace_Core
             else if (messageBytes.Length <= 65535)
             {
                 frame[1] = Convert.ToByte(126);
-                frame[2] = Convert.ToByte(messageBytes.Length & 0xff00);
+                frame[2] = Convert.ToByte((messageBytes.Length & 0xff00) >> 8);
                 frame[3] = Convert.ToByte(messageBytes.Length & 0x00ff);
             }
             // bottom 7 bits are 127, the next 8 bytes are the length
@@ -120,9 +120,9 @@ namespace iTrace_Core
                 frame[3] = Convert.ToByte(0);
                 frame[4] = Convert.ToByte(0);
                 frame[5] = Convert.ToByte(0);
-                frame[6] = Convert.ToByte(messageBytes.Length & 0xff000000);
-                frame[7] = Convert.ToByte(messageBytes.Length & 0x00ff0000);
-                frame[8] = Convert.ToByte(messageBytes.Length & 0x0000ff00);
+                frame[6] = Convert.ToByte((messageBytes.Length & 0xff000000) >> 24);
+                frame[7] = Convert.ToByte((messageBytes.Length & 0x00ff0000) >> 16);
+                frame[8] = Convert.ToByte((messageBytes.Length & 0x0000ff00) >> 8);
                 frame[9] = Convert.ToByte(messageBytes.Length & 0x000000ff);
             }
 
