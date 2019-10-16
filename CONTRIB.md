@@ -16,11 +16,24 @@
 * Addition of any 3rd party libraries (other than support for trackers) must be requested in a GitHub issue complete with links to the library and explanation of its need/value for the project.
 
 ### Branching
-* The master branch is used for the most recent and tested stable release. No commits are to be added to the master branch by anyone other than a release manager.
+* The master branch is used for the most recent and tested stable release.
+* **No commits are to be added to the master branch by anyone other than a release manager.**
+* Merging temporary fix/feature branches into will be done via pull request and by a release manager.
 * The develop branch contains tested features to be included in the next release.
 * If you are an internal member of the project and collaborating on features, please make your changes in a branch named issue##-keyword, where ## represents the issue number and a keyword or short phrase is provided to easily identify the branch.
 
+### Patch Fixes for Existing Releases
+* If a bug fix is required for an existing release, changes must be made based on the appropriate release tag.
+* Fixes will be done in a temporary branch, and a pull request will be submitted to merge those changes with master (and development if appropriate).
+* Patched releases will be packaged at the discression of the development team and PI(s).
+* The subsequent patched release **must** have a release tag generated at the time of release (freezing the state).
+
 ### Pull Requests
-* NO CODE IS TO BE MERGED INTO MASTER OR DEVELOP WITHOUT A PULL REQUEST FOR CODE REVIEW.
+* **NO CODE IS TO BE MERGED INTO STAGING BRANCHES (MASTER, DEVELOPMENT, ETC) WITHOUT A PULL REQUEST FOR CODE REVIEW.**
+* Pull requests will be used to migrate fixes and features into staging branches.
+* Pull requests **must** be based on an existing issue on GitHub.
+* A pull request must be reviewed by at least one development team member other than the original author (with two being preferrable).
+* Pull requests must outline what testing was done by the author(s) prior to the pull request, and briefly describe the fix/feature.
+* Pull request reviews must contain testing procedures used by the reviewer(s) or indicate that procedures were repeated as outlined by the original pull request author(s) or other reviewer(s).
 * Ensure that you periodically update branches with code changes from your branch base (master/develop/etc) to ensure that regressions and merge conflicts are resolved before pull requests are submitted.
 * If you are having difficulties with a merge conflict or are uncomfortable making a pull request, please reach out to another member of the development group via an issue comment or Discord.
