@@ -1,13 +1,12 @@
 ### Coding Standards
-* Configure editor so indents are four spaces (Should be the default in Visual Studio 2017).
+* Configure editor so indents are four spaces (Should be the default in Visual Studio).
 * All source and WPF filenames will be Pascal Case (example: MainClass.cs).
 * Naming Styles:
-	* We are primarily following these (guidelines)[https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions] from Microsoft with the exception of local variables
-	* Class names, members, and functions will be Pascal Case
+	* We are primarily following these (guidelines)[https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions] from Microsoft with the exception of local variables.
+	* Class names, members, and functions will be Pascal Case.
 	* Local variables and function parameters will be Camel Case (example: localVar).
 		* Online examples from MS contradict the style guideline for local variables, but I feel this provides visual differentiation of scope for identifiers.
 	* Constants will be in call caps.
-
 * Do not use magic numbers. Instead, use named constants.
 
 ### Project Standards
@@ -23,6 +22,9 @@
 
 ### Patch Fixes for Existing Releases
 * If a bug fix is required for an existing release, changes must be made based on the appropriate release tag.
+	* This becomes important when patching a previous release and master has diverged (e.g. patching version 1.5 after 2.0 has been released).
+	* Hotfix/patch tags may be issued for patch fixes to previous releases.
+	* If master and the current tag are equivalent (same current release, master may be used as the base for changes).
 * Fixes will be done in a temporary branch, and a pull request will be submitted to merge those changes with master (and development if appropriate).
 * Patched releases will be packaged at the discression of the development team and PI(s).
 * The subsequent patched release **must** have a release tag generated at the time of release (freezing the state).
@@ -32,7 +34,8 @@
 * Pull requests will be used to migrate fixes and features into staging branches.
 * Pull requests **must** be based on an existing issue on GitHub.
 * A pull request must be reviewed by at least one development team member other than the original author (with two being preferrable).
+* If no particular development team member is needed for review, using the @iTrace-Dev/itrace-developers in the pull request should notify all development team members of the pull request.
 * Pull requests must outline what testing was done by the author(s) prior to the pull request, and briefly describe the fix/feature.
 * Pull request reviews must contain testing procedures used by the reviewer(s) or indicate that procedures were repeated as outlined by the original pull request author(s) or other reviewer(s).
 * Ensure that you periodically update branches with code changes from your branch base (master/develop/etc) to ensure that regressions and merge conflicts are resolved before pull requests are submitted.
-* If you are having difficulties with a merge conflict or are uncomfortable making a pull request, please reach out to another member of the development group via an issue comment or Discord.
+* If you are having difficulties with a merge conflict or are uncomfortable making a pull request, please reach out to another member of the development group via a comment on the issue inquestions or Discord.
