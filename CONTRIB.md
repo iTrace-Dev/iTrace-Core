@@ -1,7 +1,6 @@
 ### Coding Standards
 * Configure editor so indents are four spaces (Should be the default in Visual Studio 2017).
 * All source and WPF filenames will be Pascal Case (example: MainClass.cs).
-* When possible If no standard library functionality exists, then use Qt.
 * Naming Styles:
 	* We are primarily following these (guidelines)[https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/capitalization-conventions] from Microsoft with the exception of local variables
 	* Class names, members, and functions will be Pascal Case
