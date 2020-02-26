@@ -115,9 +115,12 @@ namespace iTrace_Core
         {
             mutex.WaitOne();
 
-            if (Writing)
+            if (e.ReceivedGazeData.IsValid())
             {
-                WriteGaze(e.ReceivedGazeData);
+                if (Writing)
+                {
+                    WriteGaze(e.ReceivedGazeData);
+                }
             }
 
             mutex.ReleaseMutex();
