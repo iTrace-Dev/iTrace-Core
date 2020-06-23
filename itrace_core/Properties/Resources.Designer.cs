@@ -142,6 +142,24 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid Monitor.
+        /// </summary>
+        public static string MonitorIndexIncorrectValue {
+            get {
+                return ResourceManager.GetString("MonitorIndexIncorrectValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Selected monitor must exist.
+        /// </summary>
+        public static string MonitorIndexOutOfRange {
+            get {
+                return ResourceManager.GetString("MonitorIndexOutOfRange", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Port values cannot be the same value!.
         /// </summary>
         public static string PortValuesCannotBeSameValue {

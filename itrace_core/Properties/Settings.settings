@@ -8,5 +8,8 @@
     <Setting Name="websocket_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7007</Value>
     </Setting>
+    <Setting Name="calibration_monitor" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
