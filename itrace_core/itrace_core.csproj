@@ -105,6 +105,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="SmartEyeTracker.cs" />
     <Compile Include="EyeStatusWindow.xaml.cs">
       <DependentUpon>EyeStatusWindow.xaml</DependentUpon>
     </Compile>

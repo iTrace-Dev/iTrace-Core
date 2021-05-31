@@ -21,6 +21,12 @@ namespace iTrace_Core
             EyeTrackers.Add(new MouseTracker());
             FindTobiiDevices();
             FindGazePointDevice();
+            //FindSmartEyeDevice();
+        }
+
+        private void FindSmartEyeDevice()
+        {
+            //TODO
         }
 
         private void FindTobiiDevices()

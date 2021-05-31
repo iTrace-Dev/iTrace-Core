@@ -204,4 +204,12 @@ namespace iTrace_Core
             TrackerTime = Convert.ToInt64(recNode.Attributes["TIME_TICK"].Value);
         }
     }
+
+    public class SmartEyeGazeData : GazeData
+    {
+        public SmartEyeGazeData()
+        {
+            //TODO GazeData parsing
+        }
+    }
 }
