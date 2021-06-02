@@ -27,8 +27,24 @@ namespace iTrace_Core
 
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialogue.SelectedPath))
             {
-                DataOutputDir.Text = folderDialogue.SelectedPath;
+                string path = folderDialogue.SelectedPath;
+                if (path.Length > 23)
+                {
+                    string[] folders = path.Split('\\');
+
+                    string path_begin = folders[0] + "\\...\\";
+                    string path_end = folders[folders.Length - 1];
+
+                    int i = folders.Length - 2;
+                    while ((path_begin + folders[i] + "\\" + path_end).Length <= 23)
+                    {
+                        path_end = folders[i] + "\\" + path_end;
+                    }
+                    path = path_begin + path_end;
+                }
+                DataOutputDir.Text = path;
             }
+            
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
