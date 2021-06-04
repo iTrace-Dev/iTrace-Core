@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using iTrace_Core.Properties;
+using DejaVu;
+using DejaVuLib;
 
 namespace iTrace_Core
 {
@@ -28,10 +30,19 @@ namespace iTrace_Core
             public string Value { get; set; }
         }
 
+        // DejaVu
+        EventRecorder eventRecorder;
+        EventReplayer eventReplayer;
+        private WindowPositionManager windowPositionManager;
+
         public MainWindow()
         {
             InitializeComponent();
             TrackerManager = new TrackerManager();
+
+            // DejaVu
+            //eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
+            windowPositionManager = new WindowPositionManager();
 
             // Initialize Session
             SessionManager.GetInstance().SetScreenDimensions(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
@@ -44,6 +55,19 @@ namespace iTrace_Core
 
             InitializeSettingsGrid();
         }
+        private void StopWindowPositionManager(object sender, EventArgs e)
+        {
+            Console.WriteLine("StopWindowManager");
+            windowPositionManager.Stop();
+        }
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            Console.WriteLine("Window Closing");
+            if (eventRecorder != null && eventRecorder.IsRecordInProgress) eventRecorder.Dispose();
+            if (eventReplayer != null && eventReplayer.IsReplayInProgress) eventReplayer.StopReplay();
+            windowPositionManager.Stop();
+        }
+
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
@@ -188,6 +212,10 @@ namespace iTrace_Core
                 settingsDataGrid.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
                 CheckScreenCap.IsEnabled = true;
+
+                windowPositionManager.Stop();
+                eventRecorder.StopRecording();
+                eventRecorder.Dispose();
             }
             else
             {
@@ -223,6 +251,10 @@ namespace iTrace_Core
                 ApplyButton.IsEnabled = false;
                 CheckScreenCap.IsEnabled = false;
 
+                // DejaVu Record
+                eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
+                windowPositionManager.Start();
+                eventRecorder.StartRecording();
             }
         }
 
@@ -270,6 +302,18 @@ namespace iTrace_Core
         private void ShowEyeStatusWindow(object sender, RoutedEventArgs e)
         {
             TrackerManager.ShowEyeStatusWindow();
+        }
+
+        private void ReplayButtonClicked(object sender, RoutedEventArgs e)
+        {
+            eventReplayer = new FixedPauseEventReplayer("out.csv");
+            eventReplayer.OnReplayFinished += StopWindowPositionManager;
+
+            windowPositionManager.Start();
+            eventReplayer.StartReplay();
+
+            // TODO: Disable replay button, minimize window
+            this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
         }
     }
 }

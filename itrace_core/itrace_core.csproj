@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5783FB9E-5502-48CF-89BF-12B3A4DFFCB2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>iTrace_Core</RootNamespace>
     <AssemblyName>iTrace-Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -73,6 +73,9 @@
   </PropertyGroup>
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SharpAvi, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
@@ -226,6 +229,16 @@
       <Link>tobii_pro.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DejaVuLib\DejaVuLib.csproj">
+      <Project>{699ec118-82c3-416b-8b83-02dffc155d84}</Project>
+      <Name>DejaVuLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DejaVu\DejaVu.csproj">
+      <Project>{263a1aec-24e6-4b7b-ac09-6c1d46c9fe15}</Project>
+      <Name>DejaVu</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Tobii.Research.x64.1.6.1.987\build\Tobii.Research.x64.targets" Condition="Exists('..\packages\Tobii.Research.x64.1.6.1.987\build\Tobii.Research.x64.targets')" />
