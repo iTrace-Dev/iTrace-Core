@@ -213,9 +213,12 @@ namespace iTrace_Core
                 ApplyButton.IsEnabled = true;
                 CheckScreenCap.IsEnabled = true;
 
-                windowPositionManager.Stop();
-                eventRecorder.StopRecording();
-                eventRecorder.Dispose();
+                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
+                {
+                    windowPositionManager.Stop();
+                    eventRecorder.StopRecording();
+                    eventRecorder.Dispose();
+                }
             }
             else
             {
@@ -252,9 +255,12 @@ namespace iTrace_Core
                 CheckScreenCap.IsEnabled = false;
 
                 // DejaVu Record
-                eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
-                windowPositionManager.Start();
-                eventRecorder.StartRecording();
+                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
+                {
+                    eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
+                    windowPositionManager.Start();
+                    eventRecorder.StartRecording();
+                }
             }
         }
 
