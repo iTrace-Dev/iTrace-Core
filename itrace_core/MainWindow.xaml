@@ -37,9 +37,12 @@
                     <Button x:Name="SessionSetupButton" Content="{x:Static p:Resources.SessionSetup}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="SessionSetupButton_Click" Canvas.Left="333" Canvas.Top="40"/>
                     <Button x:Name="ActivateReticleButton" Content="{x:Static p:Resources.ShowReticle}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="333" Canvas.Top="83" />
                     <Button x:Name="ShowEyeStatusButton" Content="{x:Static p:Resources.ShowEyeStatus}" HorizontalAlignment="Left" Grid.Row ="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowEyeStatusWindow" Canvas.Left="333" Canvas.Top="125"/>
-                    <Button x:Name="ReplayButton" Content="{x:Static p:Resources.StartReplay}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ReplayButtonClicked" Canvas.Left="333" Canvas.Top="167"/>
-                    <CheckBox x:Name="CheckDejavuRecord" Content="{x:Static p:Resources.ToggleDejaVu}" HorizontalAlignment="Left" Margin="174,219,0,-230" Grid.Row="2" VerticalAlignment="Top" Width="204"/>
-                    <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Left" Margin="174,239,0,-230" Grid.Row="2" VerticalAlignment="Top" Width="204"/>
+                    <Button x:Name="ReplayButton" Content="{x:Static p:Resources.StartReplay}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ReplayButtonClicked" Canvas.Left="284" Canvas.Top="199"/>
+                    <CheckBox x:Name="CheckDejavuRecord" Content="{x:Static p:Resources.ToggleDejaVu}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="67" Canvas.Top="170"/>
+                    <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="67" Canvas.Top="190"/>
+                    <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="396" Canvas.Top="184"/>
+                    <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Height="15" Canvas.Left="396" Canvas.Top="204"/>
+                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="396" Canvas.Top="224"/>
                 </Canvas>
             </TabItem>
 

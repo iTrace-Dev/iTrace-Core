@@ -28,7 +28,7 @@ namespace DejaVu
                 events.Add(line);
 			}
             current = 0;
-            streamReader = new StreamReader(filename); // Debug code, not necessarily needed
+            streamReader.Close();
         }
 
         public bool Finished()

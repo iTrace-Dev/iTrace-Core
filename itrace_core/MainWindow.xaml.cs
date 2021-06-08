@@ -8,6 +8,12 @@ using DejaVuLib;
 
 namespace iTrace_Core
 {
+    enum ReplayType
+	{
+        Fixed,
+        Proportional,
+        Bidirectional
+	}
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
@@ -33,6 +39,7 @@ namespace iTrace_Core
         // DejaVu
         EventRecorder eventRecorder;
         EventReplayer eventReplayer;
+        ReplayType replayType = ReplayType.Fixed;
         private WindowPositionManager windowPositionManager;
 
         public MainWindow()
@@ -60,6 +67,13 @@ namespace iTrace_Core
             Console.WriteLine("StopWindowManager");
             windowPositionManager.Stop();
         }
+        private void RestoreWindowState(object sender, EventArgs e)
+		{
+            this.Dispatcher.Invoke(() =>
+            {
+                this.WindowState = WindowState.Normal;
+            });
+		}
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Console.WriteLine("Window Closing");
@@ -312,14 +326,43 @@ namespace iTrace_Core
 
         private void ReplayButtonClicked(object sender, RoutedEventArgs e)
         {
-            eventReplayer = new FixedPauseEventReplayer("out.csv");
+            Console.WriteLine(replayType);
+            switch (replayType)
+			{
+                case ReplayType.Fixed:
+                    eventReplayer = new FixedPauseEventReplayer("out.csv");
+                    break;
+                case ReplayType.Proportional:
+                    eventReplayer = new ProportionalEventReplayer("out.csv");
+                    break;
+                case ReplayType.Bidirectional:
+                    eventReplayer = new BidirectionalCommunicationEventReplayer("out.csv");
+                    break;
+            }
+            
             eventReplayer.OnReplayFinished += StopWindowPositionManager;
+            eventReplayer.OnReplayFinished += RestoreWindowState;
 
             windowPositionManager.Start();
             eventReplayer.StartReplay();
 
             // TODO: Disable replay button, minimize window
             this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
+        }
+
+		private void FixedPauseChecked(object sender, RoutedEventArgs e)
+		{
+            replayType = ReplayType.Fixed;
+		}
+
+        private void ProportionalPauseChecked(object sender, RoutedEventArgs e)
+		{
+            replayType = ReplayType.Proportional;
+		}
+
+        private void BidirectionalPauseChecked(object sender, RoutedEventArgs e)
+        {
+            replayType = ReplayType.Bidirectional;
         }
     }
 }
