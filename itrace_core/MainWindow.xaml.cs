@@ -159,6 +159,41 @@ namespace iTrace_Core
             Close();
         }
 
+        //////////////////////////////
+        /// Session Setup Tab
+        //////////////////////////////
+        private void DirectoryBrowseButton_Click(object sender, RoutedEventArgs e)
+        {
+            System.Windows.Forms.FolderBrowserDialog folderDialogue = new System.Windows.Forms.FolderBrowserDialog();
+            folderDialogue.SelectedPath = SessionManager.GetInstance().DataRootDir;
+
+            System.Windows.Forms.DialogResult result = folderDialogue.ShowDialog();
+
+            if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialogue.SelectedPath))
+            {
+                DataOutputDir.Text = folderDialogue.SelectedPath;
+            }
+        }
+
+        private void SaveButton_Click(object sender, RoutedEventArgs e)
+        {
+            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
+            //Close();
+        }
+
+        private void ClearButton_Click(object sender, RoutedEventArgs e)
+        {
+            TaskName.Text = "";
+            ResearcherName.Text = "";
+            ParticipantID.Text = "";
+            DataOutputDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
+        }
+
+        //////////////////////////////
+        /// iTrace Tracking Tab
+        //////////////////////////////
+
         private void TrackerListChanged(object sender, SelectionChangedEventArgs e)
         {
             if (TrackerList.SelectedIndex >= 0)
@@ -222,7 +257,6 @@ namespace iTrace_Core
                 }
                 TrackerList.IsEnabled = true;
                 TrackerRefreshButton.IsEnabled = true;
-                SessionSetupButton.IsEnabled = true;
                 settingsDataGrid.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
                 CheckScreenCap.IsEnabled = true;
@@ -263,7 +297,7 @@ namespace iTrace_Core
                 ShowEyeStatusButton.IsEnabled = false;
                 TrackerList.IsEnabled = false;
                 TrackerRefreshButton.IsEnabled = false;
-                SessionSetupButton.IsEnabled = false;
+                //SessionSetupButton.IsEnabled = false;
                 settingsDataGrid.IsEnabled = false;
                 ApplyButton.IsEnabled = false;
                 CheckScreenCap.IsEnabled = false;
@@ -271,7 +305,8 @@ namespace iTrace_Core
                 // DejaVu Record
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
-                    eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
+                    Console.WriteLine(SessionManager.GetInstance().DataRootDir);
+                    eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
                     windowPositionManager.Start();
                     eventRecorder.StartRecording();
                 }
@@ -324,33 +359,47 @@ namespace iTrace_Core
             TrackerManager.ShowEyeStatusWindow();
         }
 
+        //////////////////////////////
+        /// DejaVu Replay Tab
+        //////////////////////////////
         private void ReplayButtonClicked(object sender, RoutedEventArgs e)
         {
-            Console.WriteLine(replayType);
-            switch (replayType)
-			{
-                case ReplayType.Fixed:
-                    eventReplayer = new FixedPauseEventReplayer("out.csv");
-                    break;
-                case ReplayType.Proportional:
-                    eventReplayer = new ProportionalEventReplayer("out.csv");
-                    break;
-                case ReplayType.Bidirectional:
-                    eventReplayer = new BidirectionalCommunicationEventReplayer("out.csv");
-                    break;
+            System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
+            fileDialog.InitialDirectory = SessionManager.GetInstance().DataRootDir;
+            fileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
+            fileDialog.FilterIndex = 2;
+            fileDialog.RestoreDirectory = true;
+
+            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+            {
+                string path = fileDialog.FileName;
+
+                Console.WriteLine(replayType);
+                switch (replayType)
+                {
+                    case ReplayType.Fixed:
+                        eventReplayer = new FixedPauseEventReplayer(path);
+                        break;
+                    case ReplayType.Proportional:
+                        eventReplayer = new ProportionalEventReplayer(path);
+                        break;
+                    case ReplayType.Bidirectional:
+                        eventReplayer = new BidirectionalCommunicationEventReplayer(path);
+                        break;
+                }
+
+                eventReplayer.OnReplayFinished += StopWindowPositionManager;
+                eventReplayer.OnReplayFinished += RestoreWindowState;
+
+                windowPositionManager.Start();
+                eventReplayer.StartReplay();
+
+                // TODO: Disable replay button, minimize window
+                this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
             }
-            
-            eventReplayer.OnReplayFinished += StopWindowPositionManager;
-            eventReplayer.OnReplayFinished += RestoreWindowState;
-
-            windowPositionManager.Start();
-            eventReplayer.StartReplay();
-
-            // TODO: Disable replay button, minimize window
-            this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
         }
 
-		private void FixedPauseChecked(object sender, RoutedEventArgs e)
+        private void FixedPauseChecked(object sender, RoutedEventArgs e)
 		{
             replayType = ReplayType.Fixed;
 		}
