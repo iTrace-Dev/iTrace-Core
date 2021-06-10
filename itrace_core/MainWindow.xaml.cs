@@ -60,6 +60,8 @@ namespace iTrace_Core
             
             xmlGazeDataWriter = new XMLGazeDataWriter();
 
+            DataOutputDir.Text = SessionManager.GetInstance().DataRootDir;
+
             InitializeSettingsGrid();
         }
         private void StopWindowPositionManager(object sender, EventArgs e)
@@ -375,16 +377,17 @@ namespace iTrace_Core
                 string path = fileDialog.FileName;
 
                 Console.WriteLine(replayType);
+                int option = Int32.Parse(ReplayOption.Text);
                 switch (replayType)
                 {
                     case ReplayType.Fixed:
-                        eventReplayer = new FixedPauseEventReplayer(path);
+                        eventReplayer = new FixedPauseEventReplayer(path, option);
                         break;
                     case ReplayType.Proportional:
-                        eventReplayer = new ProportionalEventReplayer(path);
+                        eventReplayer = new ProportionalEventReplayer(path, option);
                         break;
                     case ReplayType.Bidirectional:
-                        eventReplayer = new BidirectionalCommunicationEventReplayer(path);
+                        eventReplayer = new BidirectionalCommunicationEventReplayer(path, option);
                         break;
                 }
 
@@ -400,18 +403,24 @@ namespace iTrace_Core
         }
 
         private void FixedPauseChecked(object sender, RoutedEventArgs e)
-		{
+        {
             replayType = ReplayType.Fixed;
-		}
+            OptionLabel.Content = "Pause Length (ms)";
+            ReplayOption.Text = "10";
+        }
 
         private void ProportionalPauseChecked(object sender, RoutedEventArgs e)
-		{
+        {
             replayType = ReplayType.Proportional;
-		}
+            OptionLabel.Content = "Length Scalar";
+            ReplayOption.Text = "3";
+        }
 
         private void BidirectionalPauseChecked(object sender, RoutedEventArgs e)
         {
             replayType = ReplayType.Bidirectional;
+            OptionLabel.Content = "Pause Length (ms)";
+            ReplayOption.Text = "10";
         }
     }
 }

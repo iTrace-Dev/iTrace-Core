@@ -16,9 +16,9 @@ namespace DejaVuLib
 
     public class FixedPauseEventFactoryMap : EventFactoryMap
     {
-        public FixedPauseEventFactoryMap()
+        public FixedPauseEventFactoryMap(int pause)
         {
-            FixedLengthPause strategy = new FixedLengthPause(10);
+            FixedLengthPause strategy = new FixedLengthPause(pause);
 
             factories = new Dictionary<string, IEventFactory>
             {
@@ -45,9 +45,9 @@ namespace DejaVuLib
 
     public class BidirectionalCommunicationFactoryMap : EventFactoryMap
     {
-        public BidirectionalCommunicationFactoryMap()
+        public BidirectionalCommunicationFactoryMap(int pause)
         {
-            FixedLengthPause fixedLengthPause = new FixedLengthPause(10);
+            FixedLengthPause fixedLengthPause = new FixedLengthPause(pause);
             WaitForClientPause waitForClientsPause = new WaitForClientPause();
 
             factories = new Dictionary<string, IEventFactory>
@@ -77,9 +77,9 @@ namespace DejaVuLib
 
     public class ProportionalFactoryMap : EventFactoryMap
     {
-        public ProportionalFactoryMap()
+        public ProportionalFactoryMap(int scale)
         {
-            ProportionalLengthPause strategy = new ProportionalLengthPause(3);
+            ProportionalLengthPause strategy = new ProportionalLengthPause(scale);
 
             factories = new Dictionary<string, IEventFactory>
             {

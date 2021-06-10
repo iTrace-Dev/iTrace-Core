@@ -56,17 +56,17 @@ namespace DejaVu
 
     public class FixedPauseEventReplayer : EventReplayer
     {
-        public FixedPauseEventReplayer(string filename)
+        public FixedPauseEventReplayer(string filename, int pause)
         {
-            eventReader = new ComputerEventReader(filename, new FixedPauseEventFactoryMap());
+            eventReader = new ComputerEventReader(filename, new FixedPauseEventFactoryMap(pause));
         }
     }
 
     public class BidirectionalCommunicationEventReplayer : EventReplayer
     {
-        public BidirectionalCommunicationEventReplayer(string filename)
+        public BidirectionalCommunicationEventReplayer(string filename, int pause)
         {
-            eventReader = new ComputerEventReader(filename, new BidirectionalCommunicationFactoryMap());
+            eventReader = new ComputerEventReader(filename, new BidirectionalCommunicationFactoryMap(pause));
         }
     }
 
@@ -75,9 +75,9 @@ namespace DejaVu
         private ComputerEvent nextEvent;
         private ComputerEvent currentEvent;
 
-        public ProportionalEventReplayer(string filename)
+        public ProportionalEventReplayer(string filename, int scale)
         {
-            eventReader = new ComputerEventReader(filename, new ProportionalFactoryMap());
+            eventReader = new ComputerEventReader(filename, new ProportionalFactoryMap(scale));
         }
 
         // Warning: A minimum of 3 events is required to be present in the file 

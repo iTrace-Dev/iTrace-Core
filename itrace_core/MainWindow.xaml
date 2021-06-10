@@ -64,10 +64,13 @@
             <TabItem Header="DejaVu Replay">
                 <Canvas>
                     <Button x:Name="ReplayButton" Content="{x:Static p:Resources.StartReplay}" VerticalAlignment="Center" Width="100" Height="22" Click="ReplayButtonClicked" HorizontalAlignment="Center" Canvas.Left="219" Canvas.Top="163"/>
-                    <Label Content="Pause Type" FontWeight="Bold" HorizontalAlignment="Center" Canvas.Left="231" Canvas.Top="73"/>
-                    <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="210" Canvas.Top="104"/>
-                    <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="210" Canvas.Top="119"/>
-                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="210" Canvas.Top="134"/>
+                    <Label Content="Pause Type" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="144" Canvas.Top="73" Width="120" RenderTransformOrigin="0.508,0.692"/>
+                    <Label Content="Options" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="73" Width="120"/>
+                    <Label x:Name="OptionLabel" Content="Pause Length" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="105" Width="120"/>
+                    <TextBox x:Name="ReplayOption" HorizontalAlignment="Center" Width="120" Height="23" Canvas.Left="274" Canvas.Top="131"/>
+                    <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="104"/>
+                    <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="119"/>
+                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134"/>
                 </Canvas>
             </TabItem>
             <TabItem Header="Settings">
