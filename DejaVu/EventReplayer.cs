@@ -27,7 +27,7 @@ namespace DejaVu
 
         protected void ReplayDone()
         {
-            // TODO: Figure out way to unminimize window when replay is done
+            IsReplayInProgress = false;
             OnReplayFinished?.Invoke(this, new EventArgs());
         }
 
@@ -89,7 +89,7 @@ namespace DejaVu
 
             do
             {
-                if (currentEvent.PauseStrategy is FixedLengthPause)
+                if (currentEvent.PauseStrategy is EmptyPause)
                 {
                     currentEvent.Replay();
                     currentEvent.Pause();

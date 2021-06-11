@@ -46,8 +46,9 @@ namespace DejaVu
             if(skipPause)
 			{
                 skipPause = false;
-                result.PauseStrategy = new FixedLengthPause(0);
-			}
+                //result.PauseStrategy = new FixedLengthPause(0);
+                result.PauseStrategy = new EmptyPause();
+            }
 
 
             // If the event is a left mouse click, we need to check for a double click
@@ -66,7 +67,8 @@ namespace DejaVu
 					{
                         Console.WriteLine("DoubleClick!");
                         skipPause = true;
-                        result.PauseStrategy = new FixedLengthPause(0);
+                        //result.PauseStrategy = new FixedLengthPause(0);
+                        result.PauseStrategy = new EmptyPause();
 					}
 				}
             }
