@@ -6,12 +6,14 @@ namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly String SMARTEYE_ADDRESS = "127.0.0.1"; //TODO option to select?
-        private readonly int SMARTEYE_PORT = 4242; //TODO set to default from SE software
+        private readonly String SMARTEYE_ADDRESS = "192.168.100.45"; //TODO option to select?
+        private readonly int SMARTEYE_PORT = 5800; //TODO set to default from SE software
         private System.Net.Sockets.UdpClient Client;
         private IPEndPoint ep;
         private String TrackerName;
         private String TrackerSerialNumber;
+
+        private bool Listen;
 
         public SmartEyeTracker()
         {
@@ -22,8 +24,7 @@ namespace iTrace_Core
 
             try
             {
-                Client = new System.Net.Sockets.UdpClient();
-                Client.Connect(SMARTEYE_ADDRESS, SMARTEYE_PORT);
+                Client = new System.Net.Sockets.UdpClient(ep);
 
                 //Set actual tracker name and serial
 
@@ -45,7 +46,13 @@ namespace iTrace_Core
         public bool TrackerFound()
         {
             //TODO: Because this is UDP, this does not actually mean the tracker is present and ready to go
-            return (Client != null);
+            if (Client != null)
+            {
+                Console.WriteLine("Client connected");
+                return true;
+            }
+            else { return false; }
+            
         }
 
         public String GetTrackerName()
@@ -70,7 +77,7 @@ namespace iTrace_Core
 
         public void StopTracker()
         {
-
+            Listen = false;
         }
 
         public void EnterCalibration()
@@ -95,8 +102,11 @@ namespace iTrace_Core
 
         private void ListenForData()
         {
-            while (true)
+            Listen = true;
+
+            while (Listen)
             {
+                Console.WriteLine("Listening for packets");
                 //Receive UDP packet
                 //TODO listen for termination
 
