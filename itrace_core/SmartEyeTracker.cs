@@ -99,6 +99,24 @@ namespace iTrace_Core
         {
 
         }
+        private UInt16 ConvertEndian32(UInt16 value)
+        {
+            if (!BitConverter.IsLittleEndian)
+                return value;
+
+            return (UInt16)( (value >> 24)
+                | (value << 24)
+                | ((value >> 8) & 0x0000FF00)
+                | ((value << 8) & 0x00FF0000) );
+        }
+
+        private UInt16 ConvertEndian16(UInt16 value)
+        {
+            if (!BitConverter.IsLittleEndian)
+                return value;
+
+            return (UInt16)((value >> 8) | (value << 8));
+        }
 
         private void ListenForData()
         {
@@ -106,13 +124,31 @@ namespace iTrace_Core
 
             while (Listen)
             {
-                Console.WriteLine("Listening for packets");
                 //Receive UDP packet
                 //TODO listen for termination
 
                 byte[] packet = Client.Receive(ref ep);
 
-                Console.WriteLine("Packet received: {0}", Encoding.ASCII.GetString(packet, 0, packet.Length));
+                //Print packet header
+                UInt16 PacketType = ConvertEndian16(BitConverter.ToUInt16(packet, 4));
+                UInt16 PacketLength = ConvertEndian16(BitConverter.ToUInt16(packet, 6));
+                Console.WriteLine("Packet Type: {0} Length: {1}", PacketType, PacketLength);
+
+                //Print subpackets and their IDs
+                //Start of first subpacket at 8 bytes
+                Int32 Index = 8; 
+
+                while (Index < PacketLength)
+                {
+                    //Pg 9 in the SmartEye Programmers Guide gives the following offsets to the Subpacket Id and Length
+                    UInt16 SubpacketId = ConvertEndian16(BitConverter.ToUInt16(packet, Index));
+                    UInt16 SubpacketLength = ConvertEndian16(BitConverter.ToUInt16(packet, Index + 2));
+
+                    //Advance to the next Subpacket
+                    Index += 4 + SubpacketLength;
+
+                    Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+                }
             }
         }
     }
