@@ -99,23 +99,40 @@ namespace iTrace_Core
         {
 
         }
-        private UInt16 ConvertEndian32(UInt16 value)
-        {
-            if (!BitConverter.IsLittleEndian)
-                return value;
 
-            return (UInt16)( (value >> 24)
-                | (value << 24)
-                | ((value >> 8) & 0x0000FF00)
-                | ((value << 8) & 0x00FF0000) );
+        //Parse a UInt16 from an SmartEye packet, accounting for endianness
+        private UInt16 ParseSEType_u16(byte[] packet, Int32 offset)
+        {
+            byte[] bytes = new byte[2];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, 2);
+
+            //Reverse bytes if system endianness is not Big
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return BitConverter.ToUInt16(bytes, 0);
         }
 
-        private UInt16 ConvertEndian16(UInt16 value)
+        private UInt32 ParseSEType_u32(byte[] packet, Int32 offset)
         {
-            if (!BitConverter.IsLittleEndian)
-                return value;
+            byte[] bytes = new byte[4];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, 4);
 
-            return (UInt16)((value >> 8) | (value << 8));
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        private double ParseSEType_float(byte[] packet, Int32 offset)
+        {
+            byte[] bytes = new byte[8];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, 8);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return BitConverter.ToDouble(bytes, 0);
         }
 
         private void ListenForData()
@@ -130,8 +147,8 @@ namespace iTrace_Core
                 byte[] packet = Client.Receive(ref ep);
 
                 //Print packet header
-                UInt16 PacketType = ConvertEndian16(BitConverter.ToUInt16(packet, 4));
-                UInt16 PacketLength = ConvertEndian16(BitConverter.ToUInt16(packet, 6));
+                UInt16 PacketType = ParseSEType_u16(packet, 4);
+                UInt16 PacketLength = ParseSEType_u16(packet, 6);
                 Console.WriteLine("Packet Type: {0} Length: {1}", PacketType, PacketLength);
 
                 //Print subpackets and their IDs
@@ -141,13 +158,45 @@ namespace iTrace_Core
                 while (Index < PacketLength)
                 {
                     //Pg 9 in the SmartEye Programmers Guide gives the following offsets to the Subpacket Id and Length
-                    UInt16 SubpacketId = ConvertEndian16(BitConverter.ToUInt16(packet, Index));
-                    UInt16 SubpacketLength = ConvertEndian16(BitConverter.ToUInt16(packet, Index + 2));
+                    UInt16 SubpacketId = ParseSEType_u16(packet, Index);
+                    UInt16 SubpacketLength = ParseSEType_u16(packet, Index + 2);
 
-                    //Advance to the next Subpacket
-                    Index += 4 + SubpacketLength;
+                    //Advance beyond the 4 byte packet header
+                    Index += 4;
 
                     Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+
+                    //Look for the field SEFilteredClosestWorldIntersection, which has ID 0x41
+                    if (SubpacketId == 0x41)
+                    {
+                        //Check if an intersection exists, the first U16 will be 1 if this is the case.
+                        if (ParseSEType_u16(packet, Index) == 1)
+                        {
+                            //Skip over fields SEType_u16 intersections, and SEType_Point3D worldPoint (3 floats of 8 bytes each)
+                            Int32 SubpacketOffset = Index + 1 + 3 * 8;
+
+                            //Read coordinates from field SEType_Point3D objectPoint
+                            double objectIntersectionX = ParseSEType_float(packet, SubpacketOffset);
+                            double objectIntersectionY = ParseSEType_float(packet, SubpacketOffset + 8);
+                            double objectIntersectionZ = ParseSEType_float(packet, SubpacketOffset + 16);
+
+                            SubpacketOffset += 3 * 8;
+
+                            //Read name of intersected object
+                            UInt16 intersectNameLength = ParseSEType_u16(packet, SubpacketOffset);
+
+                            SubpacketOffset += 2;
+
+                            String intersectName = Encoding.ASCII.GetString(packet, SubpacketOffset, intersectNameLength);
+
+                            //TODO determine which screen is intersected
+
+                            Console.WriteLine("Intersection \"{0}\" at coords {1}, {2}, {3}", intersectName, objectIntersectionX, objectIntersectionY, objectIntersectionZ);
+                        }
+                    }
+
+                    //Advance to the next Subpacket
+                    Index += SubpacketLength;
                 }
             }
         }
