@@ -412,7 +412,7 @@ namespace iTrace_Core
         private void ProportionalPauseChecked(object sender, RoutedEventArgs e)
         {
             replayType = ReplayType.Proportional;
-            OptionLabel.Content = "Length Scalar";
+            OptionLabel.Content = "Scale Factor";
             ReplayOption.Text = "3";
         }
 

@@ -39,10 +39,10 @@
                     <TextBox x:Name="ParticipantID" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="66" Width="390"/>
 
                     <Label Content="Data Directory" Canvas.Left="8" Canvas.Top="89" Height="27" Width="103"/>
-                    <TextBox x:Name="DataOutputDir" Height="23" Canvas.Left="121" Canvas.Top="93" Width="314" TextWrapping="NoWrap" IsReadOnly="true"  Foreground="{x:Static SystemColors.GrayTextBrush}" />
-                    <Button x:Name="DirectoryBrowseButton" Content="Browse" Canvas.Left="439" Canvas.Top="93" Width="72" Click="DirectoryBrowseButton_Click" Height="23"/>
+                    <TextBox x:Name="DataOutputDir" Height="23" Canvas.Left="121" Canvas.Top="93" Width="355" TextWrapping="NoWrap" IsReadOnly="true"  Foreground="{x:Static SystemColors.GrayTextBrush}" />
+                    <Button x:Name="DirectoryBrowseButton" Content="..." Canvas.Left="481" Canvas.Top="93" Width="30" Click="DirectoryBrowseButton_Click" Height="23"/>
 
-                    <Button x:Name="SaveButton" Content="Save" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="176" Canvas.Top="138" Click="SaveButton_Click"/>
+                    <Button x:Name="SaveButton" Content="Apply" HorizontalAlignment="Left" VerticalAlignment="Top" Width="75" Canvas.Left="176" Canvas.Top="138" Click="SaveButton_Click"/>
                     <Button x:Name="ClearButton" Content="Clear" Canvas.Left="287" Canvas.Top="138" Width="75" Click="ClearButton_Click" RenderTransformOrigin="0.44,0.7" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Canvas>
             </TabItem>
@@ -53,11 +53,11 @@
                     <Button x:Name="TrackerRefreshButton" Content="{x:Static p:Resources.Refresh}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="56" Height="23" Click="RefreshAttachedTrackers" Canvas.Left="225" Canvas.Top="40"/>
                     <Button x:Name="ActivateCalibrationButton" Content="{x:Static p:Resources.Calibrate}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="CalibrateTracker" Canvas.Left="67" Canvas.Top="83"/>
                     <Button x:Name="ActivateTrackerButton" Content="{x:Static p:Resources.StartTracking}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="StartTracker" Canvas.Left="67" Canvas.Top="125"/>
-                    <Button x:Name="ActivateReticleButton" Content="{x:Static p:Resources.ShowReticle}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="333" Canvas.Top="83" />
+                    <Button x:Name="ActivateReticleButton" Content="{x:Static p:Resources.ShowReticle}" HorizontalAlignment="Left" Grid.Row="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowReticle" Canvas.Left="333" Canvas.Top="83" ToolTip="Enables the Reticle Overlay"/>
                     <Button x:Name="ShowEyeStatusButton" Content="{x:Static p:Resources.ShowEyeStatus}" HorizontalAlignment="Left" Grid.Row ="2" VerticalAlignment="Top" Width="101" Height="23" Click="ShowEyeStatusWindow" Canvas.Left="333" Canvas.Top="125"/>
 
                     <CheckBox x:Name="CheckDejavuRecord" Content="{x:Static p:Resources.ToggleDejaVu}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="181" Canvas.Top="173"/>
-                    <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="181" Canvas.Top="193"/>
+                    <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="181" Canvas.Top="193" ToolTip="Records the screen during a tracking session"/>
 
                 </Canvas>
             </TabItem>
@@ -68,9 +68,9 @@
                     <Label Content="Options" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="73" Width="120"/>
                     <Label x:Name="OptionLabel" Content="Pause Length" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="105" Width="120"/>
                     <TextBox x:Name="ReplayOption" HorizontalAlignment="Center" Width="120" Height="23" Canvas.Left="274" Canvas.Top="131"/>
-                    <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="104"/>
-                    <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="119"/>
-                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134"/>
+                    <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="104" ToolTip="Each event will have the same pause"/>
+                    <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="119" ToolTip="Each event will pause in real time, but scaled by provided factor"/>
+                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134" ToolTip="Each event will pause until the plugin acknowledges the event has processed"/>
                 </Canvas>
             </TabItem>
             <TabItem Header="Settings">
