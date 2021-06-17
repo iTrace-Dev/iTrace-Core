@@ -164,7 +164,7 @@ namespace iTrace_Core
                     //Advance beyond the 4 byte packet header
                     Index += 4;
 
-                    Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+                   //Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
 
                     //Look for the field SEFilteredClosestWorldIntersection, which has ID 0x41
                     if (SubpacketId == 0x41)
@@ -173,7 +173,7 @@ namespace iTrace_Core
                         if (ParseSEType_u16(packet, Index) == 1)
                         {
                             //Skip over fields SEType_u16 intersections, and SEType_Point3D worldPoint (3 floats of 8 bytes each)
-                            Int32 SubpacketOffset = Index + 1 + 3 * 8;
+                            Int32 SubpacketOffset = Index + 2 + 3 * 8;
 
                             //Read coordinates from field SEType_Point3D objectPoint
                             double objectIntersectionX = ParseSEType_float(packet, SubpacketOffset);
