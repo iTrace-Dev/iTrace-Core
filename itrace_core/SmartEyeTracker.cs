@@ -135,6 +135,16 @@ namespace iTrace_Core
             return BitConverter.ToDouble(bytes, 0);
         }
 
+        //Get X and Y coordinates from an SEType_WorldIntersection
+        private void GetScreenCoordsFromWorldIntersection(byte[] packet, Int32 offset, out int x, out int y)
+        {
+            //Skip over fields SEType_u16 intersections, and SEType_Point3D worldPoint (3 floats of 8 bytes each)
+            offset += 2 + 3 * 8;
+
+            x = (int)ParseSEType_float(packet, offset);
+            y = (int)ParseSEType_float(packet, offset + 8);
+        }
+
         private void ListenForData()
         {
             Listen = true;
@@ -169,18 +179,18 @@ namespace iTrace_Core
                     //Look for the field SEFilteredClosestWorldIntersection, which has ID 0x41
                     if (SubpacketId == 0x41)
                     {
+                        Int32 SubpacketOffset = Index;
+
                         //Check if an intersection exists, the first U16 will be 1 if this is the case.
-                        if (ParseSEType_u16(packet, Index) == 1)
+                        if (ParseSEType_u16(packet, SubpacketOffset) == 1)
                         {
-                            //Skip over fields SEType_u16 intersections, and SEType_Point3D worldPoint (3 floats of 8 bytes each)
-                            Int32 SubpacketOffset = Index + 2 + 3 * 8;
+                            int x;
+                            int y;
 
-                            //Read coordinates from field SEType_Point3D objectPoint
-                            double objectIntersectionX = ParseSEType_float(packet, SubpacketOffset);
-                            double objectIntersectionY = ParseSEType_float(packet, SubpacketOffset + 8);
-                            double objectIntersectionZ = ParseSEType_float(packet, SubpacketOffset + 16);
+                            GetScreenCoordsFromWorldIntersection(packet, SubpacketOffset, out x, out y);
 
-                            SubpacketOffset += 3 * 8;
+                            //Skip over fields, need a better way of conveying where things are
+                            SubpacketOffset += 2 + 6 * 8;
 
                             //Read name of intersected object
                             UInt16 intersectNameLength = ParseSEType_u16(packet, SubpacketOffset);
@@ -189,11 +199,10 @@ namespace iTrace_Core
 
                             String intersectName = Encoding.ASCII.GetString(packet, SubpacketOffset, intersectNameLength);
 
-                            //TODO determine which screen is intersected
+                            Console.WriteLine("Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
 
-                            Console.WriteLine("Intersection \"{0}\" at coords {1}, {2}, {3}", intersectName, objectIntersectionX, objectIntersectionY, objectIntersectionZ);
-
-                            GazeHandler.Instance.EnqueueGaze(new SmartEyeGazeData(objectIntersectionX, objectIntersectionY));
+                            //Move this SmartEyeGazeData and gradually fill it as subpackets are encountered
+                            GazeHandler.Instance.EnqueueGaze(new SmartEyeGazeData(x, y));
                         }
                     }
 

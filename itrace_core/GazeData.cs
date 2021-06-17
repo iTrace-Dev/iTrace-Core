@@ -166,10 +166,10 @@ namespace iTrace_Core
 
     public class SmartEyeGazeData : GazeData
     {
-        public SmartEyeGazeData(double x, double y) : base()
+        public SmartEyeGazeData(int x, int y) : base()
         {
-            this.X = (int)x;
-            this.Y = (int)y;
+            this.X = x;
+            this.Y = y;
 
             RightValidation = 1;
             LeftValidation = 1;
