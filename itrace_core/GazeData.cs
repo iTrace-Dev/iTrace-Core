@@ -164,6 +164,18 @@ namespace iTrace_Core
         }
     }
 
+    public class SmartEyeGazeData : GazeData
+    {
+        public SmartEyeGazeData(double x, double y) : base()
+        {
+            this.X = (int)x;
+            this.Y = (int)y;
+
+            RightValidation = 1;
+            LeftValidation = 1;
+        }
+    }
+
     public class GazepointGazeData : GazeData
     {
         public GazepointGazeData(String gazePointRawGaze) : base()

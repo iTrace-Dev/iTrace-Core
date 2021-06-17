@@ -192,6 +192,8 @@ namespace iTrace_Core
                             //TODO determine which screen is intersected
 
                             Console.WriteLine("Intersection \"{0}\" at coords {1}, {2}, {3}", intersectName, objectIntersectionX, objectIntersectionY, objectIntersectionZ);
+
+                            GazeHandler.Instance.EnqueueGaze(new SmartEyeGazeData(objectIntersectionX, objectIntersectionY));
                         }
                     }
 
