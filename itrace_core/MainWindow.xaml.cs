@@ -56,7 +56,8 @@ namespace iTrace_Core
             settings = new List<Setting>()
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
-                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() }
+                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
+                new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() }
             };
 
             settingsDataGrid.ItemsSource = settings;
@@ -66,7 +67,8 @@ namespace iTrace_Core
         {
             int socketPort = 0;
             int websocketPort = 0;
-            if (! (int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort)) )
+            int calibrationMonitor = 0;
+            if (! (int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort) && int.TryParse(settings[2].Value, out calibrationMonitor)) )
             {
                 MessageBox.Show(Properties.Resources.PortValuesMustBeNumeric, Properties.Resources.InvalidPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -91,8 +93,14 @@ namespace iTrace_Core
                 return;
             }
 
+            if(! ((calibrationMonitor <= System.Windows.Forms.Screen.AllScreens.Length) && (calibrationMonitor > 0)) )
+            {
+                MessageBox.Show(Properties.Resources.MonitorIndexOutOfRange, Properties.Resources.MonitorIndexIncorrectValue, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
             Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
+            Settings.Default.calibration_monitor = Convert.ToInt32(settings[2].Value);
             Settings.Default.Save();
         }
 
