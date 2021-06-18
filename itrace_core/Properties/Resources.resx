@@ -144,6 +144,12 @@
   <data name="InvalidWebSocketPortValue" xml:space="preserve">
     <value>Invalid Websocket Port Value"</value>
   </data>
+  <data name="MonitorIndexIncorrectValue" xml:space="preserve">
+    <value>Invalid Monitor</value>
+  </data>
+  <data name="MonitorIndexOutOfRange" xml:space="preserve">
+    <value>Selected monitor must exist</value>
+  </data>
   <data name="PortValuesCannotBeSameValue" xml:space="preserve">
     <value>Port values cannot be the same value!</value>
   </data>

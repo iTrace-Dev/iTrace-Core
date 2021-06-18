@@ -89,6 +89,8 @@ namespace iTrace_Core
             RefreshTrackerList();
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
+
+            System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
         }
 
         private void InitializeSettingsGrid()
@@ -96,7 +98,8 @@ namespace iTrace_Core
             settings = new List<Setting>()
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
-                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() }
+                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
+                new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() }
             };
 
             settingsDataGrid.ItemsSource = settings;
@@ -106,7 +109,8 @@ namespace iTrace_Core
         {
             int socketPort = 0;
             int websocketPort = 0;
-            if (! (int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort)) )
+            int calibrationMonitor = 0;
+            if (!(int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort) && int.TryParse(settings[2].Value, out calibrationMonitor)))
             {
                 MessageBox.Show(Properties.Resources.PortValuesMustBeNumeric, Properties.Resources.InvalidPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -131,8 +135,14 @@ namespace iTrace_Core
                 return;
             }
 
+            if (!((calibrationMonitor <= System.Windows.Forms.Screen.AllScreens.Length) && (calibrationMonitor > 0)))
+            {
+                MessageBox.Show(Properties.Resources.MonitorIndexOutOfRange, Properties.Resources.MonitorIndexIncorrectValue, MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+
             Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
             Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
+            Settings.Default.calibration_monitor = Convert.ToInt32(settings[2].Value);
             Settings.Default.Save();
         }
 
@@ -407,6 +417,9 @@ namespace iTrace_Core
             replayType = ReplayType.Fixed;
             OptionLabel.Content = "Pause Length (ms)";
             ReplayOption.Text = "10";
+            OptionLabel.Visibility = Visibility.Visible;
+            //OptionHeader.Visibility = Visibility.Visible;
+            ReplayOption.Show();
         }
 
         private void ProportionalPauseChecked(object sender, RoutedEventArgs e)
@@ -414,13 +427,18 @@ namespace iTrace_Core
             replayType = ReplayType.Proportional;
             OptionLabel.Content = "Scale Factor";
             ReplayOption.Text = "3";
+            OptionLabel.Visibility = Visibility.Visible;
+            //OptionHeader.Visibility = Visibility.Visible;
+            ReplayOption.Show();
         }
 
         private void BidirectionalPauseChecked(object sender, RoutedEventArgs e)
         {
             replayType = ReplayType.Bidirectional;
-            OptionLabel.Content = "Pause Length (ms)";
-            ReplayOption.Text = "10";
+            OptionLabel.Visibility = Visibility.Hidden;
+            //OptionHeader.Visibility = Visibility.Hidden;
+            ReplayOption.Hide();
+
         }
     }
 }

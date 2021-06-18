@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:wf="clr-namespace:System.Windows.Forms;assembly=System.Windows.Forms"
         xmlns:local="clr-namespace:iTrace_Core"
         xmlns:p="clr-namespace:iTrace_Core.Properties"
         mc:Ignorable="d"
@@ -62,12 +63,14 @@
                 </Canvas>
             </TabItem>
             <TabItem Header="DejaVu Replay">
-                <Canvas>
+                <Canvas x:Name="ReplayCanvas">
                     <Button x:Name="ReplayButton" Content="{x:Static p:Resources.StartReplay}" VerticalAlignment="Center" Width="100" Height="22" Click="ReplayButtonClicked" HorizontalAlignment="Center" Canvas.Left="219" Canvas.Top="163"/>
                     <Label Content="Pause Type" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="144" Canvas.Top="73" Width="120" RenderTransformOrigin="0.508,0.692"/>
-                    <Label Content="Options" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="73" Width="120"/>
+                    <Label x:Name="OptionHeader" Content="Options" FontWeight="Bold" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="73" Width="120"/>
                     <Label x:Name="OptionLabel" Content="Pause Length" HorizontalAlignment="Center" HorizontalContentAlignment="Center" Canvas.Left="274" Canvas.Top="105" Width="120"/>
-                    <TextBox x:Name="ReplayOption" HorizontalAlignment="Center" Width="120" Height="23" Canvas.Left="274" Canvas.Top="131"/>
+                    <WindowsFormsHost HorizontalAlignment="Center" Width="120" Height="23" Canvas.Left="274" Canvas.Top="131">
+                        <wf:NumericUpDown x:Name="ReplayOption" Width="120" Height="23" Minimum="1"/>
+                    </WindowsFormsHost>
                     <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="104" ToolTip="Each event will have the same pause"/>
                     <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="119" ToolTip="Each event will pause in real time, but scaled by provided factor"/>
                     <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134" ToolTip="Each event will pause until the plugin acknowledges the event has processed"/>
