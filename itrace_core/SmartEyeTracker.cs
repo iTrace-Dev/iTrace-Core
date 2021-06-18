@@ -15,7 +15,11 @@ namespace iTrace_Core
 
         private bool Listen;
 
-        private const int SEFilteredClosestWorldIntersectionId = 0x41;
+        private const UInt16 SEFilteredClosestWorldIntersectionId = 0x0041;
+        private const UInt16 SEFilteredLeftPupilDiameter = 0x0068;
+        private const UInt16 SEFilteredRightPupilDiameter = 0x006A;
+        private const UInt16 SEFilteredLeftClosestWorldIntersection = 0x00B6;
+        private const UInt16 SEFilteredRightClosestWorldIntersection = 0x00B8;
 
         private const int SEType_u16_Size = 2;
         private const int SEType_u32_Size = 4;
@@ -169,7 +173,9 @@ namespace iTrace_Core
 
                 //Print subpackets and their IDs
                 //Start of first subpacket at 8 bytes
-                Int32 Index = 8; 
+                Int32 Index = 8;
+
+                SmartEyeGazeData gaze = new SmartEyeGazeData();
 
                 while (Index < PacketLength)
                 {
@@ -180,13 +186,16 @@ namespace iTrace_Core
                     //Advance beyond the 4 byte packet header
                     Index += 2 * SEType_u16_Size;
 
-                   //Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+                    //Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
 
-                    //Look for the field SEFilteredClosestWorldIntersection, which has ID 0x41
-                    if (SubpacketId == SEFilteredClosestWorldIntersectionId)
+                    Int32 SubpacketOffset = Index;
+
+                    //Look for a left right or combined world intersection subpacket
+                    if (SubpacketId == SEFilteredClosestWorldIntersectionId || 
+                        SubpacketId == SEFilteredLeftClosestWorldIntersection || 
+                        SubpacketId == SEFilteredRightClosestWorldIntersection)
                     {
-                        Int32 SubpacketOffset = Index;
-
+                        
                         //Check if an intersection exists, the first U16 will be 1 if this is the case.
                         if (ParseSEType_u16(packet, SubpacketOffset) == 1)
                         {
@@ -194,11 +203,6 @@ namespace iTrace_Core
                             int y;
 
                             GetScreenCoordsFromWorldIntersection(packet, SubpacketOffset, out x, out y);
-
-                            //Read coordinates from field SEType_Point3D objectPoint
-                            double objectIntersectionX = ParseSEType_f64(packet, SubpacketOffset);
-                            double objectIntersectionY = ParseSEType_f64(packet, SubpacketOffset + SEType_f64_Size);
-                            double objectIntersectionZ = ParseSEType_f64(packet, SubpacketOffset + 2 * SEType_f64_Size);
 
                             //Skip over fields, need a better way of conveying where things are
                             SubpacketOffset += SEType_u16_Size + 6 * SEType_f64_Size;
@@ -209,17 +213,51 @@ namespace iTrace_Core
                             SubpacketOffset += SEType_u16_Size;
 
                             String intersectName = Encoding.ASCII.GetString(packet, SubpacketOffset, intersectNameLength);
+                            
+                            switch (SubpacketId)
+                            {
+                                case SEFilteredClosestWorldIntersectionId:
+                                    gaze.SetXY(x, y);
+                                    Console.WriteLine("Combined Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                    break;
 
-                            Console.WriteLine("Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                case SEFilteredLeftClosestWorldIntersection:
+                                    gaze.SetLeftXY(x, y);
+                                    Console.WriteLine("Left Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                    break;
 
-                            //Move this SmartEyeGazeData and gradually fill it as subpackets are encountered
-                            GazeHandler.Instance.EnqueueGaze(new SmartEyeGazeData(x, y));
+                                case SEFilteredRightClosestWorldIntersection:
+                                    gaze.SetRightXY(x, y);
+                                    Console.WriteLine("Right Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                    break;
+                            }
+                        }
+                    }
+        
+
+                    if (SubpacketId == SEFilteredLeftPupilDiameter || SubpacketId == SEFilteredRightPupilDiameter)
+                    {
+                        double diam = ParseSEType_f64(packet, SubpacketOffset);
+
+                        switch (SubpacketId)
+                        {
+                            case SEFilteredLeftPupilDiameter:
+                                gaze.SetLeftPupil(diam);
+                                Console.WriteLine("Left Pupil: {0}", diam);
+                                break;
+
+                            case SEFilteredRightPupilDiameter:
+                                gaze.SetRightPupil(diam);
+                                Console.WriteLine("Right Pupil: {0}", diam);
+                                break;
                         }
                     }
 
                     //Advance to the next Subpacket
                     Index += SubpacketLength;
                 }
+
+                GazeHandler.Instance.EnqueueGaze(gaze);
             }
         }
     }

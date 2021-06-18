@@ -166,13 +166,36 @@ namespace iTrace_Core
 
     public class SmartEyeGazeData : GazeData
     {
-        public SmartEyeGazeData(int x, int y) : base()
+        //Dubious?
+        //Packet handling should eventually be moved inside this class, making these setters unnecessary
+        public void SetXY(int x, int y)
         {
             this.X = x;
             this.Y = y;
+        }
 
-            RightValidation = 1;
-            LeftValidation = 1;
+        public void SetLeftXY(int x, int y)
+        {
+            this.LeftX = x;
+            this.LeftY = y;
+            this.LeftValidation = 1;
+        }
+
+        public void SetRightXY(int x, int y)
+        {
+            this.RightX = x;
+            this.RightY = y;
+            this.RightValidation = 1;
+        }
+
+        public void SetLeftPupil(double p)
+        {
+            this.LeftPupil = p;
+        }
+
+        public void SetRightPupil(double p)
+        {
+            this.RightPupil = p;
         }
     }
 
