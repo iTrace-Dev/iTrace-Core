@@ -15,6 +15,12 @@ namespace iTrace_Core
 
         private bool Listen;
 
+        private const int SEFilteredClosestWorldIntersectionId = 0x41;
+
+        private const int SEType_u16_Size = 2;
+        private const int SEType_u32_Size = 4;
+        private const int SEType_f64_Size = 8;
+
         public SmartEyeTracker()
         {
             ep = new IPEndPoint(IPAddress.Parse(SMARTEYE_ADDRESS), SMARTEYE_PORT);
@@ -103,8 +109,8 @@ namespace iTrace_Core
         //Parse a UInt16 from an SmartEye packet, accounting for endianness
         private UInt16 ParseSEType_u16(byte[] packet, Int32 offset)
         {
-            byte[] bytes = new byte[2];
-            Array.ConstrainedCopy(packet, offset, bytes, 0, 2);
+            byte[] bytes = new byte[SEType_u16_Size];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, SEType_u16_Size);
 
             //Reverse bytes if system endianness is not Big
             if (BitConverter.IsLittleEndian)
@@ -115,8 +121,8 @@ namespace iTrace_Core
 
         private UInt32 ParseSEType_u32(byte[] packet, Int32 offset)
         {
-            byte[] bytes = new byte[4];
-            Array.ConstrainedCopy(packet, offset, bytes, 0, 4);
+            byte[] bytes = new byte[SEType_u32_Size];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, SEType_u32_Size);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
@@ -124,10 +130,10 @@ namespace iTrace_Core
             return BitConverter.ToUInt32(bytes, 0);
         }
 
-        private double ParseSEType_float(byte[] packet, Int32 offset)
+        private double ParseSEType_f64(byte[] packet, Int32 offset)
         {
-            byte[] bytes = new byte[8];
-            Array.ConstrainedCopy(packet, offset, bytes, 0, 8);
+            byte[] bytes = new byte[SEType_f64_Size];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, SEType_f64_Size);
 
             if (BitConverter.IsLittleEndian)
                 Array.Reverse(bytes);
@@ -139,10 +145,10 @@ namespace iTrace_Core
         private void GetScreenCoordsFromWorldIntersection(byte[] packet, Int32 offset, out int x, out int y)
         {
             //Skip over fields SEType_u16 intersections, and SEType_Point3D worldPoint (3 floats of 8 bytes each)
-            offset += 2 + 3 * 8;
+            offset += SEType_u16_Size + 3 * SEType_f64_Size;
 
-            x = (int)ParseSEType_float(packet, offset);
-            y = (int)ParseSEType_float(packet, offset + 8);
+            x = (int)ParseSEType_f64(packet, offset);
+            y = (int)ParseSEType_f64(packet, offset + SEType_f64_Size);
         }
 
         private void ListenForData()
@@ -169,15 +175,15 @@ namespace iTrace_Core
                 {
                     //Pg 9 in the SmartEye Programmers Guide gives the following offsets to the Subpacket Id and Length
                     UInt16 SubpacketId = ParseSEType_u16(packet, Index);
-                    UInt16 SubpacketLength = ParseSEType_u16(packet, Index + 2);
+                    UInt16 SubpacketLength = ParseSEType_u16(packet, Index + SEType_u16_Size);
 
                     //Advance beyond the 4 byte packet header
-                    Index += 4;
+                    Index += 2 * SEType_u16_Size;
 
                    //Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
 
                     //Look for the field SEFilteredClosestWorldIntersection, which has ID 0x41
-                    if (SubpacketId == 0x41)
+                    if (SubpacketId == SEFilteredClosestWorldIntersectionId)
                     {
                         Int32 SubpacketOffset = Index;
 
@@ -189,13 +195,18 @@ namespace iTrace_Core
 
                             GetScreenCoordsFromWorldIntersection(packet, SubpacketOffset, out x, out y);
 
+                            //Read coordinates from field SEType_Point3D objectPoint
+                            double objectIntersectionX = ParseSEType_f64(packet, SubpacketOffset);
+                            double objectIntersectionY = ParseSEType_f64(packet, SubpacketOffset + SEType_f64_Size);
+                            double objectIntersectionZ = ParseSEType_f64(packet, SubpacketOffset + 2 * SEType_f64_Size);
+
                             //Skip over fields, need a better way of conveying where things are
-                            SubpacketOffset += 2 + 6 * 8;
+                            SubpacketOffset += SEType_u16_Size + 6 * SEType_f64_Size;
 
                             //Read name of intersected object
                             UInt16 intersectNameLength = ParseSEType_u16(packet, SubpacketOffset);
 
-                            SubpacketOffset += 2;
+                            SubpacketOffset += SEType_u16_Size;
 
                             String intersectName = Encoding.ASCII.GetString(packet, SubpacketOffset, intersectNameLength);
 
