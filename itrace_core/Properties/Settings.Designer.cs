@@ -46,5 +46,17 @@ namespace iTrace_Core.Properties {
                 this["websocket_port"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int calibration_monitor {
+            get {
+                return ((int)(this["calibration_monitor"]));
+            }
+            set {
+                this["calibration_monitor"] = value;
+            }
+        }
     }
 }
