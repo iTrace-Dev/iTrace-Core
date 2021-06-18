@@ -53,14 +53,14 @@ namespace DejaVuLib
                         bool maximizable = (info.dwStyle & Win32.WS_MAXIMIZEBOX) != 0;
                         bool minimizable = (info.dwStyle & Win32.WS_MINIMIZEBOX) != 0;
 
-                        if (!maximizable && !minimizable)
+                        if (!maximizable && minimizable)
                         {
                             int height = Convert.ToInt32(info.rcWindow.Bottom - info.rcWindow.Top);
                             int width = Convert.ToInt32(info.rcWindow.Right - info.rcWindow.Left);
 
                             Win32.MoveWindow(hWnd, 10, 10, width, height, false);
                         }
-                        else
+                        else if (minimizable)
                         {
                             Win32.MoveWindow(hWnd, 10, 10, 500, 500, false);
                         }
