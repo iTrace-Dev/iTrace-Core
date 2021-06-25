@@ -196,7 +196,7 @@ namespace iTrace_Core
                 //Advance beyond the 4 byte packet header
                 Index += 2 * SEType_u16_Size;
 
-                //Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+                Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
 
                 Int32 SubpacketOffset = Index;
 
@@ -235,12 +235,14 @@ namespace iTrace_Core
                             case SEFilteredLeftClosestWorldIntersection:
                                 this.LeftX = x;
                                 this.LeftY = y;
+                                this.LeftValidation = 1;
                                 Console.WriteLine("Left Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
 
                             case SEFilteredRightClosestWorldIntersection:
                                 this.RightX = x;
                                 this.RightY = y;
+                                this.RightValidation = 1;
                                 Console.WriteLine("Right Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
                         }
