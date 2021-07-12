@@ -344,6 +344,7 @@ namespace iTrace_Core
 
         private const int SEType_u16_Size = 2;
         private const int SEType_u32_Size = 4;
+        private const int SEType_u64_Size = 8;
         private const int SEType_f64_Size = 8;
 
         public SmartEyeGazeData(byte[] packet)
@@ -418,7 +419,22 @@ namespace iTrace_Core
                         }
                     }
                 }
-
+                else if (SubpacketId == SETimeStamp)
+                {
+                    this.TrackerTime = (long)ParseSEType_u64(packet, SubpacketOffset);
+                }
+                else if (SubpacketId == SELeftGazeOrigin)
+                {
+                    this.UserLeftX = ParseSEType_f64(packet, SubpacketOffset);
+                    this.UserLeftY = ParseSEType_f64(packet, SubpacketOffset + SEType_f64_Size);
+                    this.UserLeftZ = ParseSEType_f64(packet, SubpacketOffset + 2 * SEType_f64_Size);
+                }
+                else if (SubpacketId == SERightGazeOrigin)
+                {
+                    this.UserRightX = ParseSEType_f64(packet, SubpacketOffset);
+                    this.UserRightY = ParseSEType_f64(packet, SubpacketOffset + SEType_f64_Size);
+                    this.UserRightZ = ParseSEType_f64(packet, SubpacketOffset + 2 * SEType_f64_Size);
+                }
 
                 if (SubpacketId == SEFilteredLeftPupilDiameter || SubpacketId == SEFilteredRightPupilDiameter)
                 {
@@ -465,6 +481,17 @@ namespace iTrace_Core
                 Array.Reverse(bytes);
 
             return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        private UInt64 ParseSEType_u64(byte[] packet, Int32 offset)
+        {
+            byte[] bytes = new byte[SEType_u64_Size];
+            Array.ConstrainedCopy(packet, offset, bytes, 0, SEType_u64_Size);
+
+            if (BitConverter.IsLittleEndian)
+                Array.Reverse(bytes);
+
+            return BitConverter.ToUInt64(bytes, 0);
         }
 
         private double ParseSEType_f64(byte[] packet, Int32 offset)
