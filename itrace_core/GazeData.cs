@@ -166,6 +166,11 @@ namespace iTrace_Core
 
     public class SmartEyeGazeData : GazeData
     {
+        //Debug messages
+        private const bool PrintPacketInfo = false;
+        private const bool PrintIntersectionInfo = false;
+        private const bool PrintPupilInfo = false;
+
         //Lot of constants
         //All subpacket IDs are uint16s
         //These are in the same order as in the ProgrammersGuide, not in order of ID
@@ -352,7 +357,9 @@ namespace iTrace_Core
             //Print packet header
             UInt16 PacketType = ParseSEType_u16(packet, 4);
             UInt16 PacketLength = ParseSEType_u16(packet, 6);
-            Console.WriteLine("Packet Type: {0} Length: {1}", PacketType, PacketLength);
+
+            if (PrintPacketInfo)
+                Console.WriteLine("Packet Type: {0} Length: {1}", PacketType, PacketLength);
 
             //Print subpackets and their IDs
             //Start of first subpacket at 8 bytes
@@ -367,7 +374,8 @@ namespace iTrace_Core
                 //Advance beyond the 4 byte packet header
                 Index += 2 * SEType_u16_Size;
 
-                Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
+                if (PrintPacketInfo)
+                    Console.WriteLine("\tSubpacketType: 0x{0:X} Length: {1}", SubpacketId, SubpacketLength);
 
                 Int32 SubpacketOffset = Index;
 
@@ -400,21 +408,24 @@ namespace iTrace_Core
                             case SEFilteredClosestWorldIntersectionId:
                                 this.X = x;
                                 this.Y = y;
-                                Console.WriteLine("Combined Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                if (PrintIntersectionInfo)
+                                    Console.WriteLine("Combined Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
 
                             case SEFilteredLeftClosestWorldIntersection:
                                 this.LeftX = x;
                                 this.LeftY = y;
                                 this.LeftValidation = 1;
-                                Console.WriteLine("Left Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                if (PrintIntersectionInfo)
+                                    Console.WriteLine("Left Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
 
                             case SEFilteredRightClosestWorldIntersection:
                                 this.RightX = x;
                                 this.RightY = y;
                                 this.RightValidation = 1;
-                                Console.WriteLine("Right Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
+                                if (PrintIntersectionInfo)
+                                    Console.WriteLine("Right Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
                         }
                     }
@@ -444,12 +455,14 @@ namespace iTrace_Core
                     {
                         case SEFilteredLeftPupilDiameter:
                             this.LeftPupil = diam;
-                            Console.WriteLine("Left Pupil: {0}", diam);
+                            if (PrintPupilInfo)
+                                Console.WriteLine("Left Pupil: {0}", diam);
                             break;
 
                         case SEFilteredRightPupilDiameter:
                             this.RightPupil = diam;
-                            Console.WriteLine("Right Pupil: {0}", diam);
+                            if (PrintPupilInfo)
+                                Console.WriteLine("Right Pupil: {0}", diam);
                             break;
                     }
                 }
