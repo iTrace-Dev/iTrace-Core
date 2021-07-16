@@ -352,6 +352,10 @@ namespace iTrace_Core
         private const int SEType_u64_Size = 8;
         private const int SEType_f64_Size = 8;
 
+        //TODO: these should be per-session
+        private static UInt32 lastFixation = 0;
+        private static UInt32 lastBlink = 0;
+
         public SmartEyeGazeData(byte[] packet)
         {
             //Print packet header
@@ -445,6 +449,30 @@ namespace iTrace_Core
                     this.UserRightX = ParseSEType_f64(packet, SubpacketOffset);
                     this.UserRightY = ParseSEType_f64(packet, SubpacketOffset + SEType_f64_Size);
                     this.UserRightZ = ParseSEType_f64(packet, SubpacketOffset + 2 * SEType_f64_Size);
+                }
+                else if (SubpacketId == SEFixation)
+                {
+                    UInt32 fixationNumber = ParseSEType_u32(packet, SubpacketOffset);
+
+                    if (fixationNumber > lastFixation)
+                    {
+                        if (true) //TODO: Add toggle
+                            Console.WriteLine("Fixation: {0}", fixationNumber);
+
+                        lastFixation = fixationNumber;
+                    }
+                }
+                else if (SubpacketId == SEBlink)
+                {
+                    UInt32 blinkNumber = ParseSEType_u32(packet, SubpacketOffset);
+
+                    if (blinkNumber > lastBlink)
+                    {
+                        if (true) //TODO: Add toggle
+                            Console.WriteLine("Blink: {0}", blinkNumber);
+
+                        lastBlink = blinkNumber;
+                    }
                 }
 
                 if (SubpacketId == SEFilteredLeftPupilDiameter || SubpacketId == SEFilteredRightPupilDiameter)
