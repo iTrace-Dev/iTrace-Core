@@ -4,10 +4,16 @@ using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
-using SharpAvi;
-using SharpAvi.Codecs;
-using SharpAvi.Output;
+using System.IO;
+//using SharpAvi;
+//using SharpAvi.Codecs;
+//using SharpAvi.Output;
 using System.Windows.Forms;
+using System.Collections.Generic;
+
+using Accord.Video.FFMPEG;
+
+
 //using static iTrace_Core.RecorderParams;
 
 namespace iTrace_Core
@@ -26,6 +32,7 @@ namespace iTrace_Core
 			public IntPtr hbmMask;
 			public IntPtr hbmColor;
 		}
+		
 
 		[StructLayout(LayoutKind.Sequential)]
 		public struct POINT
@@ -59,11 +66,10 @@ namespace iTrace_Core
 	// Used to Configure the Recorder
 	public class RecorderParams
 	{
-		public RecorderParams(string filename, int FrameRate, FourCC Encoder, int Quality)
+		public RecorderParams(string filename, int FrameRate, int Quality)
 		{
 			FileName = filename;
 			FramesPerSecond = FrameRate;
-			Codec = Encoder;
 			this.Quality = Quality;
 
 			Height = Screen.PrimaryScreen.Bounds.Height;
@@ -71,23 +77,22 @@ namespace iTrace_Core
 
 		}
 
-		string FileName;
+		public string FileName;
 		public int FramesPerSecond, Quality;
-		FourCC Codec;
+		//FourCC Codec;
 
 		public int Height { get; private set; }
 		public int Width { get; private set; }
 
-		public AviWriter CreateAviWriter()
+		public VideoFileWriter CreateAviWriter()
 		{
-			return new AviWriter(FileName)
-			{
-				FramesPerSecond = FramesPerSecond,
-				EmitIndex1 = true,
-			};
+
+			VideoFileWriter writer = new VideoFileWriter();
+			//writer.Open(FileName, Width, Height, FramesPerSecond, VideoCodec.MPEG4);
+			return writer;
 		}
 
-		public IAviVideoStream CreateVideoStream(AviWriter writer)
+		/*public IAviVideoStream CreateVideoStream(AviWriter writer)
 		{
 			// Select encoder type based on FOURCC of codec
 			if (Codec == KnownFourCCs.Codecs.Uncompressed)
@@ -105,32 +110,31 @@ namespace iTrace_Core
 					// Thus all calls to the encoder (including its instantiation) will be invoked on a single thread although encoding (and writing) is performed asynchronously
 					forceSingleThreadedAccess: true);
 			}
-		}
+		}*/
 	}
 
 	public class Recorder : IDisposable
 	{
 
 		#region Fields
-		AviWriter writer;
+		VideoFileWriter writer;
 		RecorderParams Params;
-		IAviVideoStream videoStream;
+		//IAviVideoStream videoStream;
 		Thread screenThread;
 		ManualResetEvent stopThread = new ManualResetEvent(false);
+		int count;
+		Queue<Bitmap> queue;
 		#endregion
 
 		public Recorder(RecorderParams Params)
 		{
 			this.Params = Params;
-
+			count = 0;
+			queue = new Queue<Bitmap>();
 			// Create AVI writer and specify FPS
 			writer = Params.CreateAviWriter();
-
-			// Create video stream
-			videoStream = Params.CreateVideoStream(writer);
-			// Set only name. Other properties were when creating stream, 
-			// either explicitly by arguments or implicitly by the encoder used
-			videoStream.Name = "Captura";
+			writer.Open(Params.FileName, Params.Width, Params.Height, Params.FramesPerSecond, VideoCodec.MPEG4);
+			//Console.WriteLine(writer.FramesPerSecond);
 
 			screenThread = new Thread(RecordScreen)
 			{
@@ -154,65 +158,66 @@ namespace iTrace_Core
 
 		void RecordScreen()
 		{
-			var frameInterval = TimeSpan.FromSeconds(1 / (double)writer.FramesPerSecond);
-			var buffer = new byte[Params.Width * Params.Height * 4];
+			Console.WriteLine(Params.FramesPerSecond);
+			var frameInterval = TimeSpan.FromSeconds(1 / Params.FramesPerSecond); // FPS
+			
 			Task videoWriteTask = null;
 			var timeTillNextFrame = TimeSpan.Zero;
 
+			
+
 			while (!stopThread.WaitOne(timeTillNextFrame))
 			{
+				var buffer = new byte[Params.Width * Params.Height * 4];
 				var timeStamp = DateTime.Now;
 
-				Screenshot(buffer);
-
-				// Wait for the previous frame is written
-				videoWriteTask?.Wait();
-
-				// Start asynchronous (encoding and) writing of the new frame
-				videoWriteTask = videoStream.WriteFrameAsync(true, buffer, 0, buffer.Length);
+				Screenshot();
 
 				timeTillNextFrame = timeStamp + frameInterval - DateTime.Now;
 				if (timeTillNextFrame < TimeSpan.Zero)
 					timeTillNextFrame = TimeSpan.Zero;
+			}
+			while (queue.Count != 0)
+			{	
+				// TODO - Make Asychronous and insert in above loop
+				var insert = queue.Dequeue();
+				writer.WriteVideoFrame(insert);
+				insert.Dispose();
 			}
 
 			// Wait for the last frame is written
 			videoWriteTask?.Wait();
 		}
 
-		public void Screenshot(byte[] Buffer)
+		public void Screenshot()
 		{
-			using (var BMP = new Bitmap(Params.Width, Params.Height))
+			var BMP = new Bitmap(Params.Width, Params.Height, PixelFormat.Format32bppRgb);
+			using (var g = Graphics.FromImage(BMP))
 			{
-				using (var g = Graphics.FromImage(BMP))
+				g.CopyFromScreen(Point.Empty, Point.Empty, new Size(Params.Width, Params.Height), CopyPixelOperation.SourceCopy);
+				MouseCursor.CURSORINFO cursorInfo;
+				cursorInfo.cbSize = Marshal.SizeOf(typeof(MouseCursor.CURSORINFO));
+				if (MouseCursor.GetCursorInfo(out cursorInfo))
 				{
-					g.CopyFromScreen(Point.Empty, Point.Empty, new Size(Params.Width, Params.Height), CopyPixelOperation.SourceCopy);
-					MouseCursor.CURSORINFO cursorInfo;
-					cursorInfo.cbSize = Marshal.SizeOf(typeof(MouseCursor.CURSORINFO));
-					if(MouseCursor.GetCursorInfo(out cursorInfo))
+					if (cursorInfo.flags == MouseCursor.CURSOR_SHOWING)
 					{
-						if(cursorInfo.flags == MouseCursor.CURSOR_SHOWING)
+						var iconPointer = MouseCursor.CopyIcon(cursorInfo.hCursor);
+						MouseCursor.ICONINFO iconInfo;
+						int iconX, iconY;
+
+						if (MouseCursor.GetIconInfo(iconPointer, out iconInfo))
 						{
-							var iconPointer = MouseCursor.CopyIcon(cursorInfo.hCursor);
-							MouseCursor.ICONINFO iconInfo;
-							int iconX, iconY;
+							iconX = cursorInfo.ptScreenPos.x - ((int)iconInfo.xHotspot);
+							iconY = cursorInfo.ptScreenPos.y - ((int)iconInfo.yHotspot);
 
-							if(MouseCursor.GetIconInfo(iconPointer, out iconInfo))
-							{
-								iconX = cursorInfo.ptScreenPos.x - ((int)iconInfo.xHotspot);
-								iconY = cursorInfo.ptScreenPos.y - ((int)iconInfo.yHotspot);
-
-								MouseCursor.DrawIcon(g.GetHdc(), iconX, iconY, cursorInfo.hCursor);
-								g.ReleaseHdc();
-							}
+							MouseCursor.DrawIcon(g.GetHdc(), iconX, iconY, cursorInfo.hCursor);
+							g.ReleaseHdc();
 						}
 					}
-					g.Flush();
-					var bits = BMP.LockBits(new Rectangle(0, 0, Params.Width, Params.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb);
-					Marshal.Copy(bits.Scan0, Buffer, 0, Buffer.Length);
-					BMP.UnlockBits(bits);
 				}
+				g.Flush();		
 			}
+			queue.Enqueue(BMP);
 		}
 	}
 }

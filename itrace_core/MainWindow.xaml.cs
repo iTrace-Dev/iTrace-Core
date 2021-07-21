@@ -291,8 +291,8 @@ namespace iTrace_Core
 
                 //Name of .avi hardcoded for now
                 if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
-                {
-                    rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                {                                                                                                                                                                       //FPS
+                    rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 30, 80)); //screenrecording start
                     SessionManager.GetInstance().GenerateScreenRecordingStart();
                 }
 
