@@ -52,8 +52,9 @@ namespace iTrace_Core
                 recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
 
                 String response = Encoding.UTF8.GetString(recvBuffer);
+                response = response.TrimEnd('\0');
 
-                Console.WriteLine("JSON response: \n", response);
+                Console.WriteLine("JSON response: {0}\n", response);
 
                 TrackerInit();
             }
