@@ -167,9 +167,9 @@ namespace iTrace_Core
     public class SmartEyeGazeData : GazeData
     {
         //Debug messages
-        private const bool PrintPacketInfo = false;
-        private const bool PrintIntersectionInfo = false;
-        private const bool PrintPupilInfo = false;
+        private const bool PrintPacketInfo = true;
+        private const bool PrintIntersectionInfo = true;
+        private const bool PrintPupilInfo = true;
 
         //Lot of constants
         //All subpacket IDs are uint16s

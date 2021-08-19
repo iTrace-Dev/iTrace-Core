@@ -6,13 +6,14 @@ namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly String SMARTEYE_ADDRESS = "192.168.100.45"; //TODO option to select?
+        private readonly String SMARTEYE_ADDRESS = "192.169.100.45"; //TODO option to select? (this is OUR address)
+        private readonly String SMARTEYE_SERVER = "192.169.100.42"; //Remote address, computer running SmartEye
         private readonly int SMARTEYE_PORT_REALTIME = 5800; //default from SE software
-        private readonly int SMARTEYE_PORT_LATENT = 5801; //TODO set to default from SE software
+        private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
         private readonly int SMARTEYE_PORT_RPC = 8100; //default from SE software
 
         private System.Net.Sockets.UdpClient RealtimeClient;
-        private System.Net.Sockets.UdpClient LatentClient;
+        private System.Net.Sockets.TcpClient LatentClient;
         private System.Net.Sockets.TcpClient RpcClient;
         private IPEndPoint realtimeEndpoint;    //For real time data
         private IPEndPoint latentEndpoint;      //For processed/filtered data
@@ -25,9 +26,10 @@ namespace iTrace_Core
         public SmartEyeTracker()
         {
             IPAddress address = IPAddress.Parse(SMARTEYE_ADDRESS);
+            IPAddress serverAddress = IPAddress.Parse(SMARTEYE_SERVER);
             realtimeEndpoint = new IPEndPoint(address, SMARTEYE_PORT_REALTIME);
-            latentEndpoint = new IPEndPoint(address, SMARTEYE_PORT_LATENT);
-            rpcEndpoint = new IPEndPoint(address, SMARTEYE_PORT_RPC);
+            latentEndpoint = new IPEndPoint(serverAddress, SMARTEYE_PORT_LATENT); 
+            rpcEndpoint = new IPEndPoint(serverAddress, SMARTEYE_PORT_RPC);
 
             TrackerName = "SmartEye Tracker";
             TrackerSerialNumber = "1234";
@@ -35,21 +37,34 @@ namespace iTrace_Core
             try
             {
                 RealtimeClient = new System.Net.Sockets.UdpClient(realtimeEndpoint);
-                LatentClient = new System.Net.Sockets.UdpClient(latentEndpoint);
-                RpcClient = new System.Net.Sockets.TcpClient(rpcEndpoint);
+                LatentClient = new System.Net.Sockets.TcpClient();
+                LatentClient.Connect(latentEndpoint);
+
+                RpcClient = new System.Net.Sockets.TcpClient();
+                RpcClient.Connect(rpcEndpoint);
 
                 //TODO: Set actual tracker name and serial
+
+                SendRpc(MakeSENetstring("{\"jsonrpc\":\"2.0\", \"method\":\"getState\", \"id\":0}"));
+
+                byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
+                System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
+                recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
+
+                String response = Encoding.UTF8.GetString(recvBuffer);
+
+                Console.WriteLine("JSON response: \n", response);
 
                 TrackerInit();
             }
             catch (System.Net.Sockets.SocketException e)
             {
-                Console.WriteLine("SmartEye not connected!");
+                Console.WriteLine("SmartEye not connected: " + e);
                 RealtimeClient = null;
             }
             catch (Exception e)
             {
-                Console.WriteLine("SmartEye Connection Failed!");
+                Console.WriteLine("SmartEye Connection Failed: " + e);
                 Console.WriteLine(e.ToString());
                 RealtimeClient = null;
             }
@@ -92,7 +107,8 @@ namespace iTrace_Core
         //Send RPC netstring using TCP
         public void SendRpc(String netstring)
         {
-            byte[] buf = Encoding.ASCII.GetBytes(netstring);
+            //Unsure if this econding is right
+            byte[] buf = Encoding.UTF8.GetBytes(netstring);
             RpcClient.GetStream().Write(buf, 0, buf.Length);
         }
 
@@ -126,7 +142,7 @@ namespace iTrace_Core
 
         public void EnterCalibration()
         {
-            //Open calibration window
+            //Open calibration window (not working yet)
             String enterCalibrationJson = MakeSENetstring("{\"jsonrpc\":\"2.0\", \"method\":\"calibrateGaze\", \"id\":0}");
             SendRpc(enterCalibrationJson);
 
@@ -168,9 +184,9 @@ namespace iTrace_Core
         {
             while (Listen)
             {
-                byte[] packet = LatentClient.Receive(ref latentEndpoint);
+                //byte[] packet = LatentClient.Receive(ref latentEndpoint);
 
-                SmartEyeGazeData gaze = new SmartEyeGazeData(packet);
+                //SmartEyeGazeData gaze = new SmartEyeGazeData(packet);
 
                 //TODO: store fixations and blinks somewhere
             }
