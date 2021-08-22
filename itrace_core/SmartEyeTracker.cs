@@ -6,7 +6,7 @@ namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly String SMARTEYE_ADDRESS = "192.169.100.45"; //TODO option to select? (this is OUR address)
+        private readonly String SMARTEYE_ADDRESS = "192.169.100.45"; //Should be determined automaticall when openDataStreamUDP rpc call is made
         private readonly String SMARTEYE_SERVER = "192.169.100.42"; //Remote address, computer running SmartEye
         private readonly int SMARTEYE_PORT_REALTIME = 5800; //default from SE software
         private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
@@ -45,6 +45,7 @@ namespace iTrace_Core
 
                 //TODO: Set actual tracker name and serial
 
+                //TODO: use verbatim strings, or preferrably a JSON builder
                 SendRpc(MakeSENetstring("{\"jsonrpc\":\"2.0\", \"method\":\"getState\", \"id\":0}"));
 
                 byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
@@ -52,7 +53,7 @@ namespace iTrace_Core
                 recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
 
                 String response = Encoding.UTF8.GetString(recvBuffer);
-                response = response.TrimEnd('\0');
+                response = TrimSENetstring(response.TrimEnd('\0'));
 
                 Console.WriteLine("JSON response: {0}\n", response);
 
@@ -74,6 +75,8 @@ namespace iTrace_Core
         public bool TrackerFound()
         {
             //TODO: Because this is UDP, this does not actually mean the tracker is present and ready to go
+            //Checking presence via RPC might be excessive?
+
             if (RealtimeClient != null)
             {
                 Console.WriteLine("Client connected");
@@ -100,9 +103,44 @@ namespace iTrace_Core
         }
 
         //Converts raw rpc command into a netstring as defined in the Programmers Guide
-        public String MakeSENetstring(String rpc)
+        public static String MakeSENetstring(String rpc)
         {
             return rpc.Length.ToString() + ":" + rpc + ",";
+        }
+
+        //Converts a netstring to a json string
+        //A netstring may look like this 16:{"memes":"dank"},
+        //Where 16 is the length of the json before it was formatted to a netstring
+        public static String TrimSENetstring(String netstring)
+        {
+            int length = 0;
+            String json = null;
+
+            for (int i = 0; i < netstring.Length; i++)
+            {
+                //Find end of length prefix
+                if ( !(netstring[i] >= '0' && netstring[i] <= '9'))
+                {
+                    //Parse length prefix
+                    length = int.Parse(netstring.Substring(0, i));
+
+                    //Trim off length prefix
+                    json = netstring.Substring(i + 1);
+                    break;
+                }
+            }
+
+            if (json == null || !json.EndsWith(","))
+                throw new Exception("Tried to parse invalid netstring: " + netstring);
+
+            //Trim off trailing comma
+            json = json.Substring(0, json.Length - 1);
+
+            //Check length
+            if (json.Length != length)
+                throw new Exception("Netstring body does not match length prefix: " + netstring);
+
+            return json;
         }
 
         //Send RPC netstring using TCP
