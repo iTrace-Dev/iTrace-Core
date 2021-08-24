@@ -11,5 +11,11 @@
     <Setting Name="calibration_monitor" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
+    <Setting Name="smarteye_ip_address" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.168.100.45</Value>
+    </Setting>
+    <Setting Name="smarteye_ip_port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5800</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

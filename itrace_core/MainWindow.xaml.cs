@@ -99,7 +99,9 @@ namespace iTrace_Core
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
                 new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
-                new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() }
+                new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() },
+                new Setting("smarteye_ip_address") { Value = Settings.Default.smarteye_ip_address.ToString() },
+                new Setting("smarteye_ip_port") { Value = Settings.Default.smarteye_ip_port.ToString() },
             };
 
             settingsDataGrid.ItemsSource = settings;
@@ -304,6 +306,8 @@ namespace iTrace_Core
                 
                 ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
+                this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
+
                 TrackerManager.StartTracker();
                 ActivateCalibrationButton.IsEnabled = false;
                 ShowEyeStatusButton.IsEnabled = false;
@@ -401,16 +405,158 @@ namespace iTrace_Core
                         break;
                 }
 
+                eventReplayer.OnReplayFinished += ReplayTrackingToggle;
                 eventReplayer.OnReplayFinished += StopWindowPositionManager;
                 eventReplayer.OnReplayFinished += RestoreWindowState;
+
+                ReplayTrackingToggle(null, null);
+
+                //TabBar.SelectedItem = TrackingTab;
 
                 windowPositionManager.Start();
                 eventReplayer.StartReplay();
 
-                // TODO: Disable replay button, minimize window
                 this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
             }
         }
+
+        void ReplayTrackingToggle(object sender, EventArgs e)
+		{
+            if (TrackerManager.Running())
+            {
+                SessionManager.GetInstance().StopSession();
+
+                TrackerManager.StopTracker();
+
+                socketServer.SendEndSession();
+                webSocketServer.SendEndSession();
+
+
+                xmlGazeDataWriter.StopWriting();
+            }
+            else
+            {
+                string trackerID = TrackerManager.GetActiveTracker().GetTrackerName() + TrackerManager.GetActiveTracker().GetTrackerSerialNumber();
+                if (trackerID != SessionManager.GetInstance().CalibratedTrackerID)
+                    SessionManager.GetInstance().ClearCalibration();
+
+                //Start the session (SHOULD HAPPPEN FIRST)
+                SessionManager.GetInstance().StartSession();
+
+                //Name of .avi hardcoded for now
+                if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
+                {
+                    rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                    SessionManager.GetInstance().GenerateScreenRecordingStart();
+                }
+
+                // Load previously use directory for data storage or the current users desktop directory
+                xmlGazeDataWriter.StartWriting(SessionManager.GetInstance().DataRootDir);
+
+                socketServer.SendSessionData();
+                webSocketServer.SendSessionData();
+
+
+                //this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
+
+                TrackerManager.StartTracker();
+                /*
+                ActivateCalibrationButton.IsEnabled = false;
+                ShowEyeStatusButton.IsEnabled = false;
+                TrackerList.IsEnabled = false;
+                TrackerRefreshButton.IsEnabled = false;
+                //SessionSetupButton.IsEnabled = false;
+                settingsDataGrid.IsEnabled = false;
+                ApplyButton.IsEnabled = false;
+                CheckScreenCap.IsEnabled = false;
+                */
+            }
+        }
+
+        /*
+        private void StartTracker(object sender, RoutedEventArgs e)
+        {
+        if (TrackerManager.Running())
+            {
+                SessionManager.GetInstance().StopSession();
+
+                ActivateTrackerButton.Content = Properties.Resources.StartTracking;
+                TrackerManager.StopTracker();
+
+                socketServer.SendEndSession();
+                webSocketServer.SendEndSession();
+
+                if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
+                {
+                    rec.Dispose();
+                }
+
+                xmlGazeDataWriter.StopWriting();
+
+                if (TrackerManager.GetActiveTracker().GetTrackerName() != "Mouse")
+                {
+                    ActivateCalibrationButton.IsEnabled = true;
+                    ShowEyeStatusButton.IsEnabled = true;
+                }
+                TrackerList.IsEnabled = true;
+                TrackerRefreshButton.IsEnabled = true;
+                settingsDataGrid.IsEnabled = true;
+                ApplyButton.IsEnabled = true;
+                CheckScreenCap.IsEnabled = true;
+
+                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
+                {
+                    windowPositionManager.Stop();
+                    eventRecorder.StopRecording();
+                    eventRecorder.Dispose();
+                }
+            }
+            else
+            {
+                string trackerID = TrackerManager.GetActiveTracker().GetTrackerName() + TrackerManager.GetActiveTracker().GetTrackerSerialNumber();
+                if (trackerID != SessionManager.GetInstance().CalibratedTrackerID)
+                    SessionManager.GetInstance().ClearCalibration();
+
+                //Start the session (SHOULD HAPPPEN FIRST)
+                SessionManager.GetInstance().StartSession();
+
+                //Name of .avi hardcoded for now
+                if (CheckScreenCap.IsChecked.HasValue && CheckScreenCap.IsChecked.Value)
+                {
+                    rec = new Recorder(new RecorderParams(SessionManager.GetInstance().DataRootDir + "/screen_rec" + "-" + SessionManager.GetInstance().CurrentSessionTimeStamp + ".avi", 10, SharpAvi.KnownFourCCs.Codecs.MotionJpeg, 80)); //screenrecording start
+                    SessionManager.GetInstance().GenerateScreenRecordingStart();
+                }
+
+                // Load previously use directory for data storage or the current users desktop directory
+                xmlGazeDataWriter.StartWriting(SessionManager.GetInstance().DataRootDir);
+
+                socketServer.SendSessionData();
+                webSocketServer.SendSessionData();
+                
+                ActivateTrackerButton.Content = Properties.Resources.StopTracking;
+
+                this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
+
+                TrackerManager.StartTracker();
+                ActivateCalibrationButton.IsEnabled = false;
+                ShowEyeStatusButton.IsEnabled = false;
+                TrackerList.IsEnabled = false;
+                TrackerRefreshButton.IsEnabled = false;
+                //SessionSetupButton.IsEnabled = false;
+                settingsDataGrid.IsEnabled = false;
+                ApplyButton.IsEnabled = false;
+                CheckScreenCap.IsEnabled = false;
+
+                // DejaVu Record
+                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
+                {
+                    Console.WriteLine(SessionManager.GetInstance().DataRootDir);
+                    eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
+                    windowPositionManager.Start();
+                    eventRecorder.StartRecording();
+                }
+            }
+        }*/
 
         private void FixedPauseChecked(object sender, RoutedEventArgs e)
         {

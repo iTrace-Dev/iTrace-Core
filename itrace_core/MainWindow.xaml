@@ -27,7 +27,7 @@
                 <MenuItem x:Name="MenuExit" Click="MenuExitClick" Header="_Exit"></MenuItem>
             </MenuItem>
         </Menu>
-        <TabControl VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Row="2" Height="299" Margin="0,0,0,-270">
+        <TabControl x:Name="TabBar" VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Row="2" Height="299" Margin="0,0,0,-270">
             <TabItem Header="Session Setup">
                 <Canvas>
                     <Label Content="Task Name" Canvas.Left="8" Canvas.Top="11" Width="103"/>
@@ -47,7 +47,7 @@
                     <Button x:Name="ClearButton" Content="Clear" Canvas.Left="287" Canvas.Top="138" Width="75" Click="ClearButton_Click" RenderTransformOrigin="0.44,0.7" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Canvas>
             </TabItem>
-            <TabItem Header="iTrace Tracking">
+            <TabItem x:Name="TrackingTab" Header="iTrace Tracking">
                 <Canvas Grid.Row="1" Grid.ColumnSpan="2">
                     <Label Canvas.Left="19" Canvas.Top="40" Height ="23" Content="{x:Static p:Resources.Trackers}" VerticalContentAlignment="Center" Padding="0"/>
                     <ComboBox x:Name="TrackerList" Grid.Row="1" Canvas.Left="67" Canvas.Top="40" Width="150" Height="23" SelectionChanged="TrackerListChanged"/>
