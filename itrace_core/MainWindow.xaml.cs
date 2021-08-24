@@ -56,7 +56,9 @@ namespace iTrace_Core
             settings = new List<Setting>()
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
-                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() }
+                new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
+                new Setting("smarteye_ip_address") { Value = Settings.Default.smarteye_ip_address.ToString() },
+                new Setting("smarteye_ip_port") { Value = Settings.Default.smarteye_ip_port.ToString() }
             };
 
             settingsDataGrid.ItemsSource = settings;
