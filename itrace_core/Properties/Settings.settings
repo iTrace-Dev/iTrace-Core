@@ -8,5 +8,11 @@
     <Setting Name="websocket_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">7007</Value>
     </Setting>
+    <Setting Name="smarteye_ip_address" Type="System.String" Scope="User">
+      <Value Profile="(Default)">192.169.100.42</Value>
+    </Setting>
+    <Setting Name="smarteye_ip_port" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">5800</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
