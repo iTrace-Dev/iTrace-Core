@@ -1,14 +1,16 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net;
 using System.Text;
+using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly String SMARTEYE_ADDRESS = "192.169.100.45"; //Should be determined automaticall when openDataStreamUDP rpc call is made
-        private readonly String SMARTEYE_SERVER = "192.169.100.42"; //Remote address, computer running SmartEye
-        private readonly int SMARTEYE_PORT_REALTIME = 5800; //default from SE software
+        private readonly String SMARTEYE_ADDRESS = "192.169.100.45"; //Should be determined automatically when openDataStreamUDP rpc call is made
+        private readonly String SMARTEYE_SERVER = Settings.Default.smarteye_ip_address;
+        private readonly int SMARTEYE_PORT_REALTIME = Settings.Default.smarteye_ip_port; //default from SE software
         private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
         private readonly int SMARTEYE_PORT_RPC = 8100; //default from SE software
 
@@ -52,6 +54,7 @@ namespace iTrace_Core
                 System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
                 recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
 
+                //Netstrings test
                 String response = Encoding.UTF8.GetString(recvBuffer);
                 response = TrimSENetstring(response.TrimEnd('\0'));
 
