@@ -63,8 +63,39 @@ namespace iTrace_Core
 
             try
             {
-                //Own address hardcoded, need to determine at runtime
-                realtimeEndpoint = new IPEndPoint(IPAddress.Parse("192.169.100.45"), Settings.Default.smarteye_ip_port);
+                IPAddress selfAddress = null;
+                IPHostEntry hostname = Dns.GetHostEntry(Dns.GetHostName());
+
+                //Search our IP addresses for one on the same network as the smarteye server
+                foreach (IPAddress ip in hostname.AddressList)
+                {
+                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
+                    {
+                        Console.WriteLine(ip.ToString());
+
+                        //Warning: this assumes a class C address for now
+                        byte[] ipAddr = ip.GetAddressBytes();
+                        byte[] serverAddr = rpcAddress.GetAddressBytes();
+
+                        //Check if first three bytes match
+                        //TODO: make this work for other address classes
+                        if (ipAddr[0] == serverAddr[0] && ipAddr[1] == serverAddr[1] && ipAddr[2] == serverAddr[2])
+                        {
+                            Console.WriteLine("Our ip is: " + ip.ToString());
+                            selfAddress = ip;
+                            break;
+                        }
+                    }
+                }
+
+                if (selfAddress == null)
+                {
+                    Console.WriteLine("Could not determine host IP");
+                    RealtimeClient = null;
+                    return;
+                }
+
+                realtimeEndpoint = new IPEndPoint(selfAddress, Settings.Default.smarteye_ip_port);
                 RealtimeClient = new System.Net.Sockets.UdpClient(realtimeEndpoint);
             }
             catch (Exception e)
