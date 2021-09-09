@@ -401,20 +401,8 @@ namespace DejaVuLib
 
         public override void Replay()
         {
-            string[] split = message.Split(',');
-            string refreshedMessage;
-
-            if (split[0] == "gaze" || split[0] == "session_start")
-            {
-                refreshedMessage = split[0] + "," + PreciseSystemTime.GetTime().ToString() + "," + split[2] + "," + split[3] + "\n";
-            }
-            else
-            {
-                refreshedMessage = message;
-            }
-
-            SocketServer.Instance().SendToClients(refreshedMessage);
-            WebSocketServer.Instance().Send(refreshedMessage);
+            SocketServer.Instance().SendToClients(message);
+            WebSocketServer.Instance().Send(message);
         }
 
         public override string Serialize()
