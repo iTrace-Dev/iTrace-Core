@@ -1,4 +1,4 @@
-﻿using iTrace_Core.Properties;
+using iTrace_Core.Properties;
 using System;
 using System.Windows.Forms;
 using System.Xml;
@@ -140,7 +140,7 @@ namespace iTrace_Core
             UserRightX = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.X;
             UserRightY = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Y;
             UserRightZ = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Z;
-            
+
             TrackerTime = tobiiRawGaze.DeviceTimeStamp;
         }
     }
@@ -184,15 +184,36 @@ namespace iTrace_Core
             X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * screen.Bounds.Width + screen.Bounds.Left);
             Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * screen.Bounds.Height + screen.Bounds.Top);
 
-            RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * screen.Bounds.Width + screen.Bounds.Left;
-            RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * screen.Bounds.Height + screen.Bounds.Top;
-            RightPupil = Double.Parse(recNode.Attributes["RPD"].Value);
+            RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
             RightValidation = Int32.Parse(recNode.Attributes["RPOGV"].Value);
 
-            LeftX = Double.Parse(recNode.Attributes["LPOGX"].Value) * screen.Bounds.Width + screen.Bounds.Left;
-            LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * screen.Bounds.Height + screen.Bounds.Top;
-            LeftPupil = Double.Parse(recNode.Attributes["LPD"].Value);
+            LeftX = Double.Parse(recNode.Attributes["LPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
+            LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
+
             LeftValidation = Int32.Parse(recNode.Attributes["LPOGV"].Value);
+
+
+            bool rightPupilValid = Int32.Parse(recNode.Attributes["RPUPILV"].Value) == 1;
+            if (rightPupilValid)
+            {
+                RightPupil = Double.Parse(recNode.Attributes["RPUPILD"].Value) * 1000.0;
+            }
+            else
+            {
+                RightPupil = -1;
+            }
+
+            bool leftPupilValid = Int32.Parse(recNode.Attributes["LPUPILV"].Value) == 1;
+            if (leftPupilValid)
+            {
+                LeftPupil = Double.Parse(recNode.Attributes["LPUPILD"].Value) * 1000.0;
+            }
+            else
+            {
+                LeftPupil = -1;
+            }
+
 
             UserLeftX = Double.Parse(recNode.Attributes["LEYEX"].Value);
             UserLeftY = Double.Parse(recNode.Attributes["LEYEY"].Value);
