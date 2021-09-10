@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -144,6 +144,12 @@
   <data name="InvalidWebSocketPortValue" xml:space="preserve">
     <value>Invalid Websocket Port Value"</value>
   </data>
+  <data name="MonitorIndexIncorrectValue" xml:space="preserve">
+    <value>Invalid Monitor</value>
+  </data>
+  <data name="MonitorIndexOutOfRange" xml:space="preserve">
+    <value>Selected monitor must exist</value>
+  </data>
   <data name="PortValuesCannotBeSameValue" xml:space="preserve">
     <value>Port values cannot be the same value!</value>
   </data>
@@ -168,6 +174,9 @@
   <data name="SocketValuesMustBeInRange" xml:space="preserve">
     <value>Socket port values must be in the range: </value>
   </data>
+  <data name="StartReplay" xml:space="preserve">
+    <value>Replay</value>
+  </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Start Tracking</value>
   </data>
@@ -176,6 +185,9 @@
   </data>
   <data name="StopTracking" xml:space="preserve">
     <value>Stop Tracking</value>
+  </data>
+  <data name="ToggleDejaVu" xml:space="preserve">
+    <value>Record with DejaVu</value>
   </data>
   <data name="Trackers" xml:space="preserve">
     <value>Trackers:</value>
