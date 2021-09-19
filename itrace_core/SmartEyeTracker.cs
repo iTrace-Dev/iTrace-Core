@@ -3,6 +3,7 @@ using System;
 using System.Net;
 using System.Text;
 using iTrace_Core.Properties;
+using Newtonsoft.Json.Linq;
 
 namespace iTrace_Core
 {
@@ -31,6 +32,9 @@ namespace iTrace_Core
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
             rpcEndpoint = new IPEndPoint(rpcAddress, SMARTEYE_PORT_RPC);
 
+            byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
+            System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
+
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
@@ -38,9 +42,6 @@ namespace iTrace_Core
                 RpcClient.Connect(rpcEndpoint);
 
                 SendRpc(new SERPC("getState").GetNetstring());
-
-                byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
-                System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
                 recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
 
                 //Netstrings test
@@ -118,6 +119,16 @@ namespace iTrace_Core
             }
 
             TrackerInit();
+
+            //Retrieve WorldModel and configuration
+
+            SendRpc(new SERPC("getWorldModel").GetNetstring());
+            recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
+
+            String response2 = Encoding.UTF8.GetString(recvBuffer);
+            response2 = NetstringUtils.TrimSENetstring(response2.TrimEnd('\0'));
+
+            JObject CmdResponse = JsonConvert.DeserializeObject<dynamic>(response2);
         }
 
         public bool TrackerFound()
