@@ -20,6 +20,7 @@ namespace iTrace_Core
         private IPEndPoint rpcEndpoint;      //For sending json RPC commands to SmartEye
         private String TrackerName;
         private String TrackerSerialNumber;
+        private String WorldModelString;
 
         private bool Listen;
 
@@ -31,15 +32,15 @@ namespace iTrace_Core
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
             rpcEndpoint = new IPEndPoint(rpcAddress, SMARTEYE_PORT_RPC);
-
-            byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
-            System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
-
+            
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
                 RpcClient = new System.Net.Sockets.TcpClient();
                 RpcClient.Connect(rpcEndpoint);
+
+                byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
+                System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
 
                 SendRpc(new SERPC("getState").GetNetstring());
                 recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
@@ -50,8 +51,24 @@ namespace iTrace_Core
 
                 //Does not deserialize the response correctly yet
                 SERPCGetStateResponse state = JsonConvert.DeserializeObject<SERPCGetStateResponse>(response);
-
+                
                 Console.WriteLine("JSON response: {0}\n", response);
+
+                //Retrieve WorldModel and configuration
+
+                SendRpc(new SERPC("getWorldModel").GetNetstring());
+                recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
+
+                String response2 = Encoding.UTF8.GetString(recvBuffer);
+                response2 = NetstringUtils.TrimSENetstring(response2.TrimEnd('\0'));
+
+                JObject CmdResponse = JsonConvert.DeserializeObject<dynamic>(response2);
+                JToken result = CmdResponse.GetValue("result");
+
+                //Escaped String representing the world model
+                WorldModelString = result.Value<String>("worldModel");
+
+                SessionManager.GetInstance().SetCalibration(new SmartEyeCalibrationResult(WorldModelString), this);
             }
             catch (Exception e)
             {
@@ -119,16 +136,6 @@ namespace iTrace_Core
             }
 
             TrackerInit();
-
-            //Retrieve WorldModel and configuration
-
-            SendRpc(new SERPC("getWorldModel").GetNetstring());
-            recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
-
-            String response2 = Encoding.UTF8.GetString(recvBuffer);
-            response2 = NetstringUtils.TrimSENetstring(response2.TrimEnd('\0'));
-
-            JObject CmdResponse = JsonConvert.DeserializeObject<dynamic>(response2);
         }
 
         public bool TrackerFound()
@@ -181,7 +188,7 @@ namespace iTrace_Core
         }
 
         public void EnterCalibration()
-        {
+        {          
             //Open calibration window (not working yet)
             //SendRpc(new SERPC("calibrateGaze").GetNetstring());
 

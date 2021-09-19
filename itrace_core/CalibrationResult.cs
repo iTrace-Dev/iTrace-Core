@@ -154,4 +154,21 @@ namespace iTrace_Core
             xmlTextWriter.WriteEndElement();
         }
     }
+
+    class SmartEyeCalibrationResult : CalibrationResult
+    {
+        private string WorldModelString;
+
+        public SmartEyeCalibrationResult(string worldModelString)
+        {
+            this.WorldModelString = worldModelString;
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
+        {
+            xmlTextWriter.WriteStartElement("calibration");        
+            xmlTextWriter.WriteAttributeString("worldModel", WorldModelString);
+            xmlTextWriter.WriteEndElement();
+        }
+    }
 }
