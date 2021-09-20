@@ -22,12 +22,14 @@ namespace iTrace_Core
         private String TrackerSerialNumber;
         private String WorldModelString;
 
+        private byte[] recvBuffer;
+
         private bool Listen;
 
         public SmartEyeTracker()
         {
             TrackerName = "SmartEye Tracker";
-            TrackerSerialNumber = "1234";
+            TrackerSerialNumber = "Unknown"; //SE does not report a serial, make up some kind of hash?
 
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
@@ -39,36 +41,43 @@ namespace iTrace_Core
                 RpcClient = new System.Net.Sockets.TcpClient();
                 RpcClient.Connect(rpcEndpoint);
 
-                byte[] recvBuffer = new byte[RpcClient.ReceiveBufferSize];
+                recvBuffer = new byte[RpcClient.ReceiveBufferSize];
                 System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
 
                 SendRpc(new SERPC("getState").GetNetstring());
-                recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
-
-                //Netstrings test
-                String response = Encoding.UTF8.GetString(recvBuffer);
-                response = NetstringUtils.TrimSENetstring(response.TrimEnd('\0'));
-
-                //Does not deserialize the response correctly yet
-                SERPCGetStateResponse state = JsonConvert.DeserializeObject<SERPCGetStateResponse>(response);
+                ReceiveRpcResponse(); //Dummy
                 
-                Console.WriteLine("JSON response: {0}\n", response);
-
                 //Retrieve WorldModel and configuration
 
                 SendRpc(new SERPC("getWorldModel").GetNetstring());
-                recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);
-
-                String response2 = Encoding.UTF8.GetString(recvBuffer);
-                response2 = NetstringUtils.TrimSENetstring(response2.TrimEnd('\0'));
-
-                JObject CmdResponse = JsonConvert.DeserializeObject<dynamic>(response2);
-                JToken result = CmdResponse.GetValue("result");
+                JToken result = ReceiveRpcResponse().GetValue("result");
 
                 //Escaped String representing the world model
                 WorldModelString = result.Value<String>("worldModel");
 
-                SessionManager.GetInstance().SetCalibration(new SmartEyeCalibrationResult(WorldModelString), this);
+                //Get actual tracker name
+
+                SendRpc(new SERPC("getProductName").GetNetstring());
+                JToken prod = ReceiveRpcResponse().GetValue("result");
+                TrackerName = prod.Value<string>();
+
+                //Shouldn't do this here?
+                
+                //Retrieve calibration from SE (stdDev and accuracy)
+                SendRpc(new SERPC("retrieveCalibrationResults").GetNetstring());
+                JToken cal = ReceiveRpcResponse().GetValue("result");
+
+                JToken stdDev = cal.SelectToken("stdDev");
+                double stdLeft = stdDev.Value<JToken>(0).Value<double>();
+                double stdRight = stdDev.Value<JToken>(1).Value<double>();
+
+                JToken accuracy = cal.SelectToken("accuracy");
+                double accLeft = accuracy.Value<JToken>(0).Value<double>();
+                double accRight = accuracy.Value<JToken>(1).Value<double>();
+
+                //Store world model string and calibration data
+                SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, stdLeft, stdRight, accLeft, accRight);
+                SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
             }
             catch (Exception e)
             {
@@ -138,6 +147,15 @@ namespace iTrace_Core
             TrackerInit();
         }
 
+        public JObject ReceiveRpcResponse()
+        {
+            System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
+            recvStream.Read(recvBuffer, 0, RpcClient.ReceiveBufferSize);          
+            string response = Encoding.UTF8.GetString(recvBuffer);
+            response = NetstringUtils.TrimSENetstring(response.TrimEnd('\0'));
+            return JsonConvert.DeserializeObject<dynamic>(response);
+        }
+
         public bool TrackerFound()
         {
             return (RealtimeClient != null) && (RpcClient != null);
@@ -163,6 +181,7 @@ namespace iTrace_Core
 
         public void StartTracker()
         {
+
             SendRpc(new SERPC("startTracking").GetNetstring());
 
             new System.Threading.Thread(() =>

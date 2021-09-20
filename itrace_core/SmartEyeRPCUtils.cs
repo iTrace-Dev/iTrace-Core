@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -41,24 +42,13 @@ namespace iTrace_Core
         }
     }
 
-    public class SERPCGetStateResponse : SERPC
+    public class SERPCOpenTcp
     {
-        public Dictionary<string, int> responseParams;
+        public string ip;
 
-        private SERPCGetStateResponse() : base("getState")
+        public SERPCOpenTcp(IPAddress remoteAddress)
         {
 
-        }
-
-        public int? GetState()
-        {
-            int state;
-            bool success = responseParams.TryGetValue("state", out state);
-
-            if (success)
-                return state;
-
-            return null;
         }
     }
 
@@ -88,15 +78,16 @@ namespace iTrace_Core
 
                     //Trim off length prefix
                     json = netstring.Substring(i + 1);
+
+                    //Trim string based on length
+                    json = json.Substring(0, length);
+
                     break;
-                }
+                }                
             }
 
-            if (json == null || !json.EndsWith(","))
+            if (json == null)
                 throw new Exception("Tried to parse invalid netstring: " + netstring);
-
-            //Trim off trailing comma
-            json = json.Substring(0, json.Length - 1);
 
             //Check length
             if (json.Length != length)

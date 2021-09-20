@@ -157,17 +157,30 @@ namespace iTrace_Core
 
     class SmartEyeCalibrationResult : CalibrationResult
     {
+        private double standardDeviationLeft;
+        private double standardDeviationRight;
+        private double accuracyLeft;
+        private double accuracyRight;
         private string WorldModelString;
 
-        public SmartEyeCalibrationResult(string worldModelString)
+        public SmartEyeCalibrationResult(string worldModelString, double standardDeviationLeft, double standardDeviationRight, double accuracyLeft, double accuracyRight)
         {
             this.WorldModelString = worldModelString;
+            this.standardDeviationLeft = standardDeviationLeft;
+            this.standardDeviationRight = standardDeviationRight;
+            this.accuracyLeft = accuracyLeft;
+            this.accuracyRight = accuracyRight;
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             xmlTextWriter.WriteStartElement("calibration");        
             xmlTextWriter.WriteAttributeString("worldModel", WorldModelString);
+            //TODO: This shouldn't use toString, XmlTextWriter has a specific way of encoding this
+            xmlTextWriter.WriteAttributeString("standardDeviationLeft", standardDeviationLeft.ToString());
+            xmlTextWriter.WriteAttributeString("standardDeviationRight", standardDeviationRight.ToString());
+            xmlTextWriter.WriteAttributeString("accuracyLeft", accuracyLeft.ToString());
+            xmlTextWriter.WriteAttributeString("accuracyRight", accuracyRight.ToString());
             xmlTextWriter.WriteEndElement();
         }
     }
