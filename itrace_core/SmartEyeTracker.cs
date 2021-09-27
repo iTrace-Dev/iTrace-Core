@@ -4,6 +4,7 @@ using System.Net;
 using System.Text;
 using iTrace_Core.Properties;
 using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace iTrace_Core
 {
@@ -75,8 +76,23 @@ namespace iTrace_Core
                 double accLeft = accuracy.Value<JToken>(0).Value<double>();
                 double accRight = accuracy.Value<JToken>(1).Value<double>();
 
+                List<SETarget> targets = new List<SETarget>();
+
+                //Retrieve calibration targets
+                int targetNumber = 0;
+                while (true)
+                {
+                    SendRpc(new SERPCGetTargetStats(targetNumber++).GetNetstring());
+                    SETarget target = ReceiveRpcResponse().GetValue("result").ToObject<SETarget>();
+
+                    if (!target.TargetValid())
+                        break;
+
+                    targets.Add(target);
+                }                
+
                 //Store world model string and calibration data
-                SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, stdLeft, stdRight, accLeft, accRight);
+                SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, targets);
                 SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
             }
             catch (Exception e)

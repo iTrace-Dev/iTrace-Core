@@ -157,30 +157,47 @@ namespace iTrace_Core
 
     class SmartEyeCalibrationResult : CalibrationResult
     {
-        private double standardDeviationLeft;
-        private double standardDeviationRight;
-        private double accuracyLeft;
-        private double accuracyRight;
+        //These are the calibration vectors produced by the SE gaze calibration dialogue
+        private List<SETarget> calibrationTargets;
         private string WorldModelString;
 
-        public SmartEyeCalibrationResult(string worldModelString, double standardDeviationLeft, double standardDeviationRight, double accuracyLeft, double accuracyRight)
+        public SmartEyeCalibrationResult(string worldModelString, List<SETarget> calibrationTargets)
         {
             this.WorldModelString = worldModelString;
-            this.standardDeviationLeft = standardDeviationLeft;
-            this.standardDeviationRight = standardDeviationRight;
-            this.accuracyLeft = accuracyLeft;
-            this.accuracyRight = accuracyRight;
+            this.calibrationTargets = calibrationTargets;
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
-            xmlTextWriter.WriteStartElement("calibration");        
-            xmlTextWriter.WriteAttributeString("worldModel", WorldModelString);
-            //TODO: This shouldn't use toString, XmlTextWriter has a specific way of encoding this
-            xmlTextWriter.WriteAttributeString("standardDeviationLeft", standardDeviationLeft.ToString());
-            xmlTextWriter.WriteAttributeString("standardDeviationRight", standardDeviationRight.ToString());
-            xmlTextWriter.WriteAttributeString("accuracyLeft", accuracyLeft.ToString());
-            xmlTextWriter.WriteAttributeString("accuracyRight", accuracyRight.ToString());
+            xmlTextWriter.WriteStartElement("calibrationStats");        
+            //Each target has its own stats, so temporarily don't write the totals
+            xmlTextWriter.WriteEndElement();
+
+            xmlTextWriter.WriteStartElement("calibrationVectors");
+
+            foreach (SETarget target in calibrationTargets)
+            {
+                xmlTextWriter.WriteStartElement("target");
+                xmlTextWriter.WriteAttributeString("targetId", target.targetId.ToString());
+
+                xmlTextWriter.WriteStartElement("left");
+                for (int i = 0; i < target.errorsxl.Length; i++)
+                {
+                    xmlTextWriter.WriteString("(" + target.errorsxl[i].ToString() + ", " + target.errorsyl[i].ToString() + ")");
+                }
+                xmlTextWriter.WriteEndElement();
+
+                xmlTextWriter.WriteStartElement("right");
+                for (int i = 0; i < target.errorsxr.Length; i++)
+                {
+                    xmlTextWriter.WriteString("(" + target.errorsxr[i].ToString() + ", " + target.errorsyr[i].ToString() + ")");
+                }
+                xmlTextWriter.WriteEndElement();
+
+                xmlTextWriter.WriteEndElement();
+
+            }
+
             xmlTextWriter.WriteEndElement();
         }
     }

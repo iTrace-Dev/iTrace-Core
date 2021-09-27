@@ -52,6 +52,41 @@ namespace iTrace_Core
         }
     }
 
+    public class SERPCGetTargetStats : SERPC
+    {
+        [JsonProperty("params")]
+        public int[] rpcParams;
+
+        public SERPCGetTargetStats(int targetId) : base("retrieveTargetStatistics", false)
+        {
+            rpcParams = new int[1];
+            rpcParams[0] = targetId;
+        }
+    }
+
+    //Put this somewhere else
+    //SmartEye target calibration result, deserialized from a call to retrieveTargetStatistics
+    public class SETarget
+    {
+        public int targetId;
+
+        //Stats
+        public double[] stdDev;
+        public double[] accuracy;
+
+        //Error vectors
+        public double[] errorsxl;
+        public double[] errorsyl;
+        public double[] errorsxr;
+        public double[] errorsyr;
+
+        //A target should only be considered if it has at least one error vector in each eye
+        public Boolean TargetValid()
+        {
+            return errorsxl.Length > 0 && errorsxr.Length > 0;
+        }
+    }
+
     public class NetstringUtils
     {
         //Converts raw rpc command into a netstring as defined in the Programmers Guide
