@@ -11,7 +11,7 @@ namespace iTrace_Core
     class SmartEyeTracker : ITracker
     {
         private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
-        private readonly int SMARTEYE_PORT_RPC = 8100; //default from SE software
+        private readonly int SMARTEYE_PORT_RPC = 8100; //This is the default from SE software
 
         private System.Net.Sockets.UdpClient RealtimeClient;
         private System.Net.Sockets.TcpClient LatentClient;
@@ -47,14 +47,6 @@ namespace iTrace_Core
 
                 SendRpc(new SERPC("getState").GetNetstring());
                 ReceiveRpcResponse(); //Dummy
-                
-                //Retrieve WorldModel and configuration
-
-                SendRpc(new SERPC("getWorldModel").GetNetstring());
-                JToken result = ReceiveRpcResponse().GetValue("result");
-
-                //Escaped String representing the world model
-                WorldModelString = result.Value<String>("worldModel");
 
                 //Get actual tracker name
 
@@ -76,24 +68,8 @@ namespace iTrace_Core
                 double accLeft = accuracy.Value<JToken>(0).Value<double>();
                 double accRight = accuracy.Value<JToken>(1).Value<double>();
 
-                List<SETarget> targets = new List<SETarget>();
-
-                //Retrieve calibration targets
-                int targetNumber = 0;
-                while (true)
-                {
-                    SendRpc(new SERPCGetTargetStats(targetNumber++).GetNetstring());
-                    SETarget target = ReceiveRpcResponse().GetValue("result").ToObject<SETarget>();
-
-                    if (!target.TargetValid())
-                        break;
-
-                    targets.Add(target);
-                }                
-
-                //Store world model string and calibration data
-                SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, targets);
-                SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
+                //Get world and calibration points
+                GetWorldCalibration();
             }
             catch (Exception e)
             {
@@ -163,6 +139,46 @@ namespace iTrace_Core
             TrackerInit();
         }
 
+        //Retrieve the World Model and calibration error vectors. Returns true on success
+        private Boolean GetWorldCalibration()
+        {
+            //Retrieve WorldModel
+
+            SendRpc(new SERPC("getWorldModel").GetNetstring());
+            JToken result = ReceiveRpcResponse().GetValue("result");
+
+            //Escaped String representing the world model
+            WorldModelString = result.Value<String>("worldModel");
+
+            List<SETarget> targets = new List<SETarget>();
+
+            //Retrieve calibration targets
+            int targetNumber = 0;
+            while (true)
+            {
+                SendRpc(new SERPCGetTargetStats(targetNumber++).GetNetstring());
+                SETarget target = ReceiveRpcResponse().GetValue("result").ToObject<SETarget>();
+
+                if (!target.TargetValid())
+                    break;
+
+                targets.Add(target);
+            }
+
+            if (targets.Count == 0)
+            {
+                //No targets, most likely user has not done a gaze calibration in SmartEye
+                System.Windows.Forms.MessageBox.Show("SmartEye is connected, but reported no calibration point data. Perform a gaze calibration from the SmartEye software.");
+                return false;
+            }
+
+            //Store world model string and calibration data
+            SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, targets);
+            SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
+
+            return true;
+        }
+
         public JObject ReceiveRpcResponse()
         {
             System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
@@ -197,7 +213,6 @@ namespace iTrace_Core
 
         public void StartTracker()
         {
-
             SendRpc(new SERPC("startTracking").GetNetstring());
 
             new System.Threading.Thread(() =>

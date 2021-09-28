@@ -165,37 +165,59 @@ namespace iTrace_Core
         {
             this.WorldModelString = worldModelString;
             this.calibrationTargets = calibrationTargets;
+
+            SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
-            xmlTextWriter.WriteStartElement("calibrationStats");        
-            //Each target has its own stats, so temporarily don't write the totals
-            xmlTextWriter.WriteEndElement();
-
-            xmlTextWriter.WriteStartElement("calibrationVectors");
+            xmlTextWriter.WriteStartElement("calibration");
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationTimeStamp);
 
             foreach (SETarget target in calibrationTargets)
             {
-                xmlTextWriter.WriteStartElement("target");
+                xmlTextWriter.WriteStartElement("calibration_point");
                 xmlTextWriter.WriteAttributeString("targetId", target.targetId.ToString());
 
-                xmlTextWriter.WriteStartElement("left");
-                for (int i = 0; i < target.errorsxl.Length; i++)
+                //Write X and Y of calibration point as percent of screen size. This may require extracting from the world model string!
+                //xmlTextWriter.WriteAttributeString("x", "0.5");
+                //xmlTextWriter.WriteAttributeString("y", "0.5");
+
+                int max = target.errorsxl.Length >= target.errorsxr.Length ? target.errorsxl.Length : target.errorsxr.Length;
+
+                for (int i = 0; i < max; i++)
                 {
-                    xmlTextWriter.WriteString("(" + target.errorsxl[i].ToString() + ", " + target.errorsyl[i].ToString() + ")");
+                    xmlTextWriter.WriteStartElement("sample");
+
+                    if (i < target.errorsxl.Length)
+                    {
+                        xmlTextWriter.WriteAttributeString("left_x", target.errorsxl[i].ToString());
+                        xmlTextWriter.WriteAttributeString("left_y", target.errorsyl[i].ToString());
+                        xmlTextWriter.WriteAttributeString("left_validity", "1");
+                    } else
+                    {
+                        xmlTextWriter.WriteAttributeString("left_x", "0.0");
+                        xmlTextWriter.WriteAttributeString("left_y", "0.0");
+                        xmlTextWriter.WriteAttributeString("left_validity", "0");
+                    }
+
+                    if (i < target.errorsxr.Length)
+                    {
+                        xmlTextWriter.WriteAttributeString("right_x", target.errorsxr[i].ToString());
+                        xmlTextWriter.WriteAttributeString("right_y", target.errorsyr[i].ToString());
+                        xmlTextWriter.WriteAttributeString("right_validity", "1");
+                    }
+                    else
+                    {
+                        xmlTextWriter.WriteAttributeString("right_x", "0.0");
+                        xmlTextWriter.WriteAttributeString("right_y", "0.0");
+                        xmlTextWriter.WriteAttributeString("right_validity", "0");
+                    }
+
+                    xmlTextWriter.WriteEndElement();
                 }
+               
                 xmlTextWriter.WriteEndElement();
-
-                xmlTextWriter.WriteStartElement("right");
-                for (int i = 0; i < target.errorsxr.Length; i++)
-                {
-                    xmlTextWriter.WriteString("(" + target.errorsxr[i].ToString() + ", " + target.errorsyr[i].ToString() + ")");
-                }
-                xmlTextWriter.WriteEndElement();
-
-                xmlTextWriter.WriteEndElement();
-
             }
 
             xmlTextWriter.WriteEndElement();

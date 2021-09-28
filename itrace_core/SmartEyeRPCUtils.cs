@@ -80,10 +80,10 @@ namespace iTrace_Core
         public double[] errorsxr;
         public double[] errorsyr;
 
-        //A target should only be considered if it has at least one error vector in each eye
+        //A target should only be considered if it has at least one error vector in either eye
         public Boolean TargetValid()
         {
-            return errorsxl.Length > 0 && errorsxr.Length > 0;
+            return errorsxl.Length > 0 || errorsxr.Length > 0;
         }
     }
 
