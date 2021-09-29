@@ -5,6 +5,7 @@ using System.Text;
 using iTrace_Core.Properties;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Numerics;
 
 namespace iTrace_Core
 {
@@ -31,6 +32,9 @@ namespace iTrace_Core
         {
             TrackerName = "SmartEye Tracker";
             TrackerSerialNumber = "Unknown"; //SE does not report a serial, make up some kind of hash?
+
+            //Parser test
+            //SEWorldPlane s = new SEWorldPlane(SEWorldPlane.example);
 
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
