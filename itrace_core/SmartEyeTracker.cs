@@ -34,7 +34,7 @@ namespace iTrace_Core
             TrackerSerialNumber = "Unknown"; //SE does not report a serial, make up some kind of hash?
 
             //Parser test
-            //SEWorldPlane s = new SEWorldPlane(SEWorldPlane.example);
+            SEWorldScreen s = new SEWorldScreen(SEWorldScreen.example);
 
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
