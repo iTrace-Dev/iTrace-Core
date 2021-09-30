@@ -159,11 +159,11 @@ namespace iTrace_Core
     {
         //These are the calibration vectors produced by the SE gaze calibration dialogue
         private List<SETarget> calibrationTargets;
-        private string WorldModelString;
+        private SEWorldModel worldModel;
 
-        public SmartEyeCalibrationResult(string worldModelString, List<SETarget> calibrationTargets)
+        public SmartEyeCalibrationResult(SEWorldModel worldModel, List<SETarget> calibrationTargets)
         {
-            this.WorldModelString = worldModelString;
+            this.worldModel = worldModel;
             this.calibrationTargets = calibrationTargets;
 
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
@@ -171,6 +171,8 @@ namespace iTrace_Core
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
+            worldModel.WriteToXMLWriter(xmlTextWriter);
+
             xmlTextWriter.WriteStartElement("calibration");
             xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationTimeStamp);
 

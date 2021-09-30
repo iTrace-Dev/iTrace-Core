@@ -5,13 +5,14 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace iTrace_Core
 {
     //A SmartEye world model which can be parsed from or serialized to a string
     class SEWorldModel
     {
-        List<SEWorldObject> objects;
+        private List<SEWorldObject> objects;
 
         public SEWorldModel(string worldModelString)
         {
@@ -136,6 +137,15 @@ namespace iTrace_Core
             return new Vector2(float.Parse(terms[0]), float.Parse(terms[1]));
         }
 
+        public void WriteToXMLWriter(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("worldModel");
+
+            foreach (SEWorldObject worldObject in objects)
+                worldObject.WriteToXMLWriter(writer);
+
+            writer.WriteEndElement();
+        }
     }
 
     abstract class SEWorldObject
@@ -171,6 +181,8 @@ namespace iTrace_Core
             if (assignee == "name")
                 this.name = value.Replace("\"", "");
         }
+
+        public abstract void WriteToXMLWriter(XmlTextWriter writer);
     }
 
     class SEWorldPlane : SEWorldObject
@@ -212,6 +224,22 @@ namespace iTrace_Core
                     break;
             }
         }
+
+        protected virtual void WriteXMLAttributes(XmlTextWriter writer)
+        {
+            writer.WriteAttributeString("name", name);
+            writer.WriteAttributeString("lowerLeft", lowerLeft.ToString());
+            writer.WriteAttributeString("xAxis", xAxis.ToString());
+            writer.WriteAttributeString("yAxis", yAxis.ToString());
+            writer.WriteAttributeString("size", size.ToString());
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("plane");
+            WriteXMLAttributes(writer);
+            writer.WriteEndElement();
+        }
     }
 
     class SEWorldScreen : SEWorldPlane
@@ -239,6 +267,19 @@ namespace iTrace_Core
             if (resolution == null)
                 throw new Exception("SEWorld object Not fully initialized!");
         }
+
+        protected override void WriteXMLAttributes(XmlTextWriter writer)
+        {
+            base.WriteXMLAttributes(writer);
+            writer.WriteAttributeString("resolution", "(" + resolution[0].ToString() + "," + resolution[1].ToString() + ")" );
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("screen");
+            WriteXMLAttributes(writer);
+            writer.WriteEndElement();
+        }
     }
 
     class SEWorldCalibrationPoint : SEWorldObject
@@ -257,6 +298,13 @@ namespace iTrace_Core
         {
             if (center == null)
                 throw new Exception("SEWorld object Not fully initialized!");
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter writer)
+        {
+            writer.WriteStartElement("calibrationPoint3D");
+            writer.WriteAttributeString("center", center.ToString());
+            writer.WriteEndElement();
         }
     }
 }

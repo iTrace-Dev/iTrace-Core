@@ -34,8 +34,8 @@ namespace iTrace_Core
             TrackerSerialNumber = "Unknown"; //SE does not report a serial, make up some kind of hash?
 
             //Parser test
-            string s = System.IO.File.ReadAllText(@"C:\Users\alinn\Downloads\SERESL_Multiple_Screen_And_Controller_Model.sew");
-            SEWorldModel wm = new SEWorldModel(s);
+            //string s = System.IO.File.ReadAllText(@"C:\Users\alinn\Downloads\SERESL_Multiple_Screen_And_Controller_Model.sew");
+            //SEWorldModel wm = new SEWorldModel(s);
 
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
@@ -178,7 +178,9 @@ namespace iTrace_Core
             }
 
             //Store world model string and calibration data
-            SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(WorldModelString, targets);
+            SEWorldModel worldModel = new SEWorldModel(WorldModelString);
+
+            SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(worldModel, targets);
             SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
 
             return true;
