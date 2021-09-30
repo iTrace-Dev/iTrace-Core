@@ -14,77 +14,137 @@ namespace iTrace_Core
     {
         private List<SEWorldObject> objects;
 
+        
+        public static string StripWorldModelString(string worldModelString)
+        {
+            StringBuilder sb = new StringBuilder(worldModelString.Length);
+
+            bool lastCharWhitespace = false;
+            bool comment = false;
+
+            //Removes extra whitespace, and removes comments starting with //
+            for (int i = 0; i < worldModelString.Length; i++)
+            {
+                bool isWhitespace = Char.IsWhiteSpace(worldModelString[i]);
+
+                if (!comment)
+                {
+                    if (lastCharWhitespace && isWhitespace)
+                        continue;
+                    else if (worldModelString[i].Equals('/'))
+                    {
+                        if (i < worldModelString.Length - 1 && worldModelString[i+1].Equals('/'))
+                        {
+                            comment = true;
+                        }
+                    }
+                    else
+                        sb.Append(worldModelString[i]);
+
+                    lastCharWhitespace = isWhitespace;
+                }
+                else
+                {
+                    bool isNewline = worldModelString[i].Equals('\n') || worldModelString[i].Equals('\r');
+
+                    if (isNewline)
+                    {
+                        comment = false;
+                        sb.Append('\n');
+                    }
+
+                    lastCharWhitespace = false;
+                }
+            }
+
+            worldModelString = sb.ToString();
+            sb = new StringBuilder(worldModelString.Length);
+
+            //Remove extra \n
+            //Whitespace does not reset "lastCharNewline"
+
+            bool lastCharNewline = true;
+            lastCharWhitespace = true; //A newline is whitespace
+
+            for (int i = 0; i < worldModelString.Length; i++)
+            {
+                bool isNewline = worldModelString[i].Equals('\n') || worldModelString[i].Equals('\r');
+                bool isWhitespace = Char.IsWhiteSpace(worldModelString[i]);
+
+                if (isNewline)
+                {
+                    if (!lastCharNewline)
+                        sb.Append(worldModelString[i]);
+
+                    lastCharWhitespace = true;
+                    lastCharNewline = true;
+
+                } else if (isWhitespace)
+                {
+                    if (!lastCharWhitespace)    
+                        sb.Append(worldModelString[i]);
+                        
+                    lastCharWhitespace = true;
+                    //lastCharNewline = false;
+
+                } else //if(!isWhitespace): is a printing character
+                {
+                    sb.Append(worldModelString[i]);
+
+                    lastCharWhitespace = false;
+                    lastCharNewline = false;
+                }
+            }
+
+            return sb.ToString();
+        }
+
         public SEWorldModel(string worldModelString)
         {
             objects = new List<SEWorldObject>();
 
             //If a // is encountered, skip to the next new line
             //If a keyword is encountered, switch on that keyword and pass the contents of the next curly brackets to the respective class constructor
-
-            int i = 0; //Start of imaginary cursor for parsing words
-            int startOfLine = 0;
-
-            string worldModelCode = "";
-
-            //Strip comments only
-            while (i < worldModelString.Length - 1)
+            try
             {
-                //Consume comment line
-                if (worldModelString.Substring(i, 2).Equals("//"))
+                int i = 0; //Start of imaginary cursor for parsing words
+
+
+                //Strip comments and extra whitespace
+                string worldModelCode = StripWorldModelString(worldModelString);
+
+                i = 0;
+                int j = 0;
+
+                //TODO: huge number of messy edge cases. Need better string normalization
+                while (j < worldModelCode.Length)
                 {
-                    int k = i; //Move start cursor to end of //       
-                    while (!worldModelString[k++].Equals('\n')) ;
-                    string code = worldModelString.Substring(startOfLine, i - startOfLine);
-                    string comment = worldModelString.Substring(i + 2, k - i - 2);
-
-                    worldModelCode += code;
-
-                    if (!String.IsNullOrWhiteSpace(code) && !String.IsNullOrWhiteSpace(comment))
-                        worldModelCode += "\n";
-
-                    startOfLine = i + 1;
-                    i = k - 1; //Move start cursor to after new line
-                } else if (worldModelString[i].Equals('\n'))
-                {
-                    worldModelCode += worldModelString.Substring(startOfLine, i - startOfLine);
-                    startOfLine = i + 1;
-                }
-
-                //This is not redundant i promise
-                if (worldModelString[i].Equals('\n'))
-                    startOfLine = i + 1;
-
-                i++;
-            }
-
-            i = 0;
-            int j = 0;
-
-            //TODO: huge number of messy edge cases. Need better string normalization
-            while (j < worldModelCode.Length)
-            {
-                //Consume word
-                if (Char.IsWhiteSpace(worldModelCode[j]))
-                {
-                    string word = worldModelCode.Substring(i, j - i).Trim();
-
-                    switch (word)
+                    //Consume word
+                    if (Char.IsWhiteSpace(worldModelCode[j]))
                     {
-                        case "Screen":
-                            objects.Add(new SEWorldScreen(PeelBraces(worldModelCode, i)));
-                            break;
-                        case "Plane":
-                            objects.Add(new SEWorldPlane(PeelBraces(worldModelCode, i)));
-                            break;
-                        case "CalibrationPoint3D":
-                            objects.Add(new SEWorldCalibrationPoint(PeelBraces(worldModelCode, i)));
-                            break;
+                        string word = worldModelCode.Substring(i, j - i).Trim();
+
+                        switch (word)
+                        {
+                            case "Screen":
+                                objects.Add(new SEWorldScreen(PeelBraces(worldModelCode, i)));
+                                break;
+                            case "Plane":
+                                objects.Add(new SEWorldPlane(PeelBraces(worldModelCode, i)));
+                                break;
+                            case "CalibrationPoint3D":
+                                objects.Add(new SEWorldCalibrationPoint(PeelBraces(worldModelCode, i)));
+                                break;
+                        }
+
+                        i = j + 1; //Move start cursor to after word
                     }
 
-                    i = j + 1; //Move start cursor to after word
+                    j++;
                 }
-
-                j++;
+            } catch (Exception e)
+            {
+                Console.WriteLine("Failed to parse WorldModel string: " + e);
             }
         }
 
