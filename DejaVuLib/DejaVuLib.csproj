@@ -55,7 +55,6 @@
     <Compile Include="MouseHook.cs" />
     <Compile Include="PreciseSystemTime.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SocketServer.cs" />
     <Compile Include="WebSocket.cs" />
     <Compile Include="WebSocketServer.cs" />
     <Compile Include="Win32.cs" />

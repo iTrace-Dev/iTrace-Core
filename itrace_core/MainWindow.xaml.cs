@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using iTrace_Core.Properties;
-using DejaVu;
-using DejaVuLib;
 
 namespace iTrace_Core
 {
@@ -19,8 +17,8 @@ namespace iTrace_Core
         TrackerManager TrackerManager;
         Recorder rec;
         ReticleController reticleController;
-        SocketServer socketServer;
-        WebSocketServer webSocketServer;
+        SocketServer socketServer = SocketServer.Instance();
+        WebSocketServer webSocketServer= WebSocketServer.Instance();
         XMLGazeDataWriter xmlGazeDataWriter;
         SessionSetupWindow sessionInformation;
         List<Setting> settings;   
@@ -87,8 +85,8 @@ namespace iTrace_Core
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
-            socketServer = new SocketServer();
-            webSocketServer = new WebSocketServer();
+            //socketServer = new SocketServer();
+            //webSocketServer = new WebSocketServer();
 
             System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
         }

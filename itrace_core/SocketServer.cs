@@ -5,8 +5,10 @@ using System.Net;
 using System.Net.Sockets;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using iTrace_Core.Properties;
 using System.Windows;
+
 
 namespace iTrace_Core
 {
@@ -16,6 +18,7 @@ namespace iTrace_Core
         List<TcpClient> clients;
         BlockingCollection<TcpClient> clientAcceptQueue;
         Thread connectionsListener;
+        CancellationTokenSource cancellationTokenSource;
 
         const string localhostAddress = "127.0.0.1";
         const int defaultPort = 8008;
@@ -23,9 +26,10 @@ namespace iTrace_Core
         public const int MAX_PORT_NUM = 65535;
         int port;
 
+
         public bool Started { get; private set; }
 
-        public SocketServer()
+        private SocketServer()
         {
             try
             {
@@ -59,6 +63,14 @@ namespace iTrace_Core
 
                 Started = false;
             }
+        }
+
+        static SocketServer instance;
+        public static SocketServer Instance()
+        {
+            if (instance == null)
+                instance = new SocketServer();
+            return instance;
         }
 
         public void SendSessionData()
@@ -104,7 +116,7 @@ namespace iTrace_Core
             }
         }
 
-        private void SendToClients(string message)
+        public void SendToClients(string message)
         {
             if (!Started)
                 return;
@@ -150,6 +162,62 @@ namespace iTrace_Core
 
                 SendToClients(e.ReceivedGazeData.Serialize());
             }
+        }
+
+        private async Task WaitForMessageFromClient(int clientIndex, CancellationToken cancellationToken, int timeout)
+        {
+            const int sleepLength = 10;
+            int slept = 0;
+            byte[] buffer = new byte[8];
+
+            try
+            {
+                NetworkStream networkStream = clients[clientIndex].GetStream();
+                //clients[clientIndex].Client.Poll(1000, SelectMode.SelectRead);
+
+                while (true)
+                {
+                    if (cancellationToken.IsCancellationRequested || slept > timeout)
+                    {
+                        return;
+                    }
+
+                    if (networkStream.DataAvailable)
+                    {
+                        networkStream.Read(buffer, 0, buffer.Length);
+
+                        return;
+                    }
+
+                    Thread.Sleep(sleepLength);
+                    slept += sleepLength;
+                }
+            }
+            catch (System.IO.IOException) { }    // Disconnect will be handled by SendToClients
+
+            return;
+        }
+
+        public void WaitUntilClientsAreReady(int timeoutMilliseconds)
+        {
+            int clientCount = clients.Count;
+            List<Task> tasks = new List<Task>();
+
+            for (int i = 0; i < clientCount; ++i)
+            {
+                var clientTask = WaitForMessageFromClient(i, cancellationTokenSource.Token, timeoutMilliseconds);
+                tasks.Add(clientTask);
+            }
+
+            Task.WhenAll(tasks).Wait();
+
+            cancellationTokenSource.Dispose();
+            cancellationTokenSource = new CancellationTokenSource();
+        }
+
+        public void CancelWait()
+        {
+            cancellationTokenSource.Cancel();
         }
     }
 }

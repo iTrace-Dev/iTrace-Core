@@ -20,7 +20,7 @@ namespace iTrace_Core
         public const int MAX_WEBSOCKET_PORT_NUM = 65535;
         int port;
         
-        public WebSocketServer()
+        private WebSocketServer()
         {
             try
             {
@@ -51,6 +51,14 @@ namespace iTrace_Core
             }
         }
 
+        static WebSocketServer instance;
+        public static WebSocketServer Instance()
+        {
+            if (instance == null)
+                instance = new WebSocketServer();
+            return instance;
+        }
+
         void AcceptIncomingWebsocketConnections()
         {
             while (true)
@@ -72,7 +80,7 @@ namespace iTrace_Core
             }
         }
 
-        void SendToClients(string message)
+        public void SendToClients(string message)
         {
             for (int i = clients.Count - 1; i >= 0; --i)
             {
