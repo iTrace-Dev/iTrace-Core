@@ -413,7 +413,14 @@ namespace iTrace_Core
         public override void DeserializeFrom(string msg)
         {
             string[] split = msg.Split(',');
-            EventTime = Convert.ToInt64(split[1]);
+            if (msg != "session_end")
+            {
+                EventTime = Convert.ToInt64(split[1]);
+            }
+            else
+			{
+                EventTime = 0;
+			}
 
             message = msg;
         }

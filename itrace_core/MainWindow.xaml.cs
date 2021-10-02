@@ -318,6 +318,7 @@ namespace iTrace_Core
                     Console.WriteLine(SessionManager.GetInstance().DataRootDir);
                     eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
                     windowPositionManager.Start();
+                    eventRecorder.ConnectToCore();
                     eventRecorder.StartRecording();
                 }
             }
