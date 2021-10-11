@@ -352,9 +352,12 @@ namespace iTrace_Core
         private const int SEType_u64_Size = 8;
         private const int SEType_f64_Size = 8;
 
-        //TODO: these should be per-session
+        // TODO: these should be per-session
         private static UInt32 lastFixation = 0;
         private static UInt32 lastBlink = 0;
+
+        // Intersection name used primarily for multiple screens
+        public string intersectionName = "";
 
         public SmartEyeGazeData(byte[] packet)
         {
@@ -412,6 +415,7 @@ namespace iTrace_Core
                             case SEFilteredClosestWorldIntersectionId:
                                 this.X = x;
                                 this.Y = y;
+                                this.intersectionName = intersectName;
                                 if (PrintIntersectionInfo)
                                     Console.WriteLine("Combined Intersection \"{0}\" at coords {1}, {2}", intersectName, x, y);
                                 break;
