@@ -279,7 +279,15 @@ namespace iTrace_Core
                 byte[] packet = RealtimeClient.Receive(ref realtimeEndpoint);
 
                 SmartEyeGazeData gaze = new SmartEyeGazeData(packet);
-                GazeHandler.Instance.EnqueueGaze(gaze);
+
+                if (gaze.IsValid()) //Sending gaze data that isn't valid breaks the plugins?
+                {
+                    bool hasIntersection = !String.IsNullOrWhiteSpace(gaze.intersectionName);
+                    bool hasXY = (gaze.X != null) && (gaze.Y != null);
+
+                    if (hasIntersection && hasXY)
+                        GazeHandler.Instance.EnqueueGaze(gaze);
+                }
             }
         }
 
