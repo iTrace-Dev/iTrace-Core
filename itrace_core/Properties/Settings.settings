@@ -14,5 +14,8 @@
     <Setting Name="smarteye_ip_port" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">5800</Value>
     </Setting>
+    <Setting Name="calibration_monitor" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">0</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

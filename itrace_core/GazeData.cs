@@ -1,4 +1,5 @@
-﻿using System;
+using iTrace_Core.Properties;
+using System;
 using System.Windows.Forms;
 using System.Xml;
 
@@ -96,25 +97,35 @@ namespace iTrace_Core
         {
             bool isLeftEyeValid = tobiiRawGaze.LeftEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
             bool isRightEyeValid = tobiiRawGaze.RightEye.GazePoint.Validity == Tobii.Research.Validity.Valid;
+            Screen screen = Screen.AllScreens[Settings.Default.calibration_monitor];
+
+            RightX = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * screen.Bounds.Width + screen.Bounds.Left;
+            RightY = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * screen.Bounds.Height + screen.Bounds.Top;
+            RightPupil = tobiiRawGaze.RightEye.Pupil.PupilDiameter;
+            RightValidation = Convert.ToInt32(isRightEyeValid);
+
+            LeftX = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * screen.Bounds.Width + screen.Bounds.Left;
+            LeftY = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * screen.Bounds.Height + screen.Bounds.Top;
+            LeftPupil = tobiiRawGaze.LeftEye.Pupil.PupilDiameter;
+            LeftValidation = Convert.ToInt32(isLeftEyeValid);
 
             if (isLeftEyeValid && isRightEyeValid)
             {
-                double avgX = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X) / 2.0D;
-                double avgY = (tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y + tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y) / 2.0D;
+                double avgX = (RightX + LeftX) / 2.0D;
+                double avgY = (RightY + LeftY) / 2.0D;
 
-                X = Convert.ToInt32(avgX * Screen.PrimaryScreen.Bounds.Width);
-                Y = Convert.ToInt32(avgY * Screen.PrimaryScreen.Bounds.Height);
-
+                X = Convert.ToInt32(avgX);
+                Y = Convert.ToInt32(avgY);
             }
             else if (isLeftEyeValid)
             {
-                X = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
-                Y = Convert.ToInt32(tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
+                X = Convert.ToInt32(LeftX);
+                Y = Convert.ToInt32(LeftY);
             }
             else if (isRightEyeValid)
             {
-                X = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width);
-                Y = Convert.ToInt32(tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height);
+                X = Convert.ToInt32(RightX);
+                Y = Convert.ToInt32(RightY);
             }
             else
             {
@@ -122,17 +133,6 @@ namespace iTrace_Core
                 X = null;
                 Y = null;
             }
-
-            RightX = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
-            RightY = tobiiRawGaze.RightEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height;
-            RightPupil = tobiiRawGaze.RightEye.Pupil.PupilDiameter;
-            RightValidation = Convert.ToInt32(isRightEyeValid);
-
-            LeftX = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.X * Screen.PrimaryScreen.Bounds.Width;
-            LeftY = tobiiRawGaze.LeftEye.GazePoint.PositionOnDisplayArea.Y * Screen.PrimaryScreen.Bounds.Height;
-            LeftPupil = tobiiRawGaze.LeftEye.Pupil.PupilDiameter;
-            LeftValidation = Convert.ToInt32(isLeftEyeValid);
-
             UserLeftX = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.X;
             UserLeftY = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.Y;
             UserLeftZ = tobiiRawGaze.LeftEye.GazeOrigin.PositionInUserCoordinates.Z;
@@ -140,7 +140,7 @@ namespace iTrace_Core
             UserRightX = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.X;
             UserRightY = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Y;
             UserRightZ = tobiiRawGaze.RightEye.GazeOrigin.PositionInUserCoordinates.Z;
-            
+
             TrackerTime = tobiiRawGaze.DeviceTimeStamp;
         }
     }
@@ -576,19 +576,41 @@ namespace iTrace_Core
                 Y = null;
                 return;
             }
+            Screen screen = Screen.AllScreens[Settings.Default.calibration_monitor];
 
-            X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width);
-            Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height);
+            X = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGX"].Value) * screen.Bounds.Width + screen.Bounds.Left);
+            Y = Convert.ToInt32(Double.Parse(recNode.Attributes["BPOGY"].Value) * screen.Bounds.Height + screen.Bounds.Top);
 
             RightX = Double.Parse(recNode.Attributes["RPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
             RightY = Double.Parse(recNode.Attributes["RPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
-            RightPupil = Double.Parse(recNode.Attributes["RPD"].Value);
             RightValidation = Int32.Parse(recNode.Attributes["RPOGV"].Value);
 
             LeftX = Double.Parse(recNode.Attributes["LPOGX"].Value) * Screen.PrimaryScreen.Bounds.Width;
             LeftY = Double.Parse(recNode.Attributes["LPOGY"].Value) * Screen.PrimaryScreen.Bounds.Height;
-            LeftPupil = Double.Parse(recNode.Attributes["LPD"].Value);
+
             LeftValidation = Int32.Parse(recNode.Attributes["LPOGV"].Value);
+
+
+            bool rightPupilValid = Int32.Parse(recNode.Attributes["RPUPILV"].Value) == 1;
+            if (rightPupilValid)
+            {
+                RightPupil = Double.Parse(recNode.Attributes["RPUPILD"].Value) * 1000.0;
+            }
+            else
+            {
+                RightPupil = -1;
+            }
+
+            bool leftPupilValid = Int32.Parse(recNode.Attributes["LPUPILV"].Value) == 1;
+            if (leftPupilValid)
+            {
+                LeftPupil = Double.Parse(recNode.Attributes["LPUPILD"].Value) * 1000.0;
+            }
+            else
+            {
+                LeftPupil = -1;
+            }
+
 
             UserLeftX = Double.Parse(recNode.Attributes["LEYEX"].Value);
             UserLeftY = Double.Parse(recNode.Attributes["LEYEY"].Value);

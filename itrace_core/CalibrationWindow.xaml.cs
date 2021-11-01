@@ -6,6 +6,7 @@ using System.Windows.Media;
 using System.Windows.Media.Animation;
 using System.Windows.Shapes;
 using System.Windows.Threading;
+using iTrace_Core.Properties;
 
 namespace iTrace_Core
 {
@@ -49,9 +50,11 @@ namespace iTrace_Core
         public CalibrationWindow()
         {
             InitializeComponent();
-            
-            Left = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Left;
-            Top = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Top;
+
+            System.Windows.Forms.Screen calibrationMonitor = System.Windows.Forms.Screen.AllScreens[Settings.Default.calibration_monitor];
+
+            Left = calibrationMonitor.Bounds.Left;
+            Top = calibrationMonitor.Bounds.Top;
         }
 
         private void WindowLoaded(object sender, RoutedEventArgs e)
