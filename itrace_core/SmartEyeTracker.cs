@@ -85,9 +85,9 @@ namespace iTrace_Core
                 return;
             }
 
+            IPAddress selfAddress = null;
             try
             {
-                IPAddress selfAddress = null;
                 IPHostEntry hostname = Dns.GetHostEntry(Dns.GetHostName());
 
                 //Search our IP addresses for one on the same network as the smarteye server
@@ -114,15 +114,34 @@ namespace iTrace_Core
 
                 if (selfAddress == null)
                 {
-                    Console.WriteLine("Could not determine host IP");
+                    Console.WriteLine("Not connected to the same network as the specified SmartEye server!");
                     RealtimeClient = null;
                     return;
                 }
 
-                realtimeEndpoint = new IPEndPoint(selfAddress, Settings.Default.smarteye_ip_port);
-                RealtimeClient = new System.Net.Sockets.UdpClient(realtimeEndpoint);
+                //Try pinging the SmartEye host computer
+                using (System.Net.NetworkInformation.Ping p = new System.Net.NetworkInformation.Ping())
+                {
+                    System.Net.NetworkInformation.PingReply reply = p.Send(rpcAddress);
+                    if (reply.Status != System.Net.NetworkInformation.IPStatus.Success)
+                        throw new Exception("Provided SmartEye IP address is not responding.");
+                }
             }
             catch (Exception e)
+            {
+                Console.WriteLine("Problem connecting to SmartEye: " + e);
+                RealtimeClient = null;
+                return;
+            }
+
+            try
+            {
+                realtimeEndpoint = new IPEndPoint(selfAddress, Settings.Default.smarteye_ip_port);
+                RealtimeClient = new System.Net.Sockets.UdpClient(realtimeEndpoint);
+
+                //TODO: Configure SmartEye output settings here
+
+            } catch (Exception e)
             {
                 Console.WriteLine("Couldn't open realtime data port (UDP) for SmartEye: " + e);
                 RealtimeClient = null;
@@ -134,6 +153,9 @@ namespace iTrace_Core
                 latentEndpoint = new IPEndPoint(IPAddress.Parse(Settings.Default.smarteye_ip_address), SMARTEYE_PORT_LATENT);
                 LatentClient = new System.Net.Sockets.TcpClient();
                 LatentClient.Connect(latentEndpoint);
+
+                //TODO: Configure SmartEye output settings here
+
             }
             catch (Exception e)
             {
