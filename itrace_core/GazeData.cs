@@ -504,6 +504,13 @@ namespace iTrace_Core
             }
         }
 
+        //Offset by screen position, for multi-screen use
+        public void Offset(int x, int y)
+        {
+            this.X += x;
+            this.Y += y;
+        }
+
         //Parse a UInt16 from an SmartEye packet, accounting for endianness
         private UInt16 ParseSEType_u16(byte[] packet, Int32 offset)
         {

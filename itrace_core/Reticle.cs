@@ -75,9 +75,12 @@ namespace iTrace_Core
             if (!display)
                 return;
 
-            // Invalid screen coordinates...
-            if (x < 0 || y < 0)
-                return;
+            //AL: This check needs redone, negative coordinates are possible when using multiple screens
+            //A similar check can be done by consulting the Screen class
+
+            //// Invalid screen coordinates...
+            //if (x < 0 || y < 0)
+            //    return;
 
             //Sum up all the x and y we have seen
             totalX += x;

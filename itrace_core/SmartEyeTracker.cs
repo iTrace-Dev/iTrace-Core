@@ -6,6 +6,7 @@ using iTrace_Core.Properties;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Numerics;
+using System.Windows.Forms;
 
 namespace iTrace_Core
 {
@@ -40,7 +41,15 @@ namespace iTrace_Core
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
             rpcEndpoint = new IPEndPoint(rpcAddress, SMARTEYE_PORT_RPC);
-            
+
+            //Screen test
+            Screen[] screens = Screen.AllScreens;
+
+            foreach (Screen screen in screens)
+            {
+                Console.WriteLine("Device: {0} Bounds: {1}", screen.DeviceName, screen.Bounds);
+            }
+
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
@@ -304,6 +313,16 @@ namespace iTrace_Core
 
                 if (gaze.IsValid()) //Sending gaze data that isn't valid breaks the plugins?
                 {
+                    //TODO: Adjust coordinates based on Screens
+                    //Converts Screen space coords to one space as used by OS
+                    //Needed in order for plugins to recognize multiple screens
+
+                    //Hardcoded example
+                    //if (gaze.intersectionName.Equals("ScreenRight"))
+                    //{
+                    //    gaze.Offset(-1920, 0); //Position of "Right" screen
+                    //}
+
                     bool hasIntersection = !String.IsNullOrWhiteSpace(gaze.intersectionName);
                     bool hasXY = (gaze.X != null) && (gaze.Y != null);
 
