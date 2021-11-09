@@ -42,14 +42,6 @@ namespace iTrace_Core
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
             rpcEndpoint = new IPEndPoint(rpcAddress, SMARTEYE_PORT_RPC);
 
-            //Screen test
-            Screen[] screens = Screen.AllScreens;
-
-            foreach (Screen screen in screens)
-            {
-                Console.WriteLine("Device: {0} Bounds: {1}", screen.DeviceName, screen.Bounds);
-            }
-
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
@@ -210,6 +202,8 @@ namespace iTrace_Core
 
             //Store world model string and calibration data
             SEWorldModel worldModel = new SEWorldModel(WorldModelString);
+            Screen[] screens = Screen.AllScreens;
+            ScreensAssociater sa = new ScreensAssociater(worldModel.GetScreens(), screens);
 
             SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(worldModel, targets);
             SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
@@ -318,10 +312,10 @@ namespace iTrace_Core
                     //Needed in order for plugins to recognize multiple screens
 
                     //Hardcoded example
-                    //if (gaze.intersectionName.Equals("ScreenRight"))
-                    //{
-                    //    gaze.Offset(-1920, 0); //Position of "Right" screen
-                    //}
+                    if (gaze.intersectionName.Equals("ScreenRight"))
+                    {
+                        gaze.Offset(-1920, 0);
+                    }
 
                     bool hasIntersection = !String.IsNullOrWhiteSpace(gaze.intersectionName);
                     bool hasXY = (gaze.X != null) && (gaze.Y != null);

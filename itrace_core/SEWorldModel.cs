@@ -14,7 +14,17 @@ namespace iTrace_Core
     {
         private List<SEWorldObject> objects;
 
-        
+        public SEWorldScreen[] GetScreens()
+        {
+            List<SEWorldScreen> screens = new List<SEWorldScreen>();
+
+            foreach (SEWorldObject obj in objects)
+                if (obj is SEWorldScreen)
+                    screens.Add(obj as SEWorldScreen);
+
+            return screens.ToArray();
+        }
+
         public static string StripWorldModelString(string worldModelString)
         {
             StringBuilder sb = new StringBuilder(worldModelString.Length);
