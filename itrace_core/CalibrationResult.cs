@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace iTrace_Core
@@ -160,11 +161,15 @@ namespace iTrace_Core
         //These are the calibration vectors produced by the SE gaze calibration dialogue
         private List<SETarget> calibrationTargets;
         private SEWorldModel worldModel;
+        public ScreenMapping screenMapping { get; private set; }
 
         public SmartEyeCalibrationResult(SEWorldModel worldModel, List<SETarget> calibrationTargets)
         {
+            //TODO: world model sanity checks
+
             this.worldModel = worldModel;
             this.calibrationTargets = calibrationTargets;
+            this.screenMapping = new ScreenMapping(worldModel.GetScreens(), Screen.AllScreens);
 
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }

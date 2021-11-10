@@ -11,14 +11,14 @@ namespace iTrace_Core
     /// <summary>
     /// An association between SmartEye WorldModel screens and Screen objects in .NET (Screens as understood by the host OS)
     /// </summary>
-    class ScreensAssociater
+    class ScreenMapping
     {
-        List<ScreenAssociationRule> rules;
+        List<ScreenMappingRule> rules;
         Dictionary<SEWorldScreen, Screen> mapping;
 
-        public ScreensAssociater(SEWorldScreen[] seScreens, Screen[] osScreens)
+        public ScreenMapping(SEWorldScreen[] seScreens, Screen[] osScreens)
         {
-            rules = new List<ScreenAssociationRule>();
+            rules = new List<ScreenMappingRule>();
 
             //Mapping rules in order of priority
             rules.Add(new ExactNameRule(seScreens, osScreens));
@@ -27,7 +27,7 @@ namespace iTrace_Core
 
             mapping = new Dictionary<SEWorldScreen, Screen>();
 
-            foreach (ScreenAssociationRule rule in rules)
+            foreach (ScreenMappingRule rule in rules)
                 if (rule.IsOneToOne())
                 {
                     mapping = rule.GetMapping();
@@ -53,11 +53,11 @@ namespace iTrace_Core
     /// <summary>
     /// Represents a rule by which screens can be associated in the ScreensAssociater
     /// </summary>
-    public abstract class ScreenAssociationRule
+    public abstract class ScreenMappingRule
     {
         private List<ScreenAssociation> associations;
 
-        public ScreenAssociationRule(SEWorldScreen[] seScreens, Screen[] osScreens)
+        public ScreenMappingRule(SEWorldScreen[] seScreens, Screen[] osScreens)
         {
             this.associations = new List<ScreenAssociation>();
 
@@ -138,7 +138,7 @@ namespace iTrace_Core
     /// <summary>
     /// Check if screens have exactly the same name
     /// </summary>
-    public class ExactNameRule : ScreenAssociationRule
+    public class ExactNameRule : ScreenMappingRule
     {
         public ExactNameRule(SEWorldScreen[] seScreens, Screen[] osScreens) : base(seScreens, osScreens) { }
 
@@ -151,7 +151,7 @@ namespace iTrace_Core
     /// <summary>
     /// Check if screens share an exact resolution 
     /// </summary>
-    public class ExactResolutionRule : ScreenAssociationRule
+    public class ExactResolutionRule : ScreenMappingRule
     {
         public ExactResolutionRule(SEWorldScreen[] seScreens, Screen[] osScreens) : base(seScreens, osScreens) { }
 
@@ -164,7 +164,7 @@ namespace iTrace_Core
     /// <summary>
     /// Check if screens share a common number somewhere in their name
     /// </summary>
-    public class NumberRule : ScreenAssociationRule
+    public class NumberRule : ScreenMappingRule
     {
         public NumberRule(SEWorldScreen[] seScreens, Screen[] osScreens) : base(seScreens, osScreens) { }
 
@@ -185,7 +185,7 @@ namespace iTrace_Core
     /// <summary>
     /// Look for spatial words like Left Center and Right and match them to Screen bounds
     /// </summary>
-    public class SpatialWordRule : ScreenAssociationRule
+    public class SpatialWordRule : ScreenMappingRule
     {
         public SpatialWordRule(SEWorldScreen[] seScreens, Screen[] osScreens) : base(seScreens, osScreens) { }
 

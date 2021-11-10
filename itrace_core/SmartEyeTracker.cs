@@ -23,7 +23,8 @@ namespace iTrace_Core
         private IPEndPoint rpcEndpoint;      //For sending json RPC commands to SmartEye
         private String TrackerName;
         private String TrackerSerialNumber;
-        private String WorldModelString;
+
+        public SmartEyeCalibrationResult seCalibrationResult { get; private set; }
 
         private byte[] recvBuffer;
 
@@ -33,10 +34,6 @@ namespace iTrace_Core
         {
             TrackerName = "SmartEye Tracker";
             TrackerSerialNumber = "Unknown"; //SE does not report a serial, make up some kind of hash?
-
-            //Parser test
-            //string s = System.IO.File.ReadAllText(@"C:\Users\alinn\Downloads\SERESL_Multiple_Screen_And_Controller_Model.sew");
-            //SEWorldModel wm = new SEWorldModel(s);
 
             //TODO catch parse exception?
             IPAddress rpcAddress = IPAddress.Parse(Settings.Default.smarteye_ip_address);
@@ -176,7 +173,7 @@ namespace iTrace_Core
             JToken result = ReceiveRpcResponse().GetValue("result");
 
             //Escaped String representing the world model
-            WorldModelString = result.Value<String>("worldModel");
+            String WorldModelString = result.Value<String>("worldModel");
 
             List<SETarget> targets = new List<SETarget>();
 
@@ -202,10 +199,7 @@ namespace iTrace_Core
 
             //Store world model string and calibration data
             SEWorldModel worldModel = new SEWorldModel(WorldModelString);
-            Screen[] screens = Screen.AllScreens;
-            ScreensAssociater sa = new ScreensAssociater(worldModel.GetScreens(), screens);
-
-            SmartEyeCalibrationResult seCalibrationResult = new SmartEyeCalibrationResult(worldModel, targets);
+            seCalibrationResult = new SmartEyeCalibrationResult(worldModel, targets);
             SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
 
             return true;
@@ -311,17 +305,16 @@ namespace iTrace_Core
                     //Converts Screen space coords to one space as used by OS
                     //Needed in order for plugins to recognize multiple screens
 
-                    //Hardcoded example
-                    if (gaze.intersectionName.Equals("ScreenRight"))
-                    {
-                        gaze.Offset(-1920, 0);
-                    }
-
                     bool hasIntersection = !String.IsNullOrWhiteSpace(gaze.intersectionName);
                     bool hasXY = (gaze.X != null) && (gaze.Y != null);
 
                     if (hasIntersection && hasXY)
+                    {
+                        Screen targetScreen = seCalibrationResult.screenMapping.GetSEToScreenMapping(gaze.intersectionName);
+                        gaze.Offset(targetScreen.Bounds.X, targetScreen.Bounds.Y);
+
                         GazeHandler.Instance.EnqueueGaze(gaze);
+                    }
                 }
             }
         }
