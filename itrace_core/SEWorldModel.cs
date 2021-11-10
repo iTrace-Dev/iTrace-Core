@@ -10,7 +10,7 @@ using System.Xml;
 namespace iTrace_Core
 {
     //A SmartEye world model which can be parsed from or serialized to a string
-    class SEWorldModel
+    public class SEWorldModel
     {
         private List<SEWorldObject> objects;
 
@@ -218,7 +218,7 @@ namespace iTrace_Core
         }
     }
 
-    abstract class SEWorldObject
+    public abstract class SEWorldObject
     {
         public string name { get; protected set; }
 
@@ -255,7 +255,7 @@ namespace iTrace_Core
         public abstract void WriteToXMLWriter(XmlTextWriter writer);
     }
 
-    class SEWorldPlane : SEWorldObject
+    public class SEWorldPlane : SEWorldObject
     {
         public Vector3 lowerLeft { get; private set; }
         public Vector3 xAxis { get; private set; }
@@ -312,7 +312,7 @@ namespace iTrace_Core
         }
     }
 
-    class SEWorldScreen : SEWorldPlane
+    public class SEWorldScreen : SEWorldPlane
     {
         public int[] resolution { get; private set; }
 
@@ -352,7 +352,7 @@ namespace iTrace_Core
         }
     }
 
-    class SEWorldCalibrationPoint : SEWorldObject
+    public class SEWorldCalibrationPoint : SEWorldObject
     {
         public Vector3 center { get; private set; }
 
