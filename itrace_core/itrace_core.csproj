@@ -108,7 +108,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ScreensAssociater.cs" />
+    <Compile Include="ScreenMapping.cs" />
     <Compile Include="SEWorldModel.cs" />
     <Compile Include="SmartEyeRPCUtils.cs" />
     <Compile Include="EyeStatusWindow.xaml.cs">
