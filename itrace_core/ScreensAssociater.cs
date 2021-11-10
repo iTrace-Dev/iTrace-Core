@@ -81,10 +81,14 @@ namespace iTrace_Core
 
         /// <summary>
         /// Returns true if this term contains exactly one entry per screen
+        /// And crucially, has any associations
         /// </summary>
         /// <returns></returns>
         public bool IsOneToOne()
         {
+            if (associations.Count == 0)
+                return false;
+
             for (int i = 0; i < associations.Count; i++)
                 for (int j = 0; j < associations.Count; j++)
                     if (i != j && associations[i].Overlaps(associations[j]))
