@@ -311,7 +311,9 @@ namespace iTrace_Core
                     if (hasIntersection && hasXY)
                     {
                         Screen targetScreen = seCalibrationResult.screenMapping.GetSEToScreenMapping(gaze.intersectionName);
-                        gaze.Offset(targetScreen.Bounds.X, targetScreen.Bounds.Y);
+
+                        if (targetScreen != null)
+                            gaze.Offset(targetScreen.Bounds.X, targetScreen.Bounds.Y);
 
                         GazeHandler.Instance.EnqueueGaze(gaze);
                     }

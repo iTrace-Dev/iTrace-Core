@@ -38,6 +38,13 @@ namespace iTrace_Core
                 throw new ArgumentException("No reasonable mapping between world model screens and device screens!");
         }
 
+
+        /// <summary>
+        /// Get the screen whose name matches the name of the provided seScreenName, presumably obtained from an intersection
+        /// Returns null if no screen has this name.
+        /// </summary>
+        /// <param name="seScreenName"></param>
+        /// <returns></returns>
         public Screen GetSEToScreenMapping(String seScreenName)
         {
             foreach (KeyValuePair<SEWorldScreen, Screen> entry in mapping)
@@ -46,7 +53,7 @@ namespace iTrace_Core
                     return entry.Value;
             }
 
-            throw new ArgumentException($"No screen maps to the world model name {seScreenName}");
+            return null;
         }
     }
 
