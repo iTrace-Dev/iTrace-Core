@@ -1,19 +1,11 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
 using iTrace_Core.Properties;
-using DejaVu;
-using DejaVuLib;
 
 namespace iTrace_Core
 {
-    enum ReplayType
-	{
-        Fixed,
-        Proportional,
-        Bidirectional
-	}
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
@@ -36,20 +28,10 @@ namespace iTrace_Core
             public string Value { get; set; }
         }
 
-        // DejaVu
-        EventRecorder eventRecorder;
-        EventReplayer eventReplayer;
-        ReplayType replayType = ReplayType.Fixed;
-        private WindowPositionManager windowPositionManager;
-
         public MainWindow()
         {
             InitializeComponent();
             TrackerManager = new TrackerManager();
-
-            // DejaVu
-            //eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
-            windowPositionManager = new WindowPositionManager();
 
             // Initialize Session
             SessionManager.GetInstance().SetScreenDimensions(SystemParameters.PrimaryScreenWidth, SystemParameters.PrimaryScreenHeight);
@@ -60,37 +42,13 @@ namespace iTrace_Core
             
             xmlGazeDataWriter = new XMLGazeDataWriter();
 
-            DataOutputDir.Text = SessionManager.GetInstance().DataRootDir;
-
             InitializeSettingsGrid();
         }
-        private void StopWindowPositionManager(object sender, EventArgs e)
-        {
-            Console.WriteLine("StopWindowManager");
-            windowPositionManager.Stop();
-        }
-        private void RestoreWindowState(object sender, EventArgs e)
-		{
-            this.Dispatcher.Invoke(() =>
-            {
-                this.WindowState = WindowState.Normal;
-            });
-		}
-        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
-        {
-            Console.WriteLine("Window Closing");
-            if (eventRecorder != null && eventRecorder.IsRecordInProgress) eventRecorder.Dispose();
-            if (eventReplayer != null && eventReplayer.IsReplayInProgress) eventReplayer.StopReplay();
-            windowPositionManager.Stop();
-        }
-
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
             socketServer = new SocketServer();
             webSocketServer = new WebSocketServer();
-
-            System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
         }
 
         private void InitializeSettingsGrid()
@@ -99,7 +57,8 @@ namespace iTrace_Core
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
                 new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
-                new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() }
+                new Setting("smarteye_ip_address") { Value = Settings.Default.smarteye_ip_address.ToString() },
+                new Setting("smarteye_ip_port") { Value = Settings.Default.smarteye_ip_port.ToString() }
             };
 
             settingsDataGrid.ItemsSource = settings;
@@ -109,8 +68,7 @@ namespace iTrace_Core
         {
             int socketPort = 0;
             int websocketPort = 0;
-            int calibrationMonitor = 0;
-            if (!(int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort) && int.TryParse(settings[2].Value, out calibrationMonitor)))
+            if (! (int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort)) )
             {
                 MessageBox.Show(Properties.Resources.PortValuesMustBeNumeric, Properties.Resources.InvalidPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -135,14 +93,8 @@ namespace iTrace_Core
                 return;
             }
 
-            if (!((calibrationMonitor <= System.Windows.Forms.Screen.AllScreens.Length) && (calibrationMonitor > 0)))
-            {
-                MessageBox.Show(Properties.Resources.MonitorIndexOutOfRange, Properties.Resources.MonitorIndexIncorrectValue, MessageBoxButton.OK, MessageBoxImage.Error);
-            }
-
             Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
             Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
-            Settings.Default.calibration_monitor = Convert.ToInt32(settings[2].Value);
             Settings.Default.Save();
         }
 
@@ -170,41 +122,6 @@ namespace iTrace_Core
         {
             Close();
         }
-
-        //////////////////////////////
-        /// Session Setup Tab
-        //////////////////////////////
-        private void DirectoryBrowseButton_Click(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.FolderBrowserDialog folderDialogue = new System.Windows.Forms.FolderBrowserDialog();
-            folderDialogue.SelectedPath = SessionManager.GetInstance().DataRootDir;
-
-            System.Windows.Forms.DialogResult result = folderDialogue.ShowDialog();
-
-            if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialogue.SelectedPath))
-            {
-                DataOutputDir.Text = folderDialogue.SelectedPath;
-            }
-        }
-
-        private void SaveButton_Click(object sender, RoutedEventArgs e)
-        {
-            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
-            //Close();
-        }
-
-        private void ClearButton_Click(object sender, RoutedEventArgs e)
-        {
-            TaskName.Text = "";
-            ResearcherName.Text = "";
-            ParticipantID.Text = "";
-            DataOutputDir.Text = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
-            SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
-        }
-
-        //////////////////////////////
-        /// iTrace Tracking Tab
-        //////////////////////////////
 
         private void TrackerListChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -269,16 +186,10 @@ namespace iTrace_Core
                 }
                 TrackerList.IsEnabled = true;
                 TrackerRefreshButton.IsEnabled = true;
+                SessionSetupButton.IsEnabled = true;
                 settingsDataGrid.IsEnabled = true;
                 ApplyButton.IsEnabled = true;
                 CheckScreenCap.IsEnabled = true;
-
-                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
-                {
-                    windowPositionManager.Stop();
-                    eventRecorder.StopRecording();
-                    eventRecorder.Dispose();
-                }
             }
             else
             {
@@ -309,19 +220,11 @@ namespace iTrace_Core
                 ShowEyeStatusButton.IsEnabled = false;
                 TrackerList.IsEnabled = false;
                 TrackerRefreshButton.IsEnabled = false;
-                //SessionSetupButton.IsEnabled = false;
+                SessionSetupButton.IsEnabled = false;
                 settingsDataGrid.IsEnabled = false;
                 ApplyButton.IsEnabled = false;
                 CheckScreenCap.IsEnabled = false;
 
-                // DejaVu Record
-                if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
-                {
-                    Console.WriteLine(SessionManager.GetInstance().DataRootDir);
-                    eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
-                    windowPositionManager.Start();
-                    eventRecorder.StartRecording();
-                }
             }
         }
 
@@ -369,76 +272,6 @@ namespace iTrace_Core
         private void ShowEyeStatusWindow(object sender, RoutedEventArgs e)
         {
             TrackerManager.ShowEyeStatusWindow();
-        }
-
-        //////////////////////////////
-        /// DejaVu Replay Tab
-        //////////////////////////////
-        private void ReplayButtonClicked(object sender, RoutedEventArgs e)
-        {
-            System.Windows.Forms.OpenFileDialog fileDialog = new System.Windows.Forms.OpenFileDialog();
-            fileDialog.InitialDirectory = SessionManager.GetInstance().DataRootDir;
-            fileDialog.Filter = "csv files (*.csv)|*.csv|All files (*.*)|*.*";
-            fileDialog.FilterIndex = 2;
-            fileDialog.RestoreDirectory = true;
-
-            if (fileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
-            {
-                string path = fileDialog.FileName;
-
-                Console.WriteLine(replayType);
-                int option = Int32.Parse(ReplayOption.Text);
-                switch (replayType)
-                {
-                    case ReplayType.Fixed:
-                        eventReplayer = new FixedPauseEventReplayer(path, option);
-                        break;
-                    case ReplayType.Proportional:
-                        eventReplayer = new ProportionalEventReplayer(path, option);
-                        break;
-                    case ReplayType.Bidirectional:
-                        eventReplayer = new BidirectionalCommunicationEventReplayer(path, option);
-                        break;
-                }
-
-                eventReplayer.OnReplayFinished += StopWindowPositionManager;
-                eventReplayer.OnReplayFinished += RestoreWindowState;
-
-                windowPositionManager.Start();
-                eventReplayer.StartReplay();
-
-                // TODO: Disable replay button, minimize window
-                this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
-            }
-        }
-
-        private void FixedPauseChecked(object sender, RoutedEventArgs e)
-        {
-            replayType = ReplayType.Fixed;
-            OptionLabel.Content = "Pause Length (ms)";
-            ReplayOption.Text = "10";
-            OptionLabel.Visibility = Visibility.Visible;
-            //OptionHeader.Visibility = Visibility.Visible;
-            ReplayOption.Show();
-        }
-
-        private void ProportionalPauseChecked(object sender, RoutedEventArgs e)
-        {
-            replayType = ReplayType.Proportional;
-            OptionLabel.Content = "Scale Factor";
-            ReplayOption.Text = "3";
-            OptionLabel.Visibility = Visibility.Visible;
-            //OptionHeader.Visibility = Visibility.Visible;
-            ReplayOption.Show();
-        }
-
-        private void BidirectionalPauseChecked(object sender, RoutedEventArgs e)
-        {
-            replayType = ReplayType.Bidirectional;
-            OptionLabel.Visibility = Visibility.Hidden;
-            //OptionHeader.Visibility = Visibility.Hidden;
-            ReplayOption.Hide();
-
         }
     }
 }

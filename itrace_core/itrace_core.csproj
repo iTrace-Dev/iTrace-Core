@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5783FB9E-5502-48CF-89BF-12B3A4DFFCB2}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>iTrace_Core</RootNamespace>
     <AssemblyName>iTrace-Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -74,10 +74,10 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
-  <PropertyGroup>
-    <StartupObject />
-  </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="SharpAvi, Version=2.1.1.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\SharpAvi.2.1.1\lib\net45\SharpAvi.dll</HintPath>
     </Reference>
@@ -86,7 +86,6 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -103,16 +102,19 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="ScreenMapping.cs" />
+    <Compile Include="SEWorldModel.cs" />
+    <Compile Include="SmartEyeRPCUtils.cs" />
     <Compile Include="EyeStatusWindow.xaml.cs">
       <DependentUpon>EyeStatusWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SmartEyeTracker.cs" />
     <Compile Include="PreciseSystemTime.cs" />
     <Compile Include="SessionSetupWindow.xaml.cs">
       <DependentUpon>SessionSetupWindow.xaml</DependentUpon>
@@ -231,16 +233,6 @@
       <Link>tobii_pro.dll</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\DejaVuLib\DejaVuLib.csproj">
-      <Project>{699ec118-82c3-416b-8b83-02dffc155d84}</Project>
-      <Name>DejaVuLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\DejaVu\DejaVu.csproj">
-      <Project>{263a1aec-24e6-4b7b-ac09-6c1d46c9fe15}</Project>
-      <Name>DejaVu</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Tobii.Research.x64.1.6.1.987\build\Tobii.Research.x64.targets" Condition="Exists('..\packages\Tobii.Research.x64.1.6.1.987\build\Tobii.Research.x64.targets')" />

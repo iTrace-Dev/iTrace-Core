@@ -12,7 +12,7 @@ namespace iTrace_Core.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.9.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "16.10.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -49,7 +49,30 @@ namespace iTrace_Core.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        [global::System.Configuration.DefaultSettingValueAttribute("192.169.100.42")]
+        public string smarteye_ip_address {
+            get {
+                return ((string)(this["smarteye_ip_address"]));
+            }
+            set {
+                this["smarteye_ip_address"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5800")]
+        public int smarteye_ip_port
+        {
+            get
+            {
+                return ((int)(this["smarteye_ip_port"]));
+            }
+            set
+            {
+                this["smarteye_ip_port"] = value;
+            }
+        }        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int calibration_monitor {
             get {
                 return ((int)(this["calibration_monitor"]));
