@@ -17,6 +17,22 @@ namespace UnitTestProject1
         }
 
         [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException), "")]
+        public void BadLengthNetstringNoPass()
+        {
+            string netstring = "9:jeffrey,";
+            string result = NetstringUtils.TrimSENetstring(netstring);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(ArgumentOutOfRangeException), "")]
+        public void ZeroLengthNetstringNoPass()
+        {
+            string netstring = "2:,";
+            string result = NetstringUtils.TrimSENetstring(netstring);
+        }
+
+        [TestMethod]
         [ExpectedException(typeof(ArgumentException),"")]
         public void NoLengthNetstringNoPass()
         {

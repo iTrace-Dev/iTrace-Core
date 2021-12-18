@@ -12,7 +12,7 @@ namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
+        private readonly int SMARTEYE_PORT_LATENT = 5799;
         private readonly int SMARTEYE_PORT_RPC = 8100; //This is the default from SE software
 
         private System.Net.Sockets.UdpClient RealtimeClient;
@@ -42,8 +42,14 @@ namespace iTrace_Core
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
+                Console.WriteLine("Attempting to connect to Smarteye...");
                 RpcClient = new System.Net.Sockets.TcpClient();
-                RpcClient.Connect(rpcEndpoint);
+                IAsyncResult conn = RpcClient.BeginConnect(rpcEndpoint.Address, rpcEndpoint.Port, null, null);
+
+                bool rpcConnectSuccess = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+
+                if (!rpcConnectSuccess)
+                    throw new Exception("Rpc connection timed out");
 
                 recvBuffer = new byte[RpcClient.ReceiveBufferSize];
                 System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
