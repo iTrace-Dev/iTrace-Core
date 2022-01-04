@@ -93,8 +93,13 @@ namespace iTrace_Core
             try
             {
                 IPHostEntry hostname = Dns.GetHostEntry(Dns.GetHostName());
-
                 //Search our IP addresses for one on the same network as the smarteye server
+                
+                //TODO: test if this gives the same selfAddress
+                IPEndPoint iep = (IPEndPoint)RpcClient.Client.RemoteEndPoint;
+                Console.WriteLine($"SmartEyeTracker Own (iTrace machine) Address is: {iep.Address}");
+
+                //Wonky
                 foreach (IPAddress ip in hostname.AddressList)
                 {
                     if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
