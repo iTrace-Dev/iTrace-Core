@@ -96,30 +96,9 @@ namespace iTrace_Core
                 //Search our IP addresses for one on the same network as the smarteye server
                 
                 //TODO: test if this gives the same selfAddress
-                IPEndPoint iep = (IPEndPoint)RpcClient.Client.RemoteEndPoint;
+                IPEndPoint iep = (IPEndPoint)RpcClient.Client.LocalEndPoint;
                 Console.WriteLine($"SmartEyeTracker Own (iTrace machine) Address is: {iep.Address}");
-
-                //Wonky
-                foreach (IPAddress ip in hostname.AddressList)
-                {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        Console.WriteLine(ip.ToString());
-
-                        //Warning: this assumes a class C address for now
-                        byte[] ipAddr = ip.GetAddressBytes();
-                        byte[] serverAddr = rpcAddress.GetAddressBytes();
-
-                        //Check if first three bytes match
-                        //TODO: make this work for other address classes
-                        if (ipAddr[0] == serverAddr[0] && ipAddr[1] == serverAddr[1] && ipAddr[2] == serverAddr[2])
-                        {
-                            Console.WriteLine("Our ip is: " + ip.ToString());
-                            selfAddress = ip;
-                            break;
-                        }
-                    }
-                }
+                selfAddress = iep.Address;
 
                 if (selfAddress == null)
                 {
