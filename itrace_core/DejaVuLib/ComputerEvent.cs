@@ -401,8 +401,8 @@ namespace iTrace_Core
 
         public override void Replay()
         {
-            SocketServer.Instance().SendToClients(message);
-            WebSocketServer.Instance().SendToClients(message);
+            SocketServer.Instance().SendToClients(message + "\n");
+            WebSocketServer.Instance().SendToClients(message + "\n");
         }
 
         public override string Serialize()

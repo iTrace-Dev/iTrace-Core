@@ -404,9 +404,10 @@ namespace iTrace_Core
                 eventReplayer.OnReplayFinished += RestoreWindowState;
 
                 windowPositionManager.Start();
+                SocketServer.Instance().ReplayAcceptQueuedClients();
                 eventReplayer.StartReplay();
 
-                // TODO: Disable replay button, minimize window
+                // TODO: Disable buttons, minimize window
                 this.WindowState = (WindowState)System.Windows.Forms.FormWindowState.Minimized;
             }
         }

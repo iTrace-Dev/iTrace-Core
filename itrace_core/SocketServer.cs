@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using iTrace_Core.Properties;
 using System.Windows;
 
+using System.IO;
 
 namespace iTrace_Core
 {
@@ -26,6 +27,7 @@ namespace iTrace_Core
         public const int MAX_PORT_NUM = 65535;
         int port;
 
+        StreamWriter log;
 
         public bool Started { get; private set; }
 
@@ -33,6 +35,8 @@ namespace iTrace_Core
         {
             try
             {
+                log = new StreamWriter("output.txt");
+
                 clients = new List<TcpClient>();
                 clientAcceptQueue = new BlockingCollection<TcpClient>();
 
@@ -116,25 +120,46 @@ namespace iTrace_Core
             }
         }
 
+        public void ReplayAcceptQueuedClients()
+        {
+            int clientQueueCount = clientAcceptQueue.Count;
+            for(int i = clientQueueCount; i != 0; --i)
+            {
+                TcpClient client = clientAcceptQueue.Take();
+                clients.Add(client);
+            }
+        }
+
         public void SendToClients(string message)
         {
+            log.WriteLine(DateTime.Now.ToString("h:mm:ss") + " | " + message);
+
             if (!Started)
                 return;
-
+            //Console.WriteLine(clients.Count);
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
+
+            Console.WriteLine(clients.Count);
 
             for (int i = clients.Count - 1; i >= 0; i--)
             {
+                //Console.WriteLine("Sending to client " + i.ToString());
+                //Console.WriteLine(message);
                 try
                 {
                     clients[i].GetStream().Write(messageInBytes, 0, messageInBytes.Length);
                 }
                 catch (System.IO.IOException e)
                 {   //client was disconnected
+                    Console.WriteLine("Lost client " + i.ToString() + " due to IO");
+                    Console.WriteLine(e.Message);
+                    Console.WriteLine(message);
                     clients.RemoveAt(i);
                 }
                 catch (InvalidOperationException e)
                 {
+                    Console.WriteLine("Lost client " + i.ToString() + " due to InvOp");
+                    Console.WriteLine(e.Message);
                     clients.RemoveAt(i);
                 }
             }

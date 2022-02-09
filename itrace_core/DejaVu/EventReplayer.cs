@@ -20,8 +20,8 @@ namespace iTrace_Core
                 ComputerEvent computerEvent = eventReader.ReadEvent();
                 computerEvent.Replay();
                 computerEvent.Pause();
-                SocketServer.Instance().SendToClients(computerEvent.Serialize());
-                WebSocketServer.Instance().SendToClients(computerEvent.Serialize());
+                //SocketServer.Instance().SendToClients(computerEvent.Serialize());
+                //WebSocketServer.Instance().SendToClients(computerEvent.Serialize());
             }
             ReplayDone();
         }
