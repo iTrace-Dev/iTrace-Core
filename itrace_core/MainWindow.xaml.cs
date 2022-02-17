@@ -315,7 +315,7 @@ namespace iTrace_Core
                 // DejaVu Record
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
-                    Console.WriteLine(SessionManager.GetInstance().DataRootDir);
+                    //Console.WriteLine(SessionManager.GetInstance().DataRootDir);
                     eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
                     windowPositionManager.Start();
                     eventRecorder.ConnectToCore();

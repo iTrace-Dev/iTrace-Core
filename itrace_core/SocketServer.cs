@@ -27,15 +27,12 @@ namespace iTrace_Core
         public const int MAX_PORT_NUM = 65535;
         int port;
 
-        StreamWriter log;
-
         public bool Started { get; private set; }
 
         private SocketServer()
         {
             try
             {
-                log = new StreamWriter("output.txt");
 
                 clients = new List<TcpClient>();
                 clientAcceptQueue = new BlockingCollection<TcpClient>();
@@ -132,19 +129,15 @@ namespace iTrace_Core
 
         public void SendToClients(string message)
         {
-            log.WriteLine(DateTime.Now.ToString("h:mm:ss") + " | " + message);
 
             if (!Started)
                 return;
-            //Console.WriteLine(clients.Count);
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
             Console.WriteLine(clients.Count);
 
             for (int i = clients.Count - 1; i >= 0; i--)
             {
-                //Console.WriteLine("Sending to client " + i.ToString());
-                //Console.WriteLine(message);
                 try
                 {
                     clients[i].GetStream().Write(messageInBytes, 0, messageInBytes.Length);
@@ -153,7 +146,6 @@ namespace iTrace_Core
                 {   //client was disconnected
                     Console.WriteLine("Lost client " + i.ToString() + " due to IO");
                     Console.WriteLine(e.Message);
-                    Console.WriteLine(message);
                     clients.RemoveAt(i);
                 }
                 catch (InvalidOperationException e)
