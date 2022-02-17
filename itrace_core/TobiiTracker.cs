@@ -20,6 +20,12 @@ namespace iTrace_Core
 
         public String GetTrackerName()
         {
+            //Temp fix for returning blank name
+            string deviceName = TrackingDevice.DeviceName;
+
+            if (String.IsNullOrWhiteSpace(deviceName))
+                return "Unidentified Tobii Tracker";
+
             return TrackingDevice.DeviceName;
         }
 
