@@ -64,7 +64,6 @@ namespace iTrace_Core
                     long doubleClickTimeInNS = System.Windows.Forms.SystemInformation.DoubleClickTime * 1000000;
                     if(changeInNS <= doubleClickTimeInNS)
 					{
-                        //Console.WriteLine("DoubleClick!");
                         skipPause = true;
                         //result.PauseStrategy = new FixedLengthPause(0);
                         result.PauseStrategy = new EmptyPause();

@@ -134,8 +134,6 @@ namespace iTrace_Core
                 return;
             byte[] messageInBytes = Encoding.ASCII.GetBytes(message);
 
-            Console.WriteLine(clients.Count);
-
             for (int i = clients.Count - 1; i >= 0; i--)
             {
                 try

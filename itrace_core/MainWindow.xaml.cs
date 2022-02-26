@@ -208,7 +208,6 @@ namespace iTrace_Core
         {
             if (TrackerList.SelectedIndex >= 0)
             {
-                System.Console.WriteLine(TrackerList.SelectedItem.ToString());
                 TrackerManager.SetActiveTracker(TrackerList.SelectedItem.ToString());
                 if (TrackerList.SelectedItem.ToString() == "Mouse")
                 {
@@ -315,7 +314,6 @@ namespace iTrace_Core
                 // DejaVu Record
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
-                    //Console.WriteLine(SessionManager.GetInstance().DataRootDir);
                     eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
                     windowPositionManager.Start();
                     eventRecorder.ConnectToCore();

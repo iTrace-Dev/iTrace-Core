@@ -40,7 +40,7 @@ namespace iTrace_Core
                 {
                     OnGazeDataReceived(this, new GazeDataReceivedEventArgs(gd));
                 }
-                Console.WriteLine(gd.Output());
+                //Console.WriteLine(gd.Output());
                 gd = GazeQueue.Take();
             }
             Console.WriteLine("Queue Thread Done!");
