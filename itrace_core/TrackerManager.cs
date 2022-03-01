@@ -35,6 +35,9 @@ namespace iTrace_Core
 
         private void FindTobiiDevices()
         {
+            //Sometimes the returned device will have a blank string DeviceName. I have no idea what causes this but it appears to be on Tobii's side, possible API problem.
+            //AL
+
             Tobii.Research.EyeTrackerCollection eyeTrackers = Tobii.Research.EyeTrackingOperations.FindAllEyeTrackers();
             foreach (Tobii.Research.IEyeTracker eyeTracker in eyeTrackers)
             {
