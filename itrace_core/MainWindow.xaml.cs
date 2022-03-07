@@ -7,21 +7,21 @@ using iTrace_Core.Properties;
 namespace iTrace_Core
 {
     enum ReplayType
-	{
+    {
         Fixed,
         Proportional,
         Bidirectional
-	}
+    }
     public partial class MainWindow : Window
     {
         TrackerManager TrackerManager;
         Recorder rec;
         ReticleController reticleController;
         SocketServer socketServer = SocketServer.Instance();
-        WebSocketServer webSocketServer= WebSocketServer.Instance();
+        WebSocketServer webSocketServer = WebSocketServer.Instance();
         XMLGazeDataWriter xmlGazeDataWriter;
         SessionSetupWindow sessionInformation;
-        List<Setting> settings;   
+        List<Setting> settings;
 
         class Setting
         {
@@ -29,7 +29,7 @@ namespace iTrace_Core
             {
                 Option = option;
             }
-            
+
             public string Option { get; }
             public string Value { get; set; }
         }
@@ -46,7 +46,6 @@ namespace iTrace_Core
             TrackerManager = new TrackerManager();
 
             // DejaVu
-            //eventRecorder = new EventRecorder(new ComputerEventWriter("out.csv"));
             windowPositionManager = new WindowPositionManager();
 
             // Initialize Session
@@ -55,7 +54,7 @@ namespace iTrace_Core
             // Default the session to the last used output directory and empty everything else
             SessionManager.GetInstance().SetupSession("", "", "", Environment.GetFolderPath(Environment.SpecialFolder.Desktop));
             SessionManager.GetInstance().ClearCalibration();
-            
+
             xmlGazeDataWriter = new XMLGazeDataWriter();
 
             DataOutputDir.Text = SessionManager.GetInstance().DataRootDir;
@@ -68,12 +67,12 @@ namespace iTrace_Core
             windowPositionManager.Stop();
         }
         private void RestoreWindowState(object sender, EventArgs e)
-		{
+        {
             this.Dispatcher.Invoke(() =>
             {
                 this.WindowState = WindowState.Normal;
             });
-		}
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             Console.WriteLine("Window Closing");
@@ -81,27 +80,26 @@ namespace iTrace_Core
             if (eventReplayer != null && eventReplayer.IsReplayInProgress) eventReplayer.StopReplay();
             windowPositionManager.Stop();
         }
-
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
-            //socketServer = new SocketServer();
-            //webSocketServer = new WebSocketServer();
 
             System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
         }
-
         private void InitializeSettingsGrid()
         {
             settings = new List<Setting>()
             {
                 new Setting("socket_port") { Value = Settings.Default.socket_port.ToString() },
                 new Setting("websocket_port") { Value = Settings.Default.websocket_port.ToString() },
+                new Setting("smarteye_ip_address") { Value = Settings.Default.smarteye_ip_address.ToString() },
+                new Setting("smarteye_ip_port") { Value = Settings.Default.smarteye_ip_port.ToString() },
                 new Setting("calibration_monitor") { Value = Settings.Default.calibration_monitor.ToString() }
             };
 
             settingsDataGrid.ItemsSource = settings;
         }
+
 
         private void ApplySettings(object sender, RoutedEventArgs e)
         {
@@ -121,13 +119,13 @@ namespace iTrace_Core
             }
 
             // These are separate in the event that the max values are actually different
-            if (! ((socketPort <= SocketServer.MAX_PORT_NUM) && (socketPort >= SocketServer.MIN_PORT_NUM)) )
+            if (!((socketPort <= SocketServer.MAX_PORT_NUM) && (socketPort >= SocketServer.MIN_PORT_NUM)))
             {
                 MessageBox.Show(Properties.Resources.SocketValuesMustBeInRange + SocketServer.MIN_PORT_NUM + "-" + SocketServer.MAX_PORT_NUM + "!", Properties.Resources.InvalidSocketPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (! ((websocketPort <= WebSocketServer.MAX_WEBSOCKET_PORT_NUM) && (websocketPort >= WebSocketServer.MIN_WEBSOCKET_PORT_NUM)) )
+            if (!((websocketPort <= WebSocketServer.MAX_WEBSOCKET_PORT_NUM) && (websocketPort >= WebSocketServer.MIN_WEBSOCKET_PORT_NUM)))
             {
                 MessageBox.Show(Properties.Resources.WebSocketValuesMustBeInRange + WebSocketServer.MIN_WEBSOCKET_PORT_NUM + "-" + WebSocketServer.MAX_WEBSOCKET_PORT_NUM + "!", Properties.Resources.InvalidWebSocketPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -143,7 +141,6 @@ namespace iTrace_Core
             Settings.Default.calibration_monitor = Convert.ToInt32(settings[2].Value);
             Settings.Default.Save();
         }
-
         // Cleanup for when core closes
         private void ApplicationClosed(object sender, EventArgs e)
         {
@@ -163,12 +160,10 @@ namespace iTrace_Core
             if (xmlGazeDataWriter.Writing)
                 xmlGazeDataWriter.StopWriting();
         }
-
         private void MenuExitClick(object sender, RoutedEventArgs e)
         {
             Close();
         }
-
         //////////////////////////////
         /// Session Setup Tab
         //////////////////////////////
@@ -298,7 +293,7 @@ namespace iTrace_Core
 
                 socketServer.SendSessionData();
                 webSocketServer.SendSessionData();
-                
+
                 ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
                 TrackerManager.StartTracker();
@@ -314,7 +309,7 @@ namespace iTrace_Core
                 // DejaVu Record
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
-                    eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir+"\\out.csv"));
+                    eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir + "\\out.csv"));
                     windowPositionManager.Start();
                     eventRecorder.ConnectToCore();
                     eventRecorder.StartRecording();
@@ -440,3 +435,5 @@ namespace iTrace_Core
         }
     }
 }
+
+
