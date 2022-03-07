@@ -62,17 +62,18 @@ namespace iTrace_Core.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("5800")]
-        public int smarteye_ip_port
-        {
-            get
-            {
+        public int smarteye_ip_port {
+            get {
                 return ((int)(this["smarteye_ip_port"]));
             }
-            set
-            {
+            set {
                 this["smarteye_ip_port"] = value;
             }
-        }        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int calibration_monitor {
             get {
                 return ((int)(this["calibration_monitor"]));

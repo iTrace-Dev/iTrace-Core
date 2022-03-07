@@ -21,6 +21,17 @@ namespace iTrace_Core
             stream = client.GetStream();
         }
 
+        public void WaitForConnection(string address, int port)
+        {
+            TcpListener server = new TcpListener(IPAddress.Parse(address), port);
+            server.Start();
+
+            client = server.AcceptTcpClient();
+            stream = client.GetStream();
+
+            server.Stop();
+        }
+
         //Returns true if succeeded, false if failed.
         public bool PerformHandshake(long timeout)
         {
