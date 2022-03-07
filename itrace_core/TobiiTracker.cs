@@ -12,14 +12,25 @@ namespace iTrace_Core
         private EyeStatusWindow eyeStatusWindow;
         private bool isEyeStatusOpen;
 
+        private string fallbackDeviceName;
+
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
             TrackingDevice = foundDevice;
             isEyeStatusOpen = false;
+
+            fallbackDeviceName = $"{foundDevice.Model} ({foundDevice.SerialNumber})";
         }
 
         public String GetTrackerName()
         {
+            //Temp fix for returning blank name
+            string deviceName = TrackingDevice.DeviceName;
+
+            //Use an alternate useful name
+            if (String.IsNullOrWhiteSpace(deviceName))
+                return fallbackDeviceName;
+
             return TrackingDevice.DeviceName;
         }
 

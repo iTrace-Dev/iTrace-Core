@@ -435,5 +435,3 @@ namespace iTrace_Core
         }
     }
 }
-
-

@@ -94,6 +94,14 @@ namespace iTrace_Core
             xmlTextWriter.WriteAttributeString("user_right_y", gazeData.UserRightY.ToString());
             xmlTextWriter.WriteAttributeString("user_right_z", gazeData.UserRightZ.ToString());
 
+            //TODO: kinda bad, this method should actually call a method in GazeData which can be overidden for extra attributes
+            if (gazeData is SmartEyeGazeData)
+            {
+                SmartEyeGazeData segd = gazeData as SmartEyeGazeData;
+
+                xmlTextWriter.WriteAttributeString("intersection_name", segd.intersectionName);
+            }
+
             xmlTextWriter.WriteEndElement();
         }
 
