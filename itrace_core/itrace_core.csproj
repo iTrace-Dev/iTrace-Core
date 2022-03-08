@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{5783FB9E-5502-48CF-89BF-12B3A4DFFCB2}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <OutputType>Exe</OutputType>
     <RootNamespace>iTrace_Core</RootNamespace>
     <AssemblyName>iTrace-Core</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
@@ -74,6 +74,9 @@
   <PropertyGroup>
     <ApplicationIcon>icon.ico</ApplicationIcon>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
       <HintPath>..\packages\Newtonsoft.Json.13.0.1\lib\net45\Newtonsoft.Json.dll</HintPath>
@@ -86,6 +89,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Numerics" />
+    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
@@ -102,23 +106,38 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="ScreenMapping.cs" />
-    <Compile Include="SEWorldModel.cs" />
-    <Compile Include="SmartEyeRPCUtils.cs" />
+    <Compile Include="DejaVuLib\ComputerEvent.cs" />
+    <Compile Include="DejaVuLib\CoreClient.cs" />
+    <Compile Include="DejaVuLib\EventFactory.cs" />
+    <Compile Include="DejaVuLib\EventFactoryMap.cs" />
+    <Compile Include="DejaVuLib\IPauseStrategy.cs" />
+    <Compile Include="DejaVuLib\KeyboardHook.cs" />
+    <Compile Include="DejaVuLib\MouseHook.cs" />
+    <Compile Include="DejaVuLib\Win32.cs" />
+    <Compile Include="DejaVuLib\WindowPositionManager.cs" />
+    <Compile Include="DejaVu\ComputerEventReader.cs" />
+    <Compile Include="DejaVu\ComputerEventWriter.cs" />
+    <Compile Include="DejaVu\EventRecorder.cs" />
+    <Compile Include="DejaVu\EventReplayer.cs" />
     <Compile Include="EyeStatusWindow.xaml.cs">
       <DependentUpon>EyeStatusWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="SmartEyeTracker.cs" />
     <Compile Include="PreciseSystemTime.cs" />
+    <Compile Include="ScreenMapping.cs" />
     <Compile Include="SessionSetupWindow.xaml.cs">
       <DependentUpon>SessionSetupWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="SEWorldModel.cs" />
+    <Compile Include="SmartEyeRPCUtils.cs" />
+    <Compile Include="SmartEyeTracker.cs" />
+    <Compile Include="SocketServer.cs" />
     <Compile Include="XMLGazeDataWriter.cs" />
     <Page Include="CalibrationWindow.xaml">
       <SubType>Designer</SubType>
@@ -161,7 +180,6 @@
     <Compile Include="SessionManager.cs" />
     <Compile Include="WebSocket.cs" />
     <Compile Include="WebSocketServer.cs" />
-    <Compile Include="SocketServer.cs" />
     <Compile Include="CalibrationResult.cs" />
     <Compile Include="TobiiTracker.cs" />
     <Compile Include="TrackerManager.cs" />
