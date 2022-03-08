@@ -103,13 +103,24 @@ namespace iTrace_Core
             int length = 0;
             String json = null;
 
+            //Netstring must end with comma
+            if (!(netstring[netstring.Length - 1] == ','))
+                throw new ArgumentException("Netstring does not end with a comma");
+
             for (int i = 0; i < netstring.Length; i++)
             {
                 //Find end of length prefix
                 if (!(netstring[i] >= '0' && netstring[i] <= '9'))
                 {
+                    if (i == 0)
+                        throw new ArgumentException("Netstring does not start with a length field");
+
                     //Parse length prefix
                     length = int.Parse(netstring.Substring(0, i));
+
+                    //Make sure seperator present
+                    if (!(netstring[i] == ':'))
+                        throw new ArgumentException("Netstring does not have a seperator between the length field and content");
 
                     //Trim off length prefix
                     json = netstring.Substring(i + 1);

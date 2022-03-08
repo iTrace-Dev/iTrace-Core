@@ -12,7 +12,7 @@ namespace iTrace_Core
 {
     class SmartEyeTracker : ITracker
     {
-        private readonly int SMARTEYE_PORT_LATENT = 5799; //TODO set to default from SE software
+        private readonly int SMARTEYE_PORT_LATENT = 5799;
         private readonly int SMARTEYE_PORT_RPC = 8100; //This is the default from SE software
 
         private System.Net.Sockets.UdpClient RealtimeClient;
@@ -42,8 +42,14 @@ namespace iTrace_Core
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
+                Console.WriteLine("Attempting to connect to Smarteye...");
                 RpcClient = new System.Net.Sockets.TcpClient();
-                RpcClient.Connect(rpcEndpoint);
+                IAsyncResult conn = RpcClient.BeginConnect(rpcEndpoint.Address, rpcEndpoint.Port, null, null);
+
+                bool rpcConnectSuccess = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(1));
+
+                if (!rpcConnectSuccess)
+                    throw new Exception("Rpc connection timed out");
 
                 recvBuffer = new byte[RpcClient.ReceiveBufferSize];
                 System.Net.Sockets.NetworkStream recvStream = RpcClient.GetStream();
@@ -87,28 +93,12 @@ namespace iTrace_Core
             try
             {
                 IPHostEntry hostname = Dns.GetHostEntry(Dns.GetHostName());
-
                 //Search our IP addresses for one on the same network as the smarteye server
-                foreach (IPAddress ip in hostname.AddressList)
-                {
-                    if (ip.AddressFamily == System.Net.Sockets.AddressFamily.InterNetwork)
-                    {
-                        Console.WriteLine(ip.ToString());
-
-                        //Warning: this assumes a class C address for now
-                        byte[] ipAddr = ip.GetAddressBytes();
-                        byte[] serverAddr = rpcAddress.GetAddressBytes();
-
-                        //Check if first three bytes match
-                        //TODO: make this work for other address classes
-                        if (ipAddr[0] == serverAddr[0] && ipAddr[1] == serverAddr[1] && ipAddr[2] == serverAddr[2])
-                        {
-                            Console.WriteLine("Our ip is: " + ip.ToString());
-                            selfAddress = ip;
-                            break;
-                        }
-                    }
-                }
+                
+                //TODO: test if this gives the same selfAddress
+                IPEndPoint iep = (IPEndPoint)RpcClient.Client.LocalEndPoint;
+                Console.WriteLine($"SmartEyeTracker Own (iTrace machine) Address is: {iep.Address}");
+                selfAddress = iep.Address;
 
                 if (selfAddress == null)
                 {
