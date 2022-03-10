@@ -85,7 +85,7 @@
                     </WindowsFormsHost>
                     <RadioButton Name="FixedPauseRadio" Checked="FixedPauseChecked" IsChecked="True" Content="Fixed Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="104" ToolTip="Each event will have the same pause"/>
                     <RadioButton Name="ProportionalPauseRadio" Checked="ProportionalPauseChecked" Content="Proportional Pause" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="119" ToolTip="Each event will pause in real time, but scaled by provided factor"/>
-                    <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134" ToolTip="Each event will pause until the plugin acknowledges the event has processed"/>
+                    <!-- <RadioButton Name="BidirectionalRadio" Checked="BidirectionalPauseChecked" Content="Bidirectional" HorizontalAlignment="Center" Width="120" Height="15" Canvas.Left="144" Canvas.Top="134" ToolTip="Each event will pause until the plugin acknowledges the event has processed"/> -->
                 </Canvas>
             </TabItem>
             <TabItem Header="Settings">
