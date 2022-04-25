@@ -51,6 +51,9 @@ namespace iTrace_Core
         ReplayType replayType = ReplayType.Fixed;
         private WindowPositionManager windowPositionManager;
 
+        //Session setup save warning
+        bool sessionInfoUnsaved = false;
+
         public MainWindow()
         {
             InitializeComponent();
@@ -187,18 +190,21 @@ namespace iTrace_Core
 
             if (result == System.Windows.Forms.DialogResult.OK && !string.IsNullOrWhiteSpace(folderDialogue.SelectedPath))
             {
+                sessionInfoUnsaved = true;
                 DataOutputDir.Text = folderDialogue.SelectedPath;
             }
         }
 
         private void SaveButton_Click(object sender, RoutedEventArgs e)
         {
+            sessionInfoUnsaved = false; //Saved!
             SessionManager.GetInstance().SetupSession(TaskName.Text, ResearcherName.Text, ParticipantID.Text, DataOutputDir.Text);
             //Close();
         }
 
         private void ClearButton_Click(object sender, RoutedEventArgs e)
         {
+            sessionInfoUnsaved = false; //Don't care about not saving a blank entry
             TaskName.Text = "";
             ResearcherName.Text = "";
             ParticipantID.Text = "";
@@ -443,6 +449,21 @@ namespace iTrace_Core
             //OptionHeader.Visibility = Visibility.Hidden;
             ReplayOption.Hide();
 
+        }
+
+        private void SessionSetupChanged(object sender, TextChangedEventArgs e)
+        {
+            sessionInfoUnsaved = true;
+        }
+
+        private void LeavingSessionSetup(object sender, RoutedEventArgs e)
+        {
+            TabItem sendingTab = (TabItem)sender;
+
+            if (sendingTab.Name.Equals("SessionSetup") && sessionInfoUnsaved)
+            {
+                MessageBox.Show("Session setup has not been saved!");
+            }
         }
     }
 }

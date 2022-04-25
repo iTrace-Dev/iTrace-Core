@@ -40,16 +40,16 @@
             </MenuItem>
         </Menu>
         <TabControl VerticalAlignment="Top" Grid.ColumnSpan="2" Grid.Row="2" Height="299" Margin="0,0,0,-270">
-            <TabItem Header="Session Setup">
+            <TabItem Header="Session Setup" Name="SessionSetup" LostFocus="LeavingSessionSetup">
                 <Canvas>
                     <Label Content="Task Name" Canvas.Left="8" Canvas.Top="11" Width="103"/>
-                    <TextBox x:Name="TaskName" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="15" Width="390"/>
+                    <TextBox x:Name="TaskName" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="15" Width="390" TextChanged="SessionSetupChanged"/>
 
                     <Label Content="Researcher Name" Canvas.Left="8" Canvas.Top="37"/>
-                    <TextBox x:Name="ResearcherName" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="40" Width="390"/>
+                    <TextBox x:Name="ResearcherName" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="40" Width="390" TextChanged="SessionSetupChanged"/>
 
                     <Label Content="Participant ID" Canvas.Left="8" Canvas.Top="63" Width="103"/>
-                    <TextBox x:Name="ParticipantID" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="66" Width="390"/>
+                    <TextBox x:Name="ParticipantID" Height="23" Canvas.Left="121" TextWrapping="Wrap" Canvas.Top="66" Width="390" TextChanged="SessionSetupChanged"/>
 
                     <Label Content="Data Directory" Canvas.Left="8" Canvas.Top="89" Height="27" Width="103"/>
                     <TextBox x:Name="DataOutputDir" Height="23" Canvas.Left="121" Canvas.Top="93" Width="355" TextWrapping="NoWrap" IsReadOnly="true"  Foreground="{x:Static SystemColors.GrayTextBrush}" />
