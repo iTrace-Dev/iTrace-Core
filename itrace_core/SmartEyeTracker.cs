@@ -165,6 +165,18 @@ namespace iTrace_Core
             TrackerInit();
         }
 
+        //Disconnect any connections, performed before refreshing the tracker list
+        public void CleanupConnections()
+        {
+            if (LatentClient.Connected)
+                LatentClient.Close();
+
+            if (RpcClient.Connected)
+                RpcClient.Close();
+
+            RealtimeClient.Close();
+        }
+
         //Retrieve the World Model and calibration error vectors. Returns true on success
         private Boolean GetWorldCalibration()
         {

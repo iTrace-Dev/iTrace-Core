@@ -28,6 +28,14 @@ namespace iTrace_Core
 
         public void FindTrackers()
         {
+            //Ensure all trackers are cleaned up (Namely SmartEye must be fully disconnected)
+            foreach (ITracker tracker in EyeTrackers)
+            {
+                //Consider making this common to ITracker
+                if (tracker is SmartEyeTracker)
+                    ((SmartEyeTracker)tracker).CleanupConnections();
+            }
+
             EyeTrackers.Clear();
             EyeTrackers.Add(new MouseTracker());
             FindTobiiDevices();
