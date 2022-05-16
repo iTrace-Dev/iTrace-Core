@@ -32,6 +32,13 @@ namespace iTrace_Core
             try
             {
                 Client = new System.Net.Sockets.TcpClient();
+                IAsyncResult conn = Client.BeginConnect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT, null, null);
+
+                bool asyncConnectSuccess = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5));
+
+                if (!asyncConnectSuccess)
+                    throw new Exception("Gazepoint timed out while connecting (Most likely there is no Gazepoint device available)");
+
                 Client.Connect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT);
                 Reader = new System.IO.StreamReader(Client.GetStream());
                 Writer = new System.IO.StreamWriter(Client.GetStream());
