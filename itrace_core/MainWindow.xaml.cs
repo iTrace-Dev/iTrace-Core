@@ -291,6 +291,16 @@ namespace iTrace_Core
             }
             else
             {
+                bool trackerStarted = TrackerManager.StartTracker();
+
+                if (!trackerStarted)
+                {
+                    //Fail to start
+                    Console.WriteLine("Failed to start tracker: " + TrackerManager.GetActiveTracker().GetTrackerName());
+                    return;
+                }
+
+                //Maybe figure out something less janky for this AL
                 string trackerID = TrackerManager.GetActiveTracker().GetTrackerName() + TrackerManager.GetActiveTracker().GetTrackerSerialNumber();
                 if (trackerID != SessionManager.GetInstance().CalibratedTrackerID)
                     SessionManager.GetInstance().ClearCalibration();
@@ -313,7 +323,6 @@ namespace iTrace_Core
 
                 ActivateTrackerButton.Content = Properties.Resources.StopTracking;
 
-                TrackerManager.StartTracker();
                 ActivateCalibrationButton.IsEnabled = false;
                 ShowEyeStatusButton.IsEnabled = false;
                 TrackerList.IsEnabled = false;

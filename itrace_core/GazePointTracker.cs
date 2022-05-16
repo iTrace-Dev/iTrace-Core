@@ -82,7 +82,7 @@ namespace iTrace_Core
             return TrackerSerialNumber;
         }
 
-        public void StartTracker()
+        public bool StartTracker()
         {
             new System.Threading.Thread(() =>
             {
@@ -92,6 +92,8 @@ namespace iTrace_Core
             Console.WriteLine("START GP TRACKING");
             Writer.Write("<SET ID=\"ENABLE_SEND_DATA\" STATE=\"1\" />\r\n");
             Writer.Flush();
+
+            return true;
         }
 
         public void StopTracker()

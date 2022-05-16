@@ -50,9 +50,10 @@ namespace iTrace_Core
             return TrackingDevice.SerialNumber;
         }
 
-        public void StartTracker()
+        public bool StartTracker()
         {
             TrackingDevice.GazeDataReceived += ReceiveRawGaze;
+            return true;
         }
 
         public void StopTracker()

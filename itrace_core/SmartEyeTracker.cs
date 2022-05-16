@@ -16,7 +16,6 @@ using System.Text;
 using iTrace_Core.Properties;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Numerics;
 using System.Windows.Forms;
 
 namespace iTrace_Core
@@ -88,8 +87,6 @@ namespace iTrace_Core
                 double accLeft = accuracy.Value<JToken>(0).Value<double>();
                 double accRight = accuracy.Value<JToken>(1).Value<double>();
 
-                //Get world and calibration points
-                GetWorldCalibration();
             }
             catch (Exception e)
             {
@@ -180,39 +177,56 @@ namespace iTrace_Core
         //Retrieve the World Model and calibration error vectors. Returns true on success
         private Boolean GetWorldCalibration()
         {
-            //Retrieve WorldModel
-
-            SendRpc(new SERPC("getWorldModel").GetNetstring());
-            JToken result = ReceiveRpcResponse().GetValue("result");
-
-            //Escaped String representing the world model
-            String WorldModelString = result.Value<String>("worldModel");
-
             List<SETarget> targets = new List<SETarget>();
+            String WorldModelString;
 
-            //Retrieve calibration targets
-            int targetNumber = 0;
-            while (true)
+            try
             {
-                SendRpc(new SERPCGetTargetStats(targetNumber++).GetNetstring());
-                SETarget target = ReceiveRpcResponse().GetValue("result").ToObject<SETarget>();
+                //Retrieve WorldModel
+                SendRpc(new SERPC("getWorldModel").GetNetstring());
+                JToken result = ReceiveRpcResponse().GetValue("result");
 
-                if (!target.TargetValid())
-                    break;
+                //Escaped String representing the world model
+                WorldModelString = result.Value<String>("worldModel");
 
-                targets.Add(target);
-            }
+                //Retrieve calibration targets
+                int targetNumber = 0;
+                while (true)
+                {
+                    //Retrieve a target
+                    SendRpc(new SERPCGetTargetStats(targetNumber++).GetNetstring());
+                    SETarget target = ReceiveRpcResponse().GetValue("result").ToObject<SETarget>();
 
-            if (targets.Count == 0)
+                    //Ran out of targets
+                    if (!target.TargetValid())
+                        break;
+
+                    targets.Add(target);
+                }
+
+                if (targets.Count == 0)
+                {
+                    //No targets, most likely user has not done a gaze calibration in SmartEye
+                    System.Windows.Forms.MessageBox.Show("SmartEye returned no calibration points. Perform a calibration from the SmartEye program before proceeding. \n\nMake sure that the correct World Model is selected before calibrating, or you will have to do it again!");
+                    return false;
+                }
+
+            } catch (Exception e)
             {
-                //No targets, most likely user has not done a gaze calibration in SmartEye
-                System.Windows.Forms.MessageBox.Show("SmartEye is connected, but reported no calibration point data. Perform a gaze calibration from the SmartEye software.");
-                return false;
+                throw new Exception("Failed to retrieve SmartEye WorldModel and calibration points");   
             }
 
             //Store world model string and calibration data
+            //TODO exception handling for invalid worldModelString
             SEWorldModel worldModel = new SEWorldModel(WorldModelString);
+
             seCalibrationResult = new SmartEyeCalibrationResult(worldModel, targets);
+
+            if (!seCalibrationResult.IsValid())
+            {
+                System.Windows.Forms.MessageBox.Show("The SmartEye World Model does not match the displays present on this computer. Make sure the correct world model is selected and perform another SmartEye calibration.");
+            }
+
             SessionManager.GetInstance().SetCalibration(seCalibrationResult, this);
 
             return true;
@@ -227,6 +241,7 @@ namespace iTrace_Core
             return JsonConvert.DeserializeObject<dynamic>(response);
         }
 
+        //An Rpc connection and UDP (Realtime) socket are required to track
         public bool TrackerFound()
         {
             return (RealtimeClient != null) && (RpcClient != null);
@@ -250,28 +265,48 @@ namespace iTrace_Core
             RpcClient.GetStream().Write(buf, 0, buf.Length);
         }
 
-        public void StartTracker()
+        public bool StartTracker()
         {
-            SendRpc(new SERPC("startTracking").GetNetstring());
+            //Before tracking starts the worldmodel must be valid and contain a set of calibration points
+            //Get world and calibration points
+            if (!GetWorldCalibration())
+                    return false;
 
+            //Tell SmartEye to start tracking (same as clicking track eye button)
+            SendRpc(new SERPC("startTracking").GetNetstring());
+            ReceiveRpcResponse(); // Dummy receive to eat any error
+
+            //Used to stop listening thread loops
+            Listen = true;
+
+            //Realtime (UDP) thread
             new System.Threading.Thread(() =>
             {
                 System.Threading.Thread.CurrentThread.IsBackground = true;
                 ListenForData();
             }).Start();
 
+            //Latent (TCP) thread
             new System.Threading.Thread(() =>
             {
                 System.Threading.Thread.CurrentThread.IsBackground = true;
                 ListenForLatent();
             }).Start();
 
+            //Ok
             Console.WriteLine("START SE TRACKING");
+            return true;
         }
 
+        //Important to make sure the tracker is actually running before sending this, otherwise an error will be returned
         public void StopTracker()
         {
-            SendRpc(new SERPC("stopTracking").GetNetstring());
+            //Send stop command to SmartEye
+            if (Listen)
+            {
+                SendRpc(new SERPC("stopTracking").GetNetstring());
+                ReceiveRpcResponse(); // Dummy receive to eat any error
+            }
 
             Listen = false;
         }
@@ -301,8 +336,6 @@ namespace iTrace_Core
 
         private void ListenForData()
         {
-            Listen = true;
-
             while (Listen)
             {
                 //Receive UDP packet

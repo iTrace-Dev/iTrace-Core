@@ -104,6 +104,7 @@ namespace iTrace_Core
         {
             TcpClient client;
 
+            //For some reason this now doesn't stop when you close the main window, I think it did before. AL
             while (true)
             {
                 client = server.AcceptTcpClient();

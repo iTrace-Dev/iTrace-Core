@@ -19,11 +19,16 @@ namespace iTrace_Core
     abstract class CalibrationResult
     {
         public abstract void WriteToXMLWriter(XmlTextWriter xmlTextWriter);
+        public abstract bool IsValid();
     }
 
     class EmptyCalibrationResult : CalibrationResult
     {
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter) { }
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     class TobiiCalibrationResult : CalibrationResult
@@ -39,6 +44,11 @@ namespace iTrace_Core
             this.calibrationScreenHeight = calibrationScreenHeight;
 
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
+        }
+
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
         }
 
         public List<Point> GetLeftEyePoints()
@@ -133,6 +143,11 @@ namespace iTrace_Core
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }
 
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             XmlNode recNode = XmlDoc.FirstChild;
@@ -183,6 +198,11 @@ namespace iTrace_Core
             this.screenMapping = new ScreenMapping(worldModel.GetScreens(), Screen.AllScreens);
 
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
+        }
+
+        public override bool IsValid() //TODO
+        {
+            return screenMapping.IsValid() && calibrationTargets.Count > 0;
         }
 
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)

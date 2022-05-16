@@ -42,9 +42,10 @@ namespace iTrace_Core
             return "";
         }
 
-        public void StartTracker()
+        public bool StartTracker()
         {
             MouseLocationTick.Start();
+            return true;
         }
 
         public void StopTracker()

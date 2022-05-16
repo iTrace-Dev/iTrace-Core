@@ -44,11 +44,13 @@ namespace iTrace_Core
                     mapping = rule.GetMapping();
                     break;
                 }
-
-            if (mapping.Count == 0)
-                throw new ArgumentException("No reasonable mapping between world model screens and device screens!");
         }
 
+        //Check that world model maps any screens
+        public bool IsValid()
+        {
+            return mapping.Count > 0;
+        }
 
         /// <summary>
         /// Get the screen whose name matches the name of the provided seScreenName, presumably obtained from an intersection

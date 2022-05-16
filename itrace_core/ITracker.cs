@@ -17,7 +17,7 @@ namespace iTrace_Core
     {
         void EnterCalibration();
         void LeaveCalibration();
-        void StartTracker();
+        bool StartTracker();
         void StopTracker();
         String GetTrackerName();
         String GetTrackerSerialNumber();
