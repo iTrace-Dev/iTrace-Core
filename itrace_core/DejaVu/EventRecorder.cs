@@ -23,9 +23,10 @@ namespace iTrace_Core
 
         KeyboardHook keyPressListener = new KeyboardHook();
         MouseHook mouseListener = new MouseHook();
-        CoreClient gazeListener = new CoreClient();
+        //CoreClient gazeListener = new CoreClient();
         ComputerEventWriter eventWriter;
 
+        //constructor
         public EventRecorder(ComputerEventWriter writer)
         {
             eventWriter = writer;
@@ -35,8 +36,20 @@ namespace iTrace_Core
 
             keyPressListener.OnKeyboardEvent += ComputerEventListener;
             keyPressListener.HookKeyboard();
-            
-            gazeListener.OnCoreMessage += ComputerEventListener;
+
+            GazeHandler.Instance.OnGazeDataReceived += WriteCoreMessage;
+            //gazeListener.OnCoreMessage += ComputerEventListener;
+        }
+
+        private void WriteCoreMessage(object sender, GazeDataReceivedEventArgs e)
+        {
+            CoreMessage msg = new CoreMessage();
+
+            msg.DeserializeFrom(e.ReceivedGazeData.Serialize());
+            if (IsRecordInProgress)
+                eventWriter.Write(msg);
+
+
         }
 
         private void ComputerEventListener(object sender, ComputerEvent e)
@@ -55,10 +68,12 @@ namespace iTrace_Core
             IsRecordInProgress = false;
         }
 
+        /*
         public void ConnectToCore()
         {
             gazeListener.Connect();
         }
+        */
 
         public void Dispose()
         {

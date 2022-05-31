@@ -34,6 +34,7 @@ namespace iTrace_Core
         SessionSetupWindow sessionInformation;
         List<Setting> settings;
 
+
         class Setting
         {
             public Setting(string option)
@@ -46,6 +47,7 @@ namespace iTrace_Core
         }
 
         // DejaVu
+        //bool dejaVu = false; // is dejaVu enabled?
         EventRecorder eventRecorder;
         EventReplayer eventReplayer;
         ReplayType replayType = ReplayType.Fixed;
@@ -284,9 +286,11 @@ namespace iTrace_Core
 
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
+                    
                     windowPositionManager.Stop();
                     eventRecorder.StopRecording();
                     eventRecorder.Dispose();
+                    
                 }
             }
             else
@@ -335,9 +339,11 @@ namespace iTrace_Core
                 // DejaVu Record
                 if (CheckDejavuRecord.IsChecked.HasValue && CheckDejavuRecord.IsChecked.Value)
                 {
+                    
                     eventRecorder = new EventRecorder(new ComputerEventWriter(SessionManager.GetInstance().DataRootDir + "\\out.csv"));
                     windowPositionManager.Start();
-                    eventRecorder.ConnectToCore();
+                    //eventRecorder.ConnectToCore();
+                    
                     eventRecorder.StartRecording();
                 }
             }
@@ -471,7 +477,7 @@ namespace iTrace_Core
 
             if (sendingTab.Name.Equals("SessionSetup") && sessionInfoUnsaved)
             {
-                MessageBox.Show("Session setup has not been saved!");
+                //MessageBox.Show("Session setup has not been saved!");
             }
         }
     }

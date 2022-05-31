@@ -18,12 +18,15 @@ namespace iTrace_Core
         string filename;
         StreamWriter streamWriter;
 
+        //constructor
         public ComputerEventWriter(string filename)
         {
             this.filename = filename;
             streamWriter = new StreamWriter(filename);
         }
+
         private object locker = new object();
+
         public void Write(ComputerEvent computerEvent)
         {
             lock(locker)

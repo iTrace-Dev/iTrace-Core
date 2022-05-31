@@ -109,13 +109,14 @@ namespace iTrace_Core
 
         public Boolean StartTracker()
         {
-            
+
             GazeHandler.Instance.StartHandler();
             if (ActiveTracker.StartTracker())
                 Tracking = true;
 
             return Tracking;
         }
+
 
         public Boolean StopTracker()
         {
