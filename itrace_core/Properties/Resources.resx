@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <root>
   <!-- 
     Microsoft ResX Schema 
@@ -117,11 +117,17 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="AnotherServiceIsRunningOnPort" xml:space="preserve">
+    <value>Another service is running on port </value>
+  </data>
   <data name="Calibrate" xml:space="preserve">
     <value>Calibrate</value>
   </data>
   <data name="ChangeRequiresRestart" xml:space="preserve">
     <value>Changes require a program restart to be applied</value>
+  </data>
+  <data name="DuplicatePortValues" xml:space="preserve">
+    <value>Duplicate Port Values</value>
   </data>
   <data name="EnableScreenRecording" xml:space="preserve">
     <value>Enable Screen Recording</value>
@@ -129,11 +135,26 @@
   <data name="HideReticle" xml:space="preserve">
     <value>Hide Reticle</value>
   </data>
-  <data name="PortValuesNumericWarningContent" xml:space="preserve">
-    <value>Port values must be numeric!</value>
-  </data>
-  <data name="PortValuesNumericWarningTitle" xml:space="preserve">
+  <data name="InvalidPortValue" xml:space="preserve">
     <value>Invalid Port Value</value>
+  </data>
+  <data name="InvalidSocketPortValue" xml:space="preserve">
+    <value>Invalid Socket Port Value</value>
+  </data>
+  <data name="InvalidWebSocketPortValue" xml:space="preserve">
+    <value>Invalid Websocket Port Value"</value>
+  </data>
+  <data name="MonitorIndexIncorrectValue" xml:space="preserve">
+    <value>Invalid Monitor</value>
+  </data>
+  <data name="MonitorIndexOutOfRange" xml:space="preserve">
+    <value>Selected monitor must exist</value>
+  </data>
+  <data name="PortValuesCannotBeSameValue" xml:space="preserve">
+    <value>Port values cannot be the same value!</value>
+  </data>
+  <data name="PortValuesMustBeNumeric" xml:space="preserve">
+    <value>Port values must be numeric!</value>
   </data>
   <data name="Refresh" xml:space="preserve">
     <value>Refresh</value>
@@ -150,16 +171,31 @@
   <data name="SocketServerCannotStart" xml:space="preserve">
     <value>Socket Server Cannot Start</value>
   </data>
+  <data name="SocketValuesMustBeInRange" xml:space="preserve">
+    <value>Socket port values must be in the range: </value>
+  </data>
+  <data name="StartReplay" xml:space="preserve">
+    <value>Replay</value>
+  </data>
   <data name="StartTracking" xml:space="preserve">
     <value>Start Tracking</value>
   </data>
+  <data name="StopServiceOrChangePortThenRestart" xml:space="preserve">
+    <value>Stop that service or change the port for iTrace Core in settings and restart the Core.</value>
+  </data>
   <data name="StopTracking" xml:space="preserve">
     <value>Stop Tracking</value>
+  </data>
+  <data name="ToggleDejaVu" xml:space="preserve">
+    <value>Record with DejaVu</value>
   </data>
   <data name="Trackers" xml:space="preserve">
     <value>Trackers:</value>
   </data>
   <data name="WebSocketServerCannotStart" xml:space="preserve">
     <value>Websocket Server Cannot Start</value>
+  </data>
+  <data name="WebSocketValuesMustBeInRange" xml:space="preserve">
+    <value>Websocket port values must be in the range: </value>
   </data>
 </root>

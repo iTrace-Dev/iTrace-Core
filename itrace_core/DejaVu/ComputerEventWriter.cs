@@ -1,5 +1,5 @@
 ﻿/********************************************************************************************************************************************************
-* @file App.xaml.cs
+* @file ComputerEventWriter.cs
 *
 * @Copyright (C) 2022 i-trace.org
 *
@@ -9,25 +9,33 @@
 * You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
 ********************************************************************************************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
+using System.IO;
 
 namespace iTrace_Core
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public class ComputerEventWriter
     {
-        App()
+        string filename;
+        StreamWriter streamWriter;
+
+        public ComputerEventWriter(string filename)
         {
-            //Manually change Localization culture as follows:
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ru-RU");
+            this.filename = filename;
+            streamWriter = new StreamWriter(filename);
+        }
+        private object locker = new object();
+        public void Write(ComputerEvent computerEvent)
+        {
+            lock(locker)
+            {
+                streamWriter.Write(computerEvent.Serialize());
+            }
+        }
+
+        public void Close()
+        {
+            streamWriter.Flush();
+            streamWriter.Close();
         }
     }
 }

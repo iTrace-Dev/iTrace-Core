@@ -1,5 +1,5 @@
 ﻿/********************************************************************************************************************************************************
-* @file App.xaml.cs
+* @file EventFactory.cs
 *
 * @Copyright (C) 2022 i-trace.org
 *
@@ -9,25 +9,31 @@
 * You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
 ********************************************************************************************************************************************************/
 
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
-using System.Windows;
-
 namespace iTrace_Core
 {
-    /// <summary>
-    /// Interaction logic for App.xaml
-    /// </summary>
-    public partial class App : Application
+    public interface IEventFactory
     {
-        App()
+        ComputerEvent Create(string serialized);
+    }
+
+    public class EventFactory<T> : IEventFactory 
+        where T: ComputerEvent, new()
+    {
+        protected IPauseStrategy strategy;
+
+        public EventFactory(IPauseStrategy strategy)
         {
-            //Manually change Localization culture as follows:
-            //System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("ru-RU");
+            this.strategy = strategy;
+        }
+
+        public ComputerEvent Create(string serialized)
+        {
+            ComputerEvent result = new T();
+
+            result.DeserializeFrom(serialized);
+            result.PauseStrategy = strategy;
+
+            return result;
         }
     }
 }

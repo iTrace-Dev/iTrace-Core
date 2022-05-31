@@ -1,4 +1,15 @@
-﻿using System;
+﻿/********************************************************************************************************************************************************
+* @file TobiiTracker.cs
+*
+* @Copyright (C) 2022 i-trace.org
+*
+* This file is part of iTrace Infrastructure http://www.i-trace.org/.
+* iTrace Infrastructure is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+* iTrace Infrastructure is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
+********************************************************************************************************************************************************/
+
+using System;
 using System.ComponentModel;
 
 namespace iTrace_Core
@@ -12,14 +23,25 @@ namespace iTrace_Core
         private EyeStatusWindow eyeStatusWindow;
         private bool isEyeStatusOpen;
 
+        private string fallbackDeviceName;
+
         public TobiiTracker(Tobii.Research.IEyeTracker foundDevice)
         {
             TrackingDevice = foundDevice;
             isEyeStatusOpen = false;
+
+            fallbackDeviceName = $"{foundDevice.Model} ({foundDevice.SerialNumber})";
         }
 
         public String GetTrackerName()
         {
+            //Temp fix for returning blank name
+            string deviceName = TrackingDevice.DeviceName;
+
+            //Use an alternate useful name
+            if (String.IsNullOrWhiteSpace(deviceName))
+                return fallbackDeviceName;
+
             return TrackingDevice.DeviceName;
         }
 
@@ -28,9 +50,10 @@ namespace iTrace_Core
             return TrackingDevice.SerialNumber;
         }
 
-        public void StartTracker()
+        public bool StartTracker()
         {
             TrackingDevice.GazeDataReceived += ReceiveRawGaze;
+            return true;
         }
 
         public void StopTracker()

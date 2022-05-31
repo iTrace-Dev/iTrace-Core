@@ -1,4 +1,15 @@
-﻿using iTrace_Core.Properties;
+﻿/********************************************************************************************************************************************************
+* @file WebSocketServer.cs
+*
+* @Copyright (C) 2022 i-trace.org
+*
+* This file is part of iTrace Infrastructure http://www.i-trace.org/.
+* iTrace Infrastructure is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+* iTrace Infrastructure is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
+********************************************************************************************************************************************************/
+
+using iTrace_Core.Properties;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Net;
@@ -20,7 +31,7 @@ namespace iTrace_Core
         public const int MAX_WEBSOCKET_PORT_NUM = 65535;
         int port;
         
-        public WebSocketServer()
+        private WebSocketServer()
         {
             try
             {
@@ -44,12 +55,19 @@ namespace iTrace_Core
             {
                 if (e.SocketErrorCode.Equals(SocketError.AddressAlreadyInUse))
                 {
-                    string content = "Another service is running on port " + port +
-                                     ".\nStop that service or change the port for iTrace Core in settings and restart the Core.";
-                    string title = "Websocket Server Cannot Start";
+                    string content = Resources.AnotherServiceIsRunningOnPort + port + '\n' + Resources.StopServiceOrChangePortThenRestart;
+                    string title = Resources.WebSocketServerCannotStart;
                     MessageBox.Show(content, title, MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
+        }
+
+        static WebSocketServer instance;
+        public static WebSocketServer Instance()
+        {
+            if (instance == null)
+                instance = new WebSocketServer();
+            return instance;
         }
 
         void AcceptIncomingWebsocketConnections()
@@ -73,7 +91,7 @@ namespace iTrace_Core
             }
         }
 
-        void SendToClients(string message)
+        public void SendToClients(string message)
         {
             for (int i = clients.Count - 1; i >= 0; --i)
             {

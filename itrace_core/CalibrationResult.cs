@@ -1,5 +1,17 @@
-﻿using System.Collections.Generic;
+﻿/********************************************************************************************************************************************************
+* @file CalibrationResult.cs
+*
+* @Copyright (C) 2022 i-trace.org
+*
+* This file is part of iTrace Infrastructure http://www.i-trace.org/.
+* iTrace Infrastructure is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+* iTrace Infrastructure is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
+********************************************************************************************************************************************************/
+
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Forms;
 using System.Xml;
 
 namespace iTrace_Core
@@ -7,11 +19,16 @@ namespace iTrace_Core
     abstract class CalibrationResult
     {
         public abstract void WriteToXMLWriter(XmlTextWriter xmlTextWriter);
+        public abstract bool IsValid();
     }
 
     class EmptyCalibrationResult : CalibrationResult
     {
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter) { }
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
+        }
     }
 
     class TobiiCalibrationResult : CalibrationResult
@@ -27,6 +44,11 @@ namespace iTrace_Core
             this.calibrationScreenHeight = calibrationScreenHeight;
 
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
+        }
+
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
         }
 
         public List<Point> GetLeftEyePoints()
@@ -121,6 +143,11 @@ namespace iTrace_Core
             SessionManager.GetInstance().GenerateCalibrationTimeStamp();
         }
 
+        public override bool IsValid() //TODO
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
         {
             XmlNode recNode = XmlDoc.FirstChild;
@@ -148,6 +175,86 @@ namespace iTrace_Core
                 xmlTextWriter.WriteEndElement();
 
                 // Close Calibration Point
+                xmlTextWriter.WriteEndElement();
+            }
+
+            xmlTextWriter.WriteEndElement();
+        }
+    }
+
+    class SmartEyeCalibrationResult : CalibrationResult
+    {
+        //These are the calibration vectors produced by the SE gaze calibration dialogue
+        private List<SETarget> calibrationTargets;
+        private SEWorldModel worldModel;
+        public ScreenMapping screenMapping { get; private set; }
+
+        public SmartEyeCalibrationResult(SEWorldModel worldModel, List<SETarget> calibrationTargets)
+        {
+            //TODO: world model sanity checks
+
+            this.worldModel = worldModel;
+            this.calibrationTargets = calibrationTargets;
+            this.screenMapping = new ScreenMapping(worldModel.GetScreens(), Screen.AllScreens);
+
+            SessionManager.GetInstance().GenerateCalibrationTimeStamp();
+        }
+
+        public override bool IsValid() //TODO
+        {
+            return screenMapping.IsValid() && calibrationTargets.Count > 0;
+        }
+
+        public override void WriteToXMLWriter(XmlTextWriter xmlTextWriter)
+        {
+            worldModel.WriteToXMLWriter(xmlTextWriter);
+
+            xmlTextWriter.WriteStartElement("calibration");
+            xmlTextWriter.WriteAttributeString("timestamp", SessionManager.GetInstance().CurrentCalibrationTimeStamp);
+
+            foreach (SETarget target in calibrationTargets)
+            {
+                xmlTextWriter.WriteStartElement("calibration_point");
+                xmlTextWriter.WriteAttributeString("targetId", target.targetId.ToString());
+
+                //Write X and Y of calibration point as percent of screen size. This may require extracting from the world model string!
+                //xmlTextWriter.WriteAttributeString("x", "0.5");
+                //xmlTextWriter.WriteAttributeString("y", "0.5");
+
+                int max = target.errorsxl.Length >= target.errorsxr.Length ? target.errorsxl.Length : target.errorsxr.Length;
+
+                for (int i = 0; i < max; i++)
+                {
+                    xmlTextWriter.WriteStartElement("sample");
+
+                    if (i < target.errorsxl.Length)
+                    {
+                        xmlTextWriter.WriteAttributeString("left_x", target.errorsxl[i].ToString());
+                        xmlTextWriter.WriteAttributeString("left_y", target.errorsyl[i].ToString());
+                        xmlTextWriter.WriteAttributeString("left_validity", "1");
+                    } else
+                    {
+                        xmlTextWriter.WriteAttributeString("left_x", "0.0");
+                        xmlTextWriter.WriteAttributeString("left_y", "0.0");
+                        xmlTextWriter.WriteAttributeString("left_validity", "0");
+                    }
+
+                    if (i < target.errorsxr.Length)
+                    {
+                        xmlTextWriter.WriteAttributeString("right_x", target.errorsxr[i].ToString());
+                        xmlTextWriter.WriteAttributeString("right_y", target.errorsyr[i].ToString());
+                        xmlTextWriter.WriteAttributeString("right_validity", "1");
+                    }
+                    else
+                    {
+                        xmlTextWriter.WriteAttributeString("right_x", "0.0");
+                        xmlTextWriter.WriteAttributeString("right_y", "0.0");
+                        xmlTextWriter.WriteAttributeString("right_validity", "0");
+                    }
+
+                    xmlTextWriter.WriteEndElement();
+                }
+               
                 xmlTextWriter.WriteEndElement();
             }
 

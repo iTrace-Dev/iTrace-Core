@@ -1,4 +1,15 @@
-﻿using System;
+﻿/********************************************************************************************************************************************************
+* @file ScreenRecorder.cs
+*
+* @Copyright (C) 2022 i-trace.org
+*
+* This file is part of iTrace Infrastructure http://www.i-trace.org/.
+* iTrace Infrastructure is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
+* iTrace Infrastructure is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+* You should have received a copy of the GNU General Public License along with iTrace Infrastructure. If not, see <https://www.gnu.org/licenses/>.
+********************************************************************************************************************************************************/
+
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
@@ -8,10 +19,54 @@ using SharpAvi;
 using SharpAvi.Codecs;
 using SharpAvi.Output;
 using System.Windows.Forms;
-
+//using static iTrace_Core.RecorderParams;
 
 namespace iTrace_Core
 {
+	// Used to retrieve Mouse Info
+	public static class MouseCursor
+	{
+		public const Int32 CURSOR_SHOWING = 0x00000001;
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct ICONINFO
+		{
+			public bool fIcon;
+			public Int32 xHotspot;
+			public Int32 yHotspot;
+			public IntPtr hbmMask;
+			public IntPtr hbmColor;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct POINT
+		{
+			public Int32 x;
+			public Int32 y;
+		}
+
+		[StructLayout(LayoutKind.Sequential)]
+		public struct CURSORINFO
+		{
+			public Int32 cbSize;
+			public Int32 flags;
+			public IntPtr hCursor;
+			public POINT ptScreenPos;
+		}
+
+		[DllImport("user32.dll")]
+		public static extern bool GetCursorInfo(out CURSORINFO pci);
+
+		[DllImport("user32.dll")]
+		public static extern IntPtr CopyIcon(IntPtr hIcon);
+
+		[DllImport("user32.dll")]
+		public static extern bool DrawIcon(IntPtr hdc, int x, int y, IntPtr hIcon);
+
+		[DllImport("user32.dll")]
+		public static extern bool GetIconInfo(IntPtr hIcon, out ICONINFO piconinfo);
+	}
+
 	// Used to Configure the Recorder
 	public class RecorderParams
 	{
@@ -143,9 +198,27 @@ namespace iTrace_Core
 				using (var g = Graphics.FromImage(BMP))
 				{
 					g.CopyFromScreen(Point.Empty, Point.Empty, new Size(Params.Width, Params.Height), CopyPixelOperation.SourceCopy);
+					MouseCursor.CURSORINFO cursorInfo;
+					cursorInfo.cbSize = Marshal.SizeOf(typeof(MouseCursor.CURSORINFO));
+					if(MouseCursor.GetCursorInfo(out cursorInfo))
+					{
+						if(cursorInfo.flags == MouseCursor.CURSOR_SHOWING)
+						{
+							var iconPointer = MouseCursor.CopyIcon(cursorInfo.hCursor);
+							MouseCursor.ICONINFO iconInfo;
+							int iconX, iconY;
 
+							if(MouseCursor.GetIconInfo(iconPointer, out iconInfo))
+							{
+								iconX = cursorInfo.ptScreenPos.x - ((int)iconInfo.xHotspot);
+								iconY = cursorInfo.ptScreenPos.y - ((int)iconInfo.yHotspot);
+
+								MouseCursor.DrawIcon(g.GetHdc(), iconX, iconY, cursorInfo.hCursor);
+								g.ReleaseHdc();
+							}
+						}
+					}
 					g.Flush();
-
 					var bits = BMP.LockBits(new Rectangle(0, 0, Params.Width, Params.Height), ImageLockMode.ReadOnly, PixelFormat.Format32bppRgb);
 					Marshal.Copy(bits.Scan0, Buffer, 0, Buffer.Length);
 					BMP.UnlockBits(bits);
