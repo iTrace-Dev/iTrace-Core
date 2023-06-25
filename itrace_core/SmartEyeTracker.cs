@@ -55,7 +55,7 @@ namespace iTrace_Core
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
-                Console.WriteLine("Attempting to connect to Smarteye...");
+                Console.WriteLine("Attempting to connect to SmartEye...");
                 RpcClient = new System.Net.Sockets.TcpClient();
                 IAsyncResult conn = RpcClient.BeginConnect(rpcEndpoint.Address, rpcEndpoint.Port, null, null);
 

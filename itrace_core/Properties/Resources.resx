@@ -144,8 +144,8 @@
   <data name="InvalidPortValue" xml:space="preserve">
     <value>Invalid Port Value</value>
   </data>
-  <data name="InvalidSmarteyePortValue" xml:space="preserve">
-    <value>Invalid Smarteye Port Value</value>
+  <data name="InvalidSmartEyePortValue" xml:space="preserve">
+    <value>Invalid SmartEye Port Value</value>
   </data>
   <data name="InvalidSocketPortValue" xml:space="preserve">
     <value>Invalid Socket Port Value</value>
@@ -177,8 +177,8 @@
   <data name="ShowReticle" xml:space="preserve">
     <value>Show Reticle</value>
   </data>
-  <data name="SmarteyePortMustBeInRange" xml:space="preserve">
-    <value>Smarteye port values must be in the range: </value>
+  <data name="SmartEyePortMustBeInRange" xml:space="preserve">
+    <value>SmartEye port values must be in the range: </value>
   </data>
   <data name="SocketServerCannotStart" xml:space="preserve">
     <value>Socket Server Cannot Start</value>
