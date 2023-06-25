@@ -88,6 +88,15 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Could not parse {0} as an IP Address.
+        /// </summary>
+        public static string CouldNotParseIPAddress {
+            get {
+                return ResourceManager.GetString("CouldNotParseIPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Duplicate Port Values.
         /// </summary>
         public static string DuplicatePortValues {
@@ -115,11 +124,29 @@ namespace iTrace_Core.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Invalid IP Address.
+        /// </summary>
+        public static string InvalidIPAddress {
+            get {
+                return ResourceManager.GetString("InvalidIPAddress", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Invalid Port Value.
         /// </summary>
         public static string InvalidPortValue {
             get {
                 return ResourceManager.GetString("InvalidPortValue", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Invalid Smarteye Port Value.
+        /// </summary>
+        public static string InvalidSmarteyePortValue {
+            get {
+                return ResourceManager.GetString("InvalidSmarteyePortValue", resourceCulture);
             }
         }
         
@@ -210,6 +237,15 @@ namespace iTrace_Core.Properties {
         public static string ShowReticle {
             get {
                 return ResourceManager.GetString("ShowReticle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Smarteye port values must be in the range: .
+        /// </summary>
+        public static string SmarteyePortMustBeInRange {
+            get {
+                return ResourceManager.GetString("SmarteyePortMustBeInRange", resourceCulture);
             }
         }
         
