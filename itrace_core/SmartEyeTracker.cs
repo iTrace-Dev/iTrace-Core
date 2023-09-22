@@ -25,6 +25,9 @@ namespace iTrace_Core
         private readonly int SMARTEYE_PORT_LATENT = 5799;
         private readonly int SMARTEYE_PORT_RPC = 8100; //This is the default from SE software
 
+        public const int MIN_PORT_NUM = 1025;
+        public const int MAX_PORT_NUM = 65535;
+
         private System.Net.Sockets.UdpClient RealtimeClient;
         private System.Net.Sockets.TcpClient LatentClient;
         private System.Net.Sockets.TcpClient RpcClient;
@@ -52,7 +55,7 @@ namespace iTrace_Core
             try
             {
                 //Try to connect to the RPC server on SmartEye host machine
-                Console.WriteLine("Attempting to connect to Smarteye...");
+                Console.WriteLine("Attempting to connect to SmartEye...");
                 RpcClient = new System.Net.Sockets.TcpClient();
                 IAsyncResult conn = RpcClient.BeginConnect(rpcEndpoint.Address, rpcEndpoint.Port, null, null);
 
