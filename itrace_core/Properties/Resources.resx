@@ -126,6 +126,9 @@
   <data name="ChangeRequiresRestart" xml:space="preserve">
     <value>Changes require a program restart to be applied</value>
   </data>
+  <data name="CouldNotParseIPAddress" xml:space="preserve">
+    <value>Could not parse {0} as an IP Address</value>
+  </data>
   <data name="DuplicatePortValues" xml:space="preserve">
     <value>Duplicate Port Values</value>
   </data>
@@ -135,8 +138,14 @@
   <data name="HideReticle" xml:space="preserve">
     <value>Hide Reticle</value>
   </data>
+  <data name="InvalidIPAddress" xml:space="preserve">
+    <value>Invalid IP Address</value>
+  </data>
   <data name="InvalidPortValue" xml:space="preserve">
     <value>Invalid Port Value</value>
+  </data>
+  <data name="InvalidSmartEyePortValue" xml:space="preserve">
+    <value>Invalid SmartEye Port Value</value>
   </data>
   <data name="InvalidSocketPortValue" xml:space="preserve">
     <value>Invalid Socket Port Value</value>
@@ -167,6 +176,9 @@
   </data>
   <data name="ShowReticle" xml:space="preserve">
     <value>Show Reticle</value>
+  </data>
+  <data name="SmartEyePortMustBeInRange" xml:space="preserve">
+    <value>SmartEye port values must be in the range: </value>
   </data>
   <data name="SocketServerCannotStart" xml:space="preserve">
     <value>Socket Server Cannot Start</value>

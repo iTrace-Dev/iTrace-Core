@@ -119,14 +119,21 @@ namespace iTrace_Core
         {
             int socketPort = 0;
             int websocketPort = 0;
+            int smartEyePort = 0;
             int calibrationMonitor = 0;
-            if (!(int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort) && int.TryParse(settings[2].Value, out calibrationMonitor)))
+            if (!(int.TryParse(settings[0].Value, out socketPort) && int.TryParse(settings[1].Value, out websocketPort) && int.TryParse(settings[3].Value, out smartEyePort) && int.TryParse(settings[4].Value, out calibrationMonitor)))
             {
                 MessageBox.Show(Properties.Resources.PortValuesMustBeNumeric, Properties.Resources.InvalidPortValue, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
-            if (socketPort == websocketPort)
+            if (!System.Net.IPAddress.TryParse(settings[2].Value, out System.Net.IPAddress temp))
+            {
+                MessageBox.Show(String.Format(Properties.Resources.CouldNotParseIPAddress, settings[2].Value), Properties.Resources.InvalidIPAddress, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            if (socketPort == websocketPort || socketPort == smartEyePort || websocketPort == smartEyePort)
             {
                 MessageBox.Show(Properties.Resources.PortValuesCannotBeSameValue, Properties.Resources.DuplicatePortValues, MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
@@ -145,14 +152,23 @@ namespace iTrace_Core
                 return;
             }
 
-            if (!((calibrationMonitor <= System.Windows.Forms.Screen.AllScreens.Length) && (calibrationMonitor > 0)))
+            if (!((smartEyePort <= SmartEyeTracker.MAX_PORT_NUM) && (smartEyePort >= SmartEyeTracker.MIN_PORT_NUM)))
             {
-                MessageBox.Show(Properties.Resources.MonitorIndexOutOfRange, Properties.Resources.MonitorIndexIncorrectValue, MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(Properties.Resources.SmartEyePortMustBeInRange + SmartEyeTracker.MIN_PORT_NUM + "-" + SmartEyeTracker.MAX_PORT_NUM + "!", Properties.Resources.InvalidSmartEyePortValue, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
             }
 
-            Settings.Default.socket_port = Convert.ToInt32(settings[0].Value);
-            Settings.Default.websocket_port = Convert.ToInt32(settings[1].Value);
-            Settings.Default.calibration_monitor = Convert.ToInt32(settings[2].Value);
+            if (!((calibrationMonitor < System.Windows.Forms.Screen.AllScreens.Length) && (calibrationMonitor >= 0)))
+            {
+                MessageBox.Show(Properties.Resources.MonitorIndexOutOfRange, Properties.Resources.MonitorIndexIncorrectValue, MessageBoxButton.OK, MessageBoxImage.Error);
+                return;
+            }
+
+            Settings.Default.socket_port = socketPort;
+            Settings.Default.websocket_port = websocketPort;
+            Settings.Default.smarteye_ip_address = settings[2].Value;
+            Settings.Default.smarteye_ip_port = smartEyePort;
+            Settings.Default.calibration_monitor = calibrationMonitor;
             Settings.Default.Save();
         }
         // Cleanup for when core closes
