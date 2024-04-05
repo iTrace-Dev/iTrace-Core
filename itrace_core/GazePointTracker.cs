@@ -19,7 +19,7 @@ namespace iTrace_Core
 {
     class GazePointTracker : ITracker
     {
-        private readonly String GAZEPOINT_ADDRESS = "127.0.0.1";
+        private readonly String GAZEPOINT_ADDRESS = "192.168.77.161";
         private readonly int GAZEPOINT_PORT = 4242;
         private System.Net.Sockets.TcpClient Client;
         private System.IO.StreamReader Reader;
@@ -32,12 +32,12 @@ namespace iTrace_Core
             try
             {
                 Client = new System.Net.Sockets.TcpClient();
-                IAsyncResult conn = Client.BeginConnect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT, null, null);
+                //IAsyncResult conn = Client.BeginConnect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT, null, null);
 
-                bool asyncConnectSuccess = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5));
+                //bool asyncConnectSuccess = conn.AsyncWaitHandle.WaitOne(TimeSpan.FromSeconds(5));
 
-                if (!asyncConnectSuccess)
-                    throw new Exception("Gazepoint timed out while connecting (Most likely there is no Gazepoint device available)");
+                //if (!asyncConnectSuccess)
+                //    throw new Exception("Gazepoint timed out while connecting (Most likely there is no Gazepoint device available)");
 
                 Client.Connect(GAZEPOINT_ADDRESS, GAZEPOINT_PORT);
                 Reader = new System.IO.StreamReader(Client.GetStream());
@@ -56,11 +56,13 @@ namespace iTrace_Core
             }
             catch (System.Net.Sockets.SocketException e)
             {
+                Console.WriteLine(e);
                 Console.WriteLine("Gaze Point not connected!");
                 Client = null;
             }
             catch (Exception e)
             {
+                Console.WriteLine(e);
                 Console.WriteLine("Gaze Point Connection Failed!");
                 Console.WriteLine(e.ToString());
                 Client = null;
