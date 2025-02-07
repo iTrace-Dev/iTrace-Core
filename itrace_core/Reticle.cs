@@ -69,6 +69,24 @@ namespace iTrace_Core
                 Hide();
         }
 
+        public void SetReticleColor(String color)
+        {
+            if (color.Equals("Green"))
+            {
+                // Default green is a bit too dark here.
+                crossPen.Color = Color.Lime;
+            } else if (color.Equals("Blue"))
+            {
+                // Ditto for the default blue.
+                crossPen.Color = Color.DodgerBlue;
+            }
+            else
+            {
+                crossPen.Color = Color.Red;
+            }
+            
+        }
+
         public void UpdateReticle(int x, int y)
         {
             //No reason to do anything if it can't be seen...

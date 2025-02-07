@@ -33,7 +33,8 @@ namespace iTrace_Core
         XMLGazeDataWriter xmlGazeDataWriter;
         SessionSetupWindow sessionInformation;
         List<Setting> settings;
-
+        
+        
         class Setting
         {
             public Setting(string option)
@@ -97,7 +98,7 @@ namespace iTrace_Core
         private void ApplicationLoaded(object sender, RoutedEventArgs e)
         {
             RefreshTrackerList();
-
+            InitReticleColorList();
             System.Windows.Forms.Integration.WindowsFormsHost host = new System.Windows.Forms.Integration.WindowsFormsHost();
         }
         private void InitializeSettingsGrid()
@@ -380,6 +381,26 @@ namespace iTrace_Core
                 ActivateReticleButton.Content = Properties.Resources.HideReticle;
             }
         }
+
+        // Change reticle colors for multiple eye trackers
+        private void InitReticleColorList()
+        {
+            List<String> reticleNames = new List<String> { "Red", "Green", "Blue" };
+            ReticleName.ItemsSource = reticleNames;
+            ReticleName.SelectedIndex = 0;
+        }
+
+        private void ChangeReticle(object sender, SelectionChangedEventArgs e)
+        {
+            if (ReticleName.SelectedIndex >= 0)
+            {
+                if (reticleController == null)
+                    reticleController = new ReticleController();
+
+                reticleController.ChangeColor(ReticleName.SelectedItem.ToString());
+            }
+        }
+
 
         private void SessionSetupButton_Click(object sender, RoutedEventArgs e)
         {

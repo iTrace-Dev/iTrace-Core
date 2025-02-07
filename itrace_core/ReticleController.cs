@@ -45,6 +45,23 @@ namespace iTrace_Core
             return shown;
         }
 
+        // Re-draws reticle & pass throughs color value to reticle
+        public void ChangeColor(string color)
+        {
+            if (shown)
+            {
+                reticle.SetReticleColor(color);
+                reticle.ToDraw(false);
+                reticle.ToDraw(true);
+            } else
+            {
+                reticle.ToDraw(true);
+                reticle.SetReticleColor(color);
+                reticle.ToDraw(false);
+            }
+            
+        }
+
         private void ReceiveGazeData(object sender, GazeDataReceivedEventArgs e)
         {
             mutex.WaitOne();

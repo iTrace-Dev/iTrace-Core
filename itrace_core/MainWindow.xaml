@@ -71,6 +71,8 @@
 
                     <CheckBox x:Name="CheckDejavuRecord" Content="{x:Static p:Resources.ToggleDejaVu}" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="181" Canvas.Top="173"/>
                     <CheckBox x:Name="CheckScreenCap" Content="{x:Static p:Resources.EnableScreenRecording}" HorizontalAlignment="Right" Grid.Row="2" VerticalAlignment="Top" Width="150" Canvas.Left="181" Canvas.Top="193" ToolTip="Records the screen during a tracking session"/>
+                    <ComboBox x:Name="ReticleName" Canvas.Left="369" Canvas.Top="40" Width="65" SelectionChanged="ChangeReticle"/>
+                    <Label Canvas.Left="295" Canvas.Top="40" Height ="23" Content="Reticle Color:" VerticalContentAlignment="Center" Padding="0" />
 
                 </Canvas>
             </TabItem>
